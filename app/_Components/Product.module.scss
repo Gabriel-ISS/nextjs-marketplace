@@ -1,0 +1,62 @@
+@import '../vars';
+
+.product {
+  @include autoMargin();
+  align-self: center;
+  padding-block: 1rem;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 2rem;
+
+  &__img {
+    width: min(100%, 500px);
+    aspect-ratio: 1;
+
+    background-color: var(--bg2);
+    border-radius: var(--br);
+  }
+
+  &__data {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  &__name {
+    margin-block: 0;
+  }
+
+  &__price {
+    font-size: 1rem !important;
+  }
+
+  &__contact_btn {
+    @include largeBtn();
+    text-align: center;
+  }
+
+  &__note {
+    margin-block: 0;
+  }
+
+  &__properties {
+    list-style: none;
+    padding-left: 0;
+    margin-block: 0;
+  }
+
+  &__property {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    padding-block: .7rem;
+
+    border-top: 1px solid var(--text-c1);
+
+    font-size: smaller;
+    font-weight: bold;
+
+    & span:last-child {
+      color: var(--muted);
+    }
+  }
+}

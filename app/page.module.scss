@@ -1,0 +1,78 @@
+@import './vars';
+
+.search_section {
+  @include autoMargin();
+  min-height: 50vh;
+  display: flex;
+  align-items: center;
+}
+
+.services {
+  background-color: var(--blue);
+  color: white;
+
+  &__container {
+    @include autoMargin();
+    padding-block: .8rem;
+  }
+
+  &__title {
+    font-size: 1.25rem;
+
+    @media (width > $screen-md) {
+      text-align: center;
+      font-size: 1.5rem;
+    }
+  }
+
+  &__list {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    padding-left: 1rem;
+
+    list-style: none;
+    font-size: .9rem;
+
+    @media (width > $screen-md) {
+      font-size: 1.1rem;
+    }
+  }
+
+  @for $i from 1 through 5 {
+    &__service_#{$i} {
+      @media (width > $screen-md) {
+        padding-left: ($i * 1.5rem);
+      }
+    }
+  }
+}
+
+.products {
+  @include autoMargin();
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  margin-block: 3rem 4rem;
+
+  &__title {
+    margin: 0;
+    font-size: 1.25rem;
+    color: var(--blue);
+
+    @media (width > $screen-md) {
+      text-align: center;
+      font-size: 1.5rem;
+    }
+  }
+
+  &__container {
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: 1rem;
+
+    list-style: none;
+  }
+}

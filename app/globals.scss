@@ -1,0 +1,123 @@
+@import './vars';
+
+:root {
+  --text-c1: #161A30;
+  --muted: #8D8D8D;
+
+  --white: white;
+  --blue: #0053ED;
+  --green: #25D366;
+  /* TODO: USAR EL ROJO CORRECTO */
+  --red: #d32525;
+  --yellow: #d3ca25;
+
+  --bg1: white;
+  --bg2: white;
+  --bg3: #F1F0F0;
+  --bg4: #D9D9D9;
+
+  --shadow-c: rgba(0, 0, 0, .45);
+
+  --br: .37rem;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --text-c1: white;
+    --muted: #8D8D8D;
+
+    --bg1: rgb(21, 21, 21);
+    --bg2: #242424;
+    --bg3: rgb(41, 41, 41);
+    --bg4: #3c3c3c;
+  }
+}
+
+* {
+  box-sizing: border-box;
+
+  scrollbar-color: var(--blue) transparent;
+  scrollbar-width: thin;
+
+  &::-webkit-scrollbar {
+    width: 10px;
+    background: var(--bg4);
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: var(--blue);
+  }
+}
+
+html {
+  scrollbar-gutter: stable;
+}
+
+body {
+  margin: 0px;
+  color: var(--text-c1);
+  background-color: var(--bg1);
+
+  height: 100lvh;
+  // fallback
+  height: 100vh;
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+
+  scrollbar-gutter: stable;
+}
+
+h1 {
+  color: var(--blue);
+  margin-block: 0rem;
+  font-size: 2rem;
+  font-family: 'Exo 2', sans-serif;
+}
+
+a {
+  text-decoration: none;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+button,
+[role="button"] {
+  display: block;
+  transform: filter 200ms;
+
+  &:hover {
+    filter: brightness(.8)
+  }
+}
+
+input,
+textarea {
+  color: var(--text-c1);
+  background-color: var(--bg1);
+}
+
+input,
+textarea,
+button {
+  border: none;
+  outline: none;
+  border-radius: var(--br);
+  padding: .5rem .7rem;
+}
+
+label {
+  display: block;
+  font-weight: bold;
+
+  +input[type="text"],
+  +input[type="email"],
+  +input[type="password"],
+  +input[type="number"],
+  +textarea {
+    width: 100%;
+    margin-top: .5rem;
+    margin-bottom: 1rem;
+  }
+}

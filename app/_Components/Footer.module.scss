@@ -1,0 +1,94 @@
+@import '../vars';
+
+.footer {
+  z-index: 1;
+  
+  background-color: var(--bg2);
+  box-shadow: 0 0 .5rem 0 var(--shadow-c);
+
+  &__content {
+    @include autoMargin();
+
+    @media (width > $screen-md) {
+      display: flex;
+      justify-content: center;
+      gap: clamp(1rem, 5vw, 8rem);
+    }
+  }
+
+  &__links_l {
+    list-style: none;
+    padding-left: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: .5em;
+
+    text-align: center;
+
+    a:hover {
+      text-decoration: underline;
+    }
+  }
+
+  &__social_media_l {
+    list-style: none;
+    padding-left: 0;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1rem;
+    margin-inline: 3rem;
+
+    @media (width > $screen-md) {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  &__copyright {
+    display: block;
+    width: 100%;
+    padding: .2em;
+
+    background-color: var(--bg4);
+    text-align: center;
+  }
+}
+
+.whatsapp,
+.tiktok,
+.instagram,
+.facebook {
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.5rem;
+  height: 2.5rem;
+
+  border-radius: 50%;
+  outline: 2px solid;
+  transition: outline-offset 200ms ease-out;
+
+  &:hover {
+    outline-offset: 5px;
+  }
+}
+
+.whatsapp {
+  background-color: #25D366;
+  outline-color: #25D366;
+}
+
+.tiktok {
+  background-color: #000000;
+  outline-color: #000000;
+}
+
+.instagram {
+  background-color: #E4405F;
+  outline-color: #E4405F;
+}
+
+.facebook {
+  background-color: #0866FF;
+  outline-color: #0866FF;
+}

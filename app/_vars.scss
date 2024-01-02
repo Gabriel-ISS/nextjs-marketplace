@@ -1,0 +1,39 @@
+$screen-sm: 576px;
+$screen-md: 768px;
+$screen-lg: 992px;
+$screen-xl: 1200px;
+
+
+@mixin autoMargin($maxWidth: 900px, $flexibleWidth: 100%) {
+  max-width: min($flexibleWidth, $maxWidth);
+  margin-inline: auto;
+  padding-inline: 1rem;
+}
+
+@mixin largeBtn($bg-color: var(--blue), $color: var(--white)) {
+  width: 100%;
+  padding: .7rem;
+
+  background-color: $bg-color;
+  color: $color;
+  border-radius: var(--br);
+
+  font-size: large;
+  font-weight: bold;
+
+  &:hover {
+    text-decoration: none;
+  }
+}
+
+@mixin tag($bg-color) {
+  padding: .2rem .5rem;
+
+  background-color: $bg-color;
+  color: var(--white);
+  border-radius: 1rem;
+
+  font-size: .8rem;
+  font-weight: bold;
+  letter-spacing: .1ch;
+}

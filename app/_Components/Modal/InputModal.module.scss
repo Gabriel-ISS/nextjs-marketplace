@@ -1,0 +1,21 @@
+@import '../../vars';
+
+.form {
+  margin-top: .5rem;
+  display: flex;
+  flex-direction: column;
+
+  width: min(300px, 100%);
+
+  &__input {
+    background-color: var(--bg4);
+    text-align: center;
+    margin-bottom: 1rem;
+  }
+
+  &__btn {
+    @include largeBtn();
+    width: min-content;
+    margin-left: auto;
+  }
+}

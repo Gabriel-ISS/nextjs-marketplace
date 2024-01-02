@@ -1,0 +1,34 @@
+@import '../vars';
+
+.main {
+  @include autoMargin();
+  padding-block: 2rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.title {
+  width: 100%;
+  margin-block: 0;
+
+  border-bottom: 1px solid var(--text-c1);
+  font-size: 1rem;
+  text-align: center;
+}
+
+.days {
+  list-style: none;
+  padding-left: 0;
+}
+
+.day {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 3rem;
+
+
+  span:last-child {
+    color: var(--muted);
+  }
+}

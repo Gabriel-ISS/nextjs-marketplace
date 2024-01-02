@@ -1,0 +1,22 @@
+@import '../vars';
+
+.main {
+  @media (width > $screen-sm) {
+    display: grid;
+    grid-template-columns: clamp(19rem, 23vw, 22rem) 1fr;
+  }
+}
+
+.principal_view {
+  @include autoMargin(1000px);
+  width: 100%;
+}
+
+.search {
+  margin-block: 2rem;
+}
+
+.add_product_btn {
+  @include largeBtn(var(--green));
+  text-align: center;
+}

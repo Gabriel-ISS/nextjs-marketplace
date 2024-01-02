@@ -1,0 +1,108 @@
+@import '../vars';
+
+.header {
+  z-index: 1;
+}
+
+.nav {
+  $link-height: 1.5rem;
+  $links-padding-bottom: .3rem;
+
+  background-color: var(--bg2);
+  box-shadow: 0 0 .5rem 0 var(--shadow-c);
+
+  &__primary_link:hover {
+    text-decoration: none;
+  }
+
+  &__content {
+    @include autoMargin();
+    min-height: 3rem;
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+
+  &__collapsible {
+
+    @media (width < $screen-md) {
+      // el display se controla desde javascript
+      width: 100%;
+      overflow: hidden;
+      padding-block: 0;
+      margin-block: 0;
+      opacity: 0;
+      height: 0rem;
+      transition: height 400ms, opacity 400ms;
+
+      &[data-state="opening"],
+      &[data-state="opened"] {
+        opacity: 1;
+        height: ($link-height * 3) + $links-padding-bottom;
+      }
+
+      &[data-state="closed"] {
+        display: none;
+      }
+    }
+  }
+
+  &__links_list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    padding-bottom: $links-padding-bottom;
+    padding-inline: 0;
+    margin: 0;
+
+    @media (width > $screen-md) {
+      flex-direction: row;
+      gap: 1rem;
+    }
+
+    li {
+      height: $link-height;
+      display: flex;
+      align-items: center;
+
+      a {
+        font-variant-caps: all-small-caps;
+        color: var(--muted);
+        transition: color 400ms;
+
+        &:hover {
+          color: var(--blue);
+        }
+      }
+    }
+  }
+
+  &__menu_btn {
+    width: 45px;
+    height: 45px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: none;
+    color: var(--blue);
+
+    @media (width > $screen-md) {
+      display: none;
+    }
+
+    svg {
+      width: 2rem;
+      height: 2rem;
+    }
+  }
+
+}
+
+.hidden {
+  height: 1px;
+  width: 1px;
+  overflow: hidden;
+  position: absolute;
+  white-space: nowrap;
+}

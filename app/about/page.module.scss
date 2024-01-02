@@ -1,0 +1,20 @@
+@import '../vars';  
+
+.main {
+  @include autoMargin();
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 1rem;
+  padding-block: 2rem;
+}
+
+.title {
+  border-bottom: 1px solid var(--text-c1);
+  text-align: center;
+  margin-block: 0;
+}
+
+.paragraph {
+  text-align: center;
+}

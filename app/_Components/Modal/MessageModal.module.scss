@@ -1,0 +1,27 @@
+.mm {
+  &__message {
+    margin-bottom: .7rem;
+  }
+
+  &__btn {
+    margin-left: auto;
+
+    color: var(--white);
+
+    &[data-theme="blue"] {
+      background-color: var(--blue);
+    }
+
+    &[data-theme="green"] {
+      background-color: var(--green);
+    }
+
+    &[data-theme="red"] {
+      background-color: var(--red);
+    }
+
+    &[data-theme="yellow"] {
+      background-color: var(--yellow);
+    }
+  }
+}

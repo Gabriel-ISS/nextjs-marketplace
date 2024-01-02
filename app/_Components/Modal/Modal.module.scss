@@ -1,0 +1,98 @@
+.modal {
+  position: fixed;
+
+  background-color: var(--bg1);
+  color: var(--text-c1);
+  border: 1px solid;
+  border-radius: var(--br);
+
+  $transition-duration: 300ms;
+
+  opacity: 0;
+  transition: opacity $transition-duration ease-in;
+
+
+  &::backdrop {
+    backdrop-filter: blur(0px);
+    background-color: transparent;
+    transition: backdrop-filter $transition-duration ease-in;
+  }
+
+  &[data-state="opening"],
+  &[data-state="opened"] {
+    display: block;
+    opacity: 1;
+
+    &::backdrop {
+      backdrop-filter: blur(5px);
+    }
+  }
+
+  &[data-state="closed"] {
+    display: none;
+  }
+
+  &[data-theme="blue"] {
+    border-color: var(--blue);
+  }
+
+  &[data-theme="green"] {
+    border-color: var(--green);
+  }
+
+  &[data-theme="red"] {
+    border-color: var(--red);
+  }
+
+  &[data-theme="yellow"] {
+    border-color: var(--yellow);
+  }
+
+  &__header {
+    width: 100%;
+    padding-bottom: 1rem;
+
+    font-weight: bold;
+  }
+
+  &__title {
+    font-size: large;
+    margin-right: 3rem;
+
+    &[data-theme="blue"] {
+      color: var(--blue);
+    }
+
+    &[data-theme="green"] {
+      color: var(--green);
+    }
+
+    &[data-theme="red"] {
+      color: var(--red);
+    }
+  }
+
+  &__close_btn {
+    padding: 0;
+    position: absolute;
+    right: .7rem;
+    top: .7rem;
+
+    color: var(--text-c1);
+    background: none;
+
+    transition: color 200ms;
+
+    &[data-theme="blue"]:hover {
+      color: var(--blue);
+    }
+
+    &[data-theme="green"]:hover {
+      color: var(--green);
+    }
+
+    &[data-theme="red"]:hover {
+      color: var(--red);
+    }
+  }
+}

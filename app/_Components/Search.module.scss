@@ -1,0 +1,29 @@
+.search {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  padding: .25rem;
+  overflow: hidden;
+
+  border-radius: 2rem;
+  border: 1px solid var(--blue);
+  box-shadow: 0 .1rem .5rem var(--shadow-c);
+
+  &__input {
+    width: 100%;
+    padding: 0 .4rem;
+
+    font-size: 1.1rem;
+  }
+
+  &__btn {
+    height: 1.9rem;
+    width: 1.9rem;
+    
+    padding: .4rem;
+
+    background-color: var(--blue);
+    color: var(--white);
+    border-radius: 100%;
+  }
+}

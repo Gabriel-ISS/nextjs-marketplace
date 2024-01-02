@@ -1,0 +1,11 @@
+.price {
+  font-size: .8rem;
+  font-weight: bold;
+  color: var(--blue);
+
+  &--old {
+    color: var(--muted);
+    text-decoration: line-through;
+    margin-right: .5rem;
+  }
+}

@@ -1,0 +1,115 @@
+@import '../../vars';
+
+.filters {
+  position: fixed;
+  top: 0;
+  left: -100%;
+  background-color: var(--bg3);
+  width: 100%;
+  //fallback
+  height: 100vh;
+  height: 100dvh;
+  z-index: 2;
+  padding: 1rem;
+
+  transition: left 500ms;
+
+  &[data-state="opened"] {
+    left: 0%;
+  }
+
+  @media (width > $screen-sm) {
+    position: static;
+    z-index: 0;
+    height: 100%;
+  }
+
+  &__toggle_btn {
+    position: fixed;
+    bottom: 1rem;
+    right: 1rem;
+    z-index: 3;
+    width: 3rem;
+    height: 3rem;
+
+    background-color: var(--blue);
+    color: var(--white);
+    border-radius: 50%;
+
+    animation: resize 1.6s ease-in-out infinite forwards;
+
+    @keyframes resize {
+
+      0%,
+      100% {
+        transform: scale(1);
+      }
+
+      50% {
+        transform: scale(1.2);
+      }
+    }
+  }
+}
+
+.filter_group {
+  border: none;
+
+  &__title {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    padding-block: .3rem;
+
+    border-bottom: 1px solid var(--text-c1);
+
+    font-weight: bold;
+  }
+
+  &__add_btn {
+    @include tag(var(--green));
+  }
+
+  &__options {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 1rem;
+  }
+
+  &__option {
+    @include tag(var(--muted));
+
+    label {
+      cursor: pointer;
+    }
+
+    &:has(input:checked) {
+      background-color: var(--blue)
+    }
+
+    input {
+      display: none;
+    }
+  }
+}
+
+.common_properties {
+  @extend .filter_group;
+  margin-top: 1rem;
+
+  &__label {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+
+    font-weight: bold;
+    font-size: 1.2rem;
+  }
+
+  &__container {
+    border: 1px solid var(--blue);
+    border-radius: var(--br);
+  }
+}
