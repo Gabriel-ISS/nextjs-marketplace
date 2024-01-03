@@ -27,7 +27,7 @@ const filterSchema = new Schema<Filter & Document>({
     name: RequiredString,
     used: RequiredNumber
   }],
-  commonProperties: [{
+  properties: [{
     name: RequiredString,
     values: [{
       name: RequiredString,

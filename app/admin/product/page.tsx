@@ -25,7 +25,7 @@ import { ChangeEvent, useEffect, useState } from 'react'
 let newFilters: NewFilters = {
   category: '',
   brand: '',
-  commonProperties: [],
+  properties: [],
   tags: []
 }
 
@@ -62,7 +62,7 @@ export default function ({ searchParams }: PageProps) {
           isNew: product.category == ''
         })
         setOriginalPrice(product.price.current)
-        newFilters = { category: '', brand: '', commonProperties: [], tags: [] }
+        newFilters = { category: '', brand: '', properties: [], tags: [] }
         lastSelectedIsNew = { category: false, brand: false }
       } catch (error) {
         alert('Error al obtener productos')
@@ -197,7 +197,7 @@ export default function ({ searchParams }: PageProps) {
 
   function addProperty() {
     openModal(<InputModal title='Agregar característica' onAccept={propertyName => {
-      const properties = useAppStore.getState().filters.categoryFilters.state.data.commonProperties
+      const properties = useAppStore.getState().filters.categoryFilters.state.data.properties
       if (properties.some(p => p.name == propertyName)) return;
 
       const newProperty = {
@@ -206,8 +206,8 @@ export default function ({ searchParams }: PageProps) {
       }
 
       setCategoryFilters(filters => {
-        filters.commonProperties.push(newProperty)
-        newFilters.commonProperties.push(newProperty)
+        filters.properties.push(newProperty)
+        newFilters.properties.push(newProperty)
       })
 
       setProduct(product => {
@@ -218,21 +218,21 @@ export default function ({ searchParams }: PageProps) {
 
   function addPropertyValue(propertyName: string, propertyIndexForFilters: number) {
     openModal(<InputModal title='Agregar valor de característica' onAccept={propertyValue => {
-      const values = useAppStore.getState().filters.categoryFilters.state.data.commonProperties[propertyIndexForFilters].values;
+      const values = useAppStore.getState().filters.categoryFilters.state.data.properties[propertyIndexForFilters].values;
       if (values.includes(propertyValue)) return;
 
       setCategoryFilters(filters => {
-        filters.commonProperties[propertyIndexForFilters].values.push(propertyValue)
+        filters.properties[propertyIndexForFilters].values.push(propertyValue)
       })
 
-      const propertyIndexNewFilters = newFilters.commonProperties.findIndex(property => property.name == propertyName)
-      const property = newFilters.commonProperties[propertyIndexNewFilters]
+      const propertyIndexNewFilters = newFilters.properties.findIndex(property => property.name == propertyName)
+      const property = newFilters.properties[propertyIndexNewFilters]
       if (property) {
-        newFilters.commonProperties[propertyIndexNewFilters] = produce(property, draft => {
+        newFilters.properties[propertyIndexNewFilters] = produce(property, draft => {
           draft.values.push(propertyValue)
         })
       } else {
-        newFilters.commonProperties = [{
+        newFilters.properties = [{
           name: propertyName,
           values: [propertyValue]
         }]
@@ -257,18 +257,18 @@ export default function ({ searchParams }: PageProps) {
   ) {
     const
       propertyValue = e.currentTarget.value,
-      propertyIndexForNewFilters = newFilters.commonProperties.findIndex(property => property.name == propertyName),
+      propertyIndexForNewFilters = newFilters.properties.findIndex(property => property.name == propertyName),
       propertyIndexForProduct = product.properties.findIndex(property => property.name == propertyName),
-      clickedValueIsNew = newFilters.commonProperties[propertyIndexForNewFilters]?.values.includes(propertyValue),
+      clickedValueIsNew = newFilters.properties[propertyIndexForNewFilters]?.values.includes(propertyValue),
       isSelected = !product.properties[propertyIndexForProduct]?.values.includes(propertyValue)
 
     if (clickedValueIsNew && !isSelected) {
       setCategoryFilters(filters => {
-        filters.commonProperties[propertyIndexForFilters].values.splice(propertyValueIndexForFilters, 1)
+        filters.properties[propertyIndexForFilters].values.splice(propertyValueIndexForFilters, 1)
       })
       console.log(newFilters)
-      const propertyValueIndexForNewFilters = newFilters.commonProperties[propertyIndexForNewFilters].values.indexOf(propertyValue)
-      newFilters.commonProperties[propertyIndexForNewFilters].values.splice(propertyValueIndexForNewFilters, 1)
+      const propertyValueIndexForNewFilters = newFilters.properties[propertyIndexForNewFilters].values.indexOf(propertyValue)
+      newFilters.properties[propertyIndexForNewFilters].values.splice(propertyValueIndexForNewFilters, 1)
     }
 
     setProduct(product => {

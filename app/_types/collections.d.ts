@@ -19,7 +19,7 @@ type Property = {
 type Filter = {
   category: string
   brands: Brand[]
-  commonProperties: Property[]
+  properties: Property[]
 }
 
 type Group = {

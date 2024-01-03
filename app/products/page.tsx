@@ -4,7 +4,7 @@ import Search from '@/_Components/Search';
 import style from '@/products/page.module.scss';
 import { getServerSession } from 'next-auth';
 import Link from 'next/link';
-import { AiFillFileAdd } from 'react-icons/ai'
+import { AiFillFileAdd } from 'react-icons/ai';
 
 
 export default async function () {

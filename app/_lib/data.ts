@@ -44,7 +44,7 @@ export async function getCategoryFiltersNC(category: string): Promise<FilterNoCo
     const noCounted: FilterNoCounted = {
       category: filters.category,
       brands: filters.brands.map(brand => brand.name),
-      commonProperties: filters.commonProperties.map(property => ({
+      properties: filters.properties.map(property => ({
         name: property.name,
         values: property.values.map(value => value.name)
       }))

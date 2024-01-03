@@ -29,8 +29,8 @@ export async function checkAuthentication() {
 
 /** Explain product filter data */
 export async function explainPFData(product: Product, newFilters: NewFilters): Promise<{ toIncrease: PFData, toReduce: PFData }> {
-  const toIncrease: PFData = { category: '', brand: '', commonProperties: [], tags: [] }
-  const toReduce: PFData = { category: '', brand: '', commonProperties: [], tags: [] }
+  const toIncrease: PFData = { category: '', brand: '', properties: [], tags: [] }
+  const toReduce: PFData = { category: '', brand: '', properties: [], tags: [] }
 
   const getProduct = async (): Promise<Product> => {
     if (!product._id.length) return DEFAULT_PRODUCT
@@ -60,7 +60,7 @@ export async function explainPFData(product: Product, newFilters: NewFilters): P
     const currentValues = product.properties.find(p => p.name == property.name)?.values || []
 
     const deselectedValues = prevValues.filter(v => !currentValues.includes(v))
-    const propertyFromNewFilters = newFilters.commonProperties.find(p => p.name == property.name)
+    const propertyFromNewFilters = newFilters.properties.find(p => p.name == property.name)
     const selectedValue = currentValues.filter(value => {
       const notInPrevProduct = !prevValues.includes(value)
       const notInNewFilters = !propertyFromNewFilters?.values.some(v => v == value)
@@ -68,14 +68,14 @@ export async function explainPFData(product: Product, newFilters: NewFilters): P
     })
 
     if (deselectedValues.length) {
-      toReduce.commonProperties.push({
+      toReduce.properties.push({
         name: property.name,
         values: deselectedValues
       })
     }
 
     if (selectedValue.length) {
-      toIncrease.commonProperties.push({
+      toIncrease.properties.push({
         name: property.name,
         values: selectedValue
       })
@@ -100,7 +100,7 @@ export async function createFilter(newFilterData: NewFilters) {
       name: newFilterData.brand,
       used: 1
     }],
-    commonProperties: newFilterData.commonProperties.map(property => ({
+    properties: newFilterData.properties.map(property => ({
       name: property.name,
       values: property.values.map(value => ({
         name: value,
@@ -127,9 +127,9 @@ export async function updateFilter(category: string, toAdd: NewFilters, toIncrea
     filter.brands = filter.brands.filter(b => b.used)
   }
 
-  const updatePropertyUse = (properties: PFData['commonProperties'], toAdd: 1 | -1) => {
+  const updatePropertyUse = (properties: PFData['properties'], toAdd: 1 | -1) => {
     if (!properties.length) return;
-    filter.commonProperties.forEach(property => {
+    filter.properties.forEach(property => {
       const toIncreaseValues = properties.find(p => p.name == property.name)?.values
       if (!toIncreaseValues) return;
       property.values.forEach(value => {
@@ -137,7 +137,7 @@ export async function updateFilter(category: string, toAdd: NewFilters, toIncrea
       })
       property.values = property.values.filter(v => v.used)
     })
-    filter.commonProperties = filter.commonProperties.filter(p => p.values.length)
+    filter.properties = filter.properties.filter(p => p.values.length)
   }
 
   // brand
@@ -153,24 +153,24 @@ export async function updateFilter(category: string, toAdd: NewFilters, toIncrea
   }
 
   // properties
-  updatePropertyUse(toIncrease.commonProperties, 1)
+  updatePropertyUse(toIncrease.properties, 1)
 
-  updatePropertyUse(toReduce.commonProperties, -1)
+  updatePropertyUse(toReduce.properties, -1)
 
-  toAdd.commonProperties.forEach(property => {
-    const filterProperty = filter.commonProperties.find(p => p.name == property.name)
+  toAdd.properties.forEach(property => {
+    const filterProperty = filter.properties.find(p => p.name == property.name)
     const toAddValues = property.values.map(v => ({ name: v, used: 1 }))
     if (filterProperty) {
       filterProperty.values.push(...toAddValues)
     } else {
-      filter.commonProperties.push({
+      filter.properties.push({
         name: property.name,
         values: toAddValues
       })
     }
   })
 
-  if (filter.brands.length || filter.commonProperties.length) {
+  if (filter.brands.length || filter.properties.length) {
     try {
       return await (filter as Filter & Document).save()
     } catch (error) {

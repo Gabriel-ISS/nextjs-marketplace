@@ -25,10 +25,10 @@ export type FilterSlice = {
   }
 }
 
-const defaultCategoryFilters = {
+const defaultCategoryFilters: FilterNoCounted = {
   category: '',
   brands: [],
-  commonProperties: []
+  properties: []
 }
 
 const filterSlice: Slice<FilterSlice> = (set) => ({
@@ -65,7 +65,7 @@ const filterSlice: Slice<FilterSlice> = (set) => ({
           prev.filters.categoryFilters.state.data = {
             category: '',
             brands: [],
-            commonProperties: []
+            properties: []
           }
         })
       }

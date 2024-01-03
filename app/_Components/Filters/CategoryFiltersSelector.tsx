@@ -12,7 +12,7 @@ interface Props {
   brandHandler: ChangeEventHandler<HTMLInputElement>
   commonPropertiesHandler: (propertyName: string, propertyIndexForFilters: number, propertyValueIndexForFilters: number, event: ChangeEvent<HTMLInputElement>) => void
   checkedBrands: string[]
-  checkedProperties: FilterNoCounted['commonProperties']
+  checkedProperties: FilterNoCounted['properties']
   editor?: {
     addBrand: () => void
     addProperty: () => void
@@ -75,7 +75,7 @@ export default function CategoryFiltersSelector({ category, brandHandler, common
             </legend>
           }
           <div className={editor ? style.common_properties__container : undefined}>
-            {data.commonProperties.map(({ name: propertyName, values }, propertyIndex) => (
+            {data.properties.map(({ name: propertyName, values }, propertyIndex) => (
               <fieldset className={style.filter_group} key={propertyName}>
                 <legend className={style.filter_group__title}>
                   {propertyName}

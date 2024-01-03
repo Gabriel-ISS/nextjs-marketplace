@@ -1,15 +1,12 @@
 'use client'
 
-import style from '@/_Components/ProductList.module.scss'
-import ProductItem from '@/_Components/ProductItem'
-import { useEffect, useState } from 'react'
-import useLoadState from '@/_hooks/useLoadState'
-import { getProducts } from '@/_lib/data'
-import QueryString from 'qs'
-import { useSearchParams } from 'next/navigation'
 import Loader from '@/_Components/Loader'
+import ProductItem from '@/_Components/ProductItem'
+import style from '@/_Components/ProductList.module.scss'
 import useFetch from '@/_hooks/useFetch'
 import { StateUpdater } from '@/_hooks/useWritableState'
+import { getProducts } from '@/_lib/data'
+import { useSearchParams } from 'next/navigation'
 
 
 interface Props {
@@ -25,7 +22,7 @@ export default function ProductList({ adminMode }: Props) {
 
   return (
     <section className={style.products}>
-      <Loader isLoading={isLoading} meanwhile={<span>Cargando productos</span>}>
+      <Loader isLoading={isLoading} meanwhile={<span>Cargando productos...</span>}>
         {products && products.map(product => (
           <ProductItem key={product._id} product={product} adminMode={adminMode} setProducts={setProducts as StateUpdater<Product[]>} />
         ))}

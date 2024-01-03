@@ -39,7 +39,6 @@
     animation: resize 1.6s ease-in-out infinite forwards;
 
     @keyframes resize {
-
       0%,
       100% {
         transform: scale(1);
@@ -48,6 +47,10 @@
       50% {
         transform: scale(1.2);
       }
+    }
+
+    @media (width > $screen-sm) {
+      display: none;
     }
   }
 }

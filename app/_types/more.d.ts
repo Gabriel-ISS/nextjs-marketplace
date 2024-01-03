@@ -16,10 +16,7 @@ type Query = Partial<Pick<FilterNoCounted, 'category' | 'brands'>> & {
 type FilterNoCounted = {
   category: string
   brands: string[]
-  commonProperties: {
-    name: string
-    values: string[]
-  }[]
+  properties: Product['properties']
 }
 
 type NewFilters = Omit<FilterNoCounted, 'brands'> & {
