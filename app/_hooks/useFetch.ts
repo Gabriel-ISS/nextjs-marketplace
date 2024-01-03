@@ -1,5 +1,5 @@
 import useLoadState from '@/_hooks/useLoadState';
-import { UpdateState } from '@/_hooks/useWritableState';
+import { StateUpdater } from '@/_hooks/useWritableState';
 import { useEffect } from 'react';
 
 
@@ -7,7 +7,7 @@ interface Config<T = any> {
   fetcher: () => Promise<T>
   message?: string
   condition?: () => boolean
-  then?: (data: T, setData: UpdateState<T | null>) => void
+  then?: (data: T, setData: StateUpdater<T | null>) => void
   dependencyList?: any[]
 }
 

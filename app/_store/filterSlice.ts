@@ -1,4 +1,4 @@
-import { UpdateState } from '@/_hooks/useWritableState'
+import { StateUpdater } from '@/_hooks/useWritableState'
 import { getCategories, getCategoryFiltersNC } from '@/_lib/data'
 import { getProductTagsNC } from '@/_lib/data'
 import { ImmerSet, Slice } from '@/_store/useStore'
@@ -8,7 +8,7 @@ import QueryString from 'qs'
 type Filter<T, Loader = () => void> = {
   state: DataState<T>
   load: Loader
-  setter: UpdateState<T>
+  setter: StateUpdater<T>
 }
 
 export type FilterSlice = {
@@ -19,7 +19,7 @@ export type FilterSlice = {
   }
   query: {
     data: Query
-    setter: UpdateState<Query>
+    setter: StateUpdater<Query>
     setFromString(query: string): void 
     setTag(tag: string): void
   }

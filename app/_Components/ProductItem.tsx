@@ -1,6 +1,7 @@
 import MessageModal from '@/_Components/Modal/MessageModal'
 import Price from '@/_Components/Price'
 import style from '@/_Components/ProductItem.module.scss'
+import { StateUpdater } from '@/_hooks/useWritableState'
 import { deleteProduct } from '@/_lib/actions'
 import useAppStore from '@/_store/useStore'
 import Link from 'next/link'
@@ -11,10 +12,11 @@ import { FaExternalLinkAlt } from 'react-icons/fa'
 
 interface Props {
   product: Product
-  adminMode?: boolean
+  adminMode: boolean
+  setProducts: StateUpdater<Product[]>
 }
 
-export default function ProductItem({ product, adminMode }: Props) {
+export default function ProductItem({ product, adminMode, setProducts }: Props) {
   const router = useRouter()
   const openModal = useAppStore(s => s.modal.open)
 
@@ -26,7 +28,13 @@ export default function ProductItem({ product, adminMode }: Props) {
     openModal(<MessageModal title='Advertencia' message='El producto se eliminara permanentemente' onAccept={async () => {
       try {
         const message = await deleteProduct(product._id, product.category)
-        openModal(<MessageModal title='Éxito' message={message} onAccept={() => router.refresh()} />, 'green')
+        openModal(<MessageModal title='Éxito' message={message} onAccept={() => {
+          setProducts(products => {
+            const index = products.findIndex(p => p.name == product.name)
+            products.splice(index, 1)
+            router.refresh()
+          })
+        }} />, 'green')
       } catch (error: any) {
         openModal(<MessageModal title='Error' message={error.message} />, 'red')
       }

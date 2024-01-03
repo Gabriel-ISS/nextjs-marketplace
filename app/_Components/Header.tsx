@@ -47,7 +47,7 @@ export default function Header() {
       <nav className={styles.nav}>
 
         <div className={styles.nav__content}>
-          <Link className={styles.nav__primary_link} href="/"><h1 className={exo2.className}>PC CLICKS</h1></Link>
+          <Link className={styles.nav__primary_link} href="/"><h1 className={exo2.className}>PC CLICK</h1></Link>
 
           <button
             className={styles.nav__menu_btn}

@@ -13,7 +13,7 @@ import { getProductTags as getProductGroups } from '@/_lib/data'
 export default async function () {
   const services = [
     <><CiSettings /> Reparación</>,
-    <><PiBroom /> Mantenimiento y limpieza.</>,
+    <><PiBroom /> Mantenimiento y limpieza</>,
     <><PiCircuitry /> Instalación de componentes de computadoras</>,
     <><MdOutlineSpeed /> Actualización y optimización de sistemas</>,
     <><GiCctvCamera /> Instalación de cámaras de seguridad</>,
@@ -38,7 +38,7 @@ export default async function () {
         </div>
       </section>
       <section className={style.products}>
-        <h2 className={`${exo2.className} ${style.products__title}`}>Encuentre en PC Clicks</h2>
+        <h2 className={`${exo2.className} ${style.products__title}`}>Encuentre en PC Click</h2>
         <ul className={style.products__container}>
           {productGroups.map(group => (
             <ProductGroup key={group.name} name={group.name} image={group.image} />

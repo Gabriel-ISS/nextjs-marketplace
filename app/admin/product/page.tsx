@@ -30,7 +30,7 @@ let newFilters: NewFilters = {
 }
 
 // solo para inputs tipo radio
-const lastSelectedIsNew = {
+let lastSelectedIsNew = {
   category: false,
   brand: false
 }
@@ -63,6 +63,7 @@ export default function ({ searchParams }: PageProps) {
         })
         setOriginalPrice(product.price.current)
         newFilters = { category: '', brand: '', commonProperties: [], tags: [] }
+        lastSelectedIsNew = { category: false, brand: false }
       } catch (error) {
         alert('Error al obtener productos')
       }
@@ -85,7 +86,11 @@ export default function ({ searchParams }: PageProps) {
 
   function priceHandler(_name: string, value: string) {
     setProduct(product => {
-      product.price.current = parseInt(value) || 0
+      const newPrice = parseInt(value) || 0
+      if (originalPrice > newPrice) {
+        product.price.old = originalPrice
+      }
+      product.price.current = newPrice
     })
   }
 
@@ -261,7 +266,8 @@ export default function ({ searchParams }: PageProps) {
       setCategoryFilters(filters => {
         filters.commonProperties[propertyIndexForFilters].values.splice(propertyValueIndexForFilters, 1)
       })
-      const propertyValueIndexForNewFilters = newFilters.commonProperties[propertyIndexForFilters].values.indexOf(propertyValue)
+      console.log(newFilters)
+      const propertyValueIndexForNewFilters = newFilters.commonProperties[propertyIndexForNewFilters].values.indexOf(propertyValue)
       newFilters.commonProperties[propertyIndexForNewFilters].values.splice(propertyValueIndexForNewFilters, 1)
     }
 
@@ -337,14 +343,14 @@ export default function ({ searchParams }: PageProps) {
   }
 
   async function save() {
-    setProduct(product => {
-      if (originalPrice > product.price.current) {
-        product.price.old = originalPrice
-      }
-      product.properties = product.properties.filter(property => property.values.length)
-    })
     try {
-      const message = await saveProduct(product, newFilters)
+      const finalProduct = produce(product, p => {
+        if (originalPrice > p.price.current) {
+          p.price.old = originalPrice
+        }
+        p.properties = p.properties.filter(property => property.values.length)
+      })
+      const message = await saveProduct(finalProduct, newFilters)
       openModal(<MessageModal title='Éxito' message={message} onAccept={() => router.push('/products')} />, 'green')
     } catch (error: any) {
       openModal(<MessageModal title='Error' message={error.message} />, 'red')
