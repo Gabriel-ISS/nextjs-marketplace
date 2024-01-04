@@ -3,6 +3,10 @@ import { Model, Schema, model, models } from 'mongoose';
 
 const RequiredNumber = { type: Number, required: true }
 const RequiredString = { type: String, required: true }
+const UsedSchema = {
+  type: Number,
+  default: 1
+}
 
 const productSchema = new Schema<Product & Document>({
   image: RequiredString,
@@ -21,17 +25,18 @@ const productSchema = new Schema<Product & Document>({
   tags: [String],
 })
 
+
 const filterSchema = new Schema<Filter & Document>({
   category: RequiredString,
   brands: [{
     name: RequiredString,
-    used: RequiredNumber
+    used: UsedSchema
   }],
   properties: [{
     name: RequiredString,
     values: [{
       name: RequiredString,
-      used: RequiredNumber
+      used: UsedSchema
     }]
   }]
 })
@@ -39,10 +44,7 @@ const filterSchema = new Schema<Filter & Document>({
 const groupSchema = new Schema<Group & Document>({
   name: RequiredString,
   image: RequiredString,
-  used: {
-    type: Number,
-    default: 1
-  }
+  used: UsedSchema
 })
 
 const userSchema = new Schema<User & Document>({

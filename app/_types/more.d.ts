@@ -16,13 +16,11 @@ type Query = Partial<Pick<FilterNoCounted, 'category' | 'brands'>> & {
 type FilterNoCounted = {
   category: string
   brands: string[]
-  properties: Product['properties']
-}
+} & Pick<Product, 'properties'>
 
 type NewFilters = Omit<FilterNoCounted, 'brands'> & {
-  brand: string
-  tags: Omit<Group, '_id'| 'used'>[]
-}
+  tags: UnsavedGroup[]
+} & Pick<Product, 'brand'>
 
 /** Product Filter Data */
 type PFData = Omit<FilterNoCounted, 'brands'> & {
@@ -34,3 +32,5 @@ type DataState<T> = {
   data: T
   isLoading: boolean
 }
+
+type Projection<T, N extends 1 | -1> = { [key in keyof T]: N }
