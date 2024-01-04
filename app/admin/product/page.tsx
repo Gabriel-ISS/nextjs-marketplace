@@ -350,7 +350,7 @@ export default function ({ searchParams }: PageProps) {
         }
         p.properties = p.properties.filter(property => property.values.length)
       })
-      const message = await saveProduct(finalProduct, newFilters)
+      const message = await saveProduct(finalProduct, newFilters.tags)
       openModal(<MessageModal title='Éxito' message={message} onAccept={() => router.push('/products')} />, 'green')
     } catch (error: any) {
       openModal(<MessageModal title='Error' message={error.message} />, 'red')

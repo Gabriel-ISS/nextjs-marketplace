@@ -15,7 +15,7 @@ export async function getProductTags(): Promise<Group[]> {
     const groups = await Group.find({})
     return groups
   } catch (error) {
-    throw new Error('Failed to fetch tags')
+    throw new Error('Falla al obtener las etiquetas')
   }
 }
 
@@ -24,7 +24,7 @@ export async function getProductTagsNC(): Promise<string[]> {
     const groups = await Group.find({})
     return groups.map(group => group.name)
   } catch (error) {
-    throw new Error('Failed to fetch no counted tags')
+    throw new Error('Falla al obtener las etiquetas (NC)')
   }
 }
 
@@ -33,14 +33,14 @@ export async function getCategories(): Promise<string[]> {
     const categoriesContainers = await Filter.find({}, { category: 1 })
     return categoriesContainers.map(obj => obj.category)
   } catch (error) {
-    throw new Error('Failed to fetch categories')
+    throw new Error('Falla al obtener las categorías')
   }
 }
 
 export async function getCategoryFiltersNC(category: string): Promise<FilterNoCounted> {
   try {
     const filters = await Filter.findOne({ category })
-    if (!filters) throw new Error('No filters found')
+    if (!filters) throw new Error(`No se encontraron los filtros para la categoría "${category}"`)
     const noCounted: FilterNoCounted = {
       category: filters.category,
       brands: filters.brands.map(brand => brand.name),
@@ -51,7 +51,7 @@ export async function getCategoryFiltersNC(category: string): Promise<FilterNoCo
     }
     return noCounted
   } catch (error) {
-    throw new Error('Failed to fetch filters')
+    throw new Error('Falla al obtener los filtros (NC)')
   }
 }
 
@@ -89,7 +89,7 @@ export async function getProducts(queryString: string): Promise<Product[]> {
     const products = await Product.find(mongoQuery).limit(LIMIT_PER_PAGE).skip(LIMIT_PER_PAGE * (page - 1))
     return JSON.parse(JSON.stringify(products))
   } catch (error) {
-    throw new Error('Failed to fetch products')
+    throw new Error('Fallo al obtener los productos')
   }
 }
 
@@ -100,7 +100,7 @@ export async function getProduct(id?: string): Promise<Product> {
     const product = await Product.findById(id)
     return JSON.parse(JSON.stringify(product))
   } catch (error) {
-    throw new Error('Failed to fetch product')
+    throw new Error('Falla al obtener el producto product')
   }
 }
 

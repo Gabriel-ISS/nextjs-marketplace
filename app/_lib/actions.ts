@@ -1,17 +1,15 @@
 'use server'
 
-import { Filter, Product } from '@/_lib/models'
-import { withoutID } from '@/_lib/utils'
-import { checkAuthentication, createFilter, /* explainPFData, */ updateFilters, updateTags } from '@/_lib/server-utils'
 import { DEFAULT_PRODUCT } from '@/_lib/constants'
 import { RelevantFilterDataKeys } from '@/_lib/filter-manager'
+import { Product } from '@/_lib/models'
+import { checkAuthentication, updateFilters, updateTags } from '@/_lib/server-utils'
+import { withoutID } from '@/_lib/utils'
 
 
-export async function saveProduct(product: Product, newFilters: NewFilters) {
+export async function saveProduct(product: Product, newTags: UnsavedGroup[]) {
   await checkAuthentication()
-  //const { toIncrease, toReduce } = await explainPFData(product, newFilters)
-  const productExist = product._id.length
-  const prevProduct = await (async () => {
+  const getPrevProduct = async () => {
     if (productExist) {
       type MinProduct = Pick<Product, RelevantFilterDataKeys | 'tags'>
       const projection: Projection<MinProduct, 1> = { category: 1, brand: 1, properties: 1, tags: 1 }
@@ -21,7 +19,10 @@ export async function saveProduct(product: Product, newFilters: NewFilters) {
     } else {
       return DEFAULT_PRODUCT
     }
-  })()
+  }
+
+  const productExist = product._id.length
+  const prevProduct = await getPrevProduct()
 
   const createOrUpdateProduct = async () => {
     if (productExist) {
@@ -40,20 +41,10 @@ export async function saveProduct(product: Product, newFilters: NewFilters) {
     }
   }
 
-  const createOrUpdateFilter = async () => {
-    if (newFilters.category) {
-      return await createFilter(newFilters)
-    } else {
-      return await updateFilters(product, prevProduct)
-      //return await updateFilter(product.category, newFilters, toIncrease, toReduce)
-    }
-  }
-
   await Promise.all([
     createOrUpdateProduct(),
-    createOrUpdateFilter(),
-    //updateTags(newFilters.tags, toIncrease.tags, toReduce.tags)
-    updateTags(newFilters.tags, product.tags, prevProduct.tags)
+    updateFilters(product, prevProduct),
+    updateTags(newTags, product.tags, prevProduct.tags)
   ])
 
   if (product._id.length) {
@@ -63,27 +54,16 @@ export async function saveProduct(product: Product, newFilters: NewFilters) {
   }
 }
 
-export async function deleteProduct(_id: string, category: string) {
+export async function deleteProduct(_id: string) {
   await checkAuthentication()
-
-
-
-  //throw new Error('No implementado')
-
-
-  //const emptyNewFilters: NewFilters = { category: '', brand: '', properties: [], tags: [] }
-  //const { toIncrease, toReduce } = await explainPFData({ ...DEFAULT_PRODUCT, _id }, emptyNewFilters)
 
   const prevProduct = await Product.findById(_id)
   if (!prevProduct) throw new Error('No se pudo encontrar el producto a eliminar')
 
   await Promise.all([
-    //Product.findByIdAndDelete(_id),
     prevProduct.deleteOne(),
     updateFilters(DEFAULT_PRODUCT, prevProduct),
     updateTags([], [], prevProduct.tags)
-    //updateFilter(category, emptyNewFilters, toIncrease, toReduce),
-    //updateTags(product.tags)
   ])
 
   return 'Producto eliminado correctamente'
