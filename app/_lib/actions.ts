@@ -4,7 +4,7 @@ import { DEFAULT_PRODUCT } from '@/_lib/constants'
 import { RelevantFilterDataKeys } from '@/_lib/filter-manager'
 import { Product } from '@/_lib/models'
 import { checkAuthentication, updateFilters, updateTags } from '@/_lib/server-utils'
-import { withoutID } from '@/_lib/utils'
+import { CustomError, withoutID } from '@/_lib/utils'
 
 
 export async function saveProduct(product: Product, newTags: UnsavedGroup[]) {
@@ -14,7 +14,7 @@ export async function saveProduct(product: Product, newTags: UnsavedGroup[]) {
       type MinProduct = Pick<Product, RelevantFilterDataKeys | 'tags'>
       const projection: Projection<MinProduct, 1> = { category: 1, brand: 1, properties: 1, tags: 1 }
       const p = await Product.findById<MinProduct>(product._id, projection)
-      if (!p) throw new Error(`El producto con id ${product._id} no fue encontrado`)
+      if (!p) throw new CustomError(`El producto con id ${product._id} no fue encontrado`)
       return p
     } else {
       return DEFAULT_PRODUCT
@@ -29,14 +29,14 @@ export async function saveProduct(product: Product, newTags: UnsavedGroup[]) {
       try {
         return await Product.findByIdAndUpdate(product._id, withoutID(product))
       } catch (error) {
-        throw new Error('No se pudo actualizar el producto')
+        throw new CustomError('No se pudo actualizar el producto')
       }
     } else {
       try {
         return await Product.create(withoutID(product))
       } catch (error) {
         console.log(error)
-        throw new Error('No se pudo crear el producto')
+        throw new CustomError('No se pudo crear el producto')
       }
     }
   }
@@ -58,7 +58,7 @@ export async function deleteProduct(_id: string) {
   await checkAuthentication()
 
   const prevProduct = await Product.findById(_id)
-  if (!prevProduct) throw new Error('No se pudo encontrar el producto a eliminar')
+  if (!prevProduct) throw new CustomError('No se pudo encontrar el producto a eliminar')
 
   await Promise.all([
     prevProduct.deleteOne(),

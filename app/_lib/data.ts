@@ -3,6 +3,7 @@
 import { DEFAULT_PRODUCT } from '@/_lib/constants'
 import { Filter, Group, Product, User } from '@/_lib/models'
 import { connectDB } from '@/_lib/server-utils'
+import { CustomError } from '@/_lib/utils'
 import { FilterQuery } from 'mongoose'
 import QueryString from 'qs'
 
@@ -15,7 +16,7 @@ export async function getProductTags(): Promise<Group[]> {
     const groups = await Group.find({})
     return groups
   } catch (error) {
-    throw new Error('Falla al obtener las etiquetas')
+    throw new CustomError('Falla al obtener las etiquetas')
   }
 }
 
@@ -24,7 +25,7 @@ export async function getProductTagsNC(): Promise<string[]> {
     const groups = await Group.find({})
     return groups.map(group => group.name)
   } catch (error) {
-    throw new Error('Falla al obtener las etiquetas (NC)')
+    throw new CustomError('Falla al obtener las etiquetas (NC)')
   }
 }
 
@@ -33,14 +34,14 @@ export async function getCategories(): Promise<string[]> {
     const categoriesContainers = await Filter.find({}, { category: 1 })
     return categoriesContainers.map(obj => obj.category)
   } catch (error) {
-    throw new Error('Falla al obtener las categorías')
+    throw new CustomError('Falla al obtener las categorías')
   }
 }
 
 export async function getCategoryFiltersNC(category: string): Promise<FilterNoCounted> {
   try {
     const filters = await Filter.findOne({ category })
-    if (!filters) throw new Error(`No se encontraron los filtros para la categoría "${category}"`)
+    if (!filters) throw new CustomError(`No se encontraron los filtros para la categoría "${category}"`)
     const noCounted: FilterNoCounted = {
       category: filters.category,
       brands: filters.brands.map(brand => brand.name),
@@ -51,7 +52,7 @@ export async function getCategoryFiltersNC(category: string): Promise<FilterNoCo
     }
     return noCounted
   } catch (error) {
-    throw new Error('Falla al obtener los filtros (NC)')
+    throw new CustomError('Falla al obtener los filtros (NC)')
   }
 }
 
@@ -89,7 +90,7 @@ export async function getProducts(queryString: string): Promise<Product[]> {
     const products = await Product.find(mongoQuery).limit(LIMIT_PER_PAGE).skip(LIMIT_PER_PAGE * (page - 1))
     return JSON.parse(JSON.stringify(products))
   } catch (error) {
-    throw new Error('Fallo al obtener los productos')
+    throw new CustomError('Fallo al obtener los productos')
   }
 }
 
@@ -100,7 +101,7 @@ export async function getProduct(id?: string): Promise<Product> {
     const product = await Product.findById(id)
     return JSON.parse(JSON.stringify(product))
   } catch (error) {
-    throw new Error('Falla al obtener el producto product')
+    throw new CustomError('Falla al obtener el producto product')
   }
 }
 
@@ -110,6 +111,6 @@ export async function getAdmin(credentials: Pick<User, 'name' | 'password'>): Pr
     name: credentials.name, 
     password: credentials.password
   });
-  if (!user) throw new Error('Usuario o contraseña incorrectos.');
+  if (!user) throw new CustomError('Usuario o contraseña incorrectos.');
   return user
 }

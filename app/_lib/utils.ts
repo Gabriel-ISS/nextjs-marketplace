@@ -1,3 +1,14 @@
+type ExtraData = { send?: boolean }
+export class CustomError extends Error {
+  constructor(message: string, extraData: ExtraData = {}) {
+    if (extraData.send) {
+      super('Por favor reporte el error a la empresa.\n' + message)
+    } else {
+      super(message)
+    }
+  }
+}
+
 export function getLocalCurrency(value: number) {
   return new Intl.NumberFormat('es-Py', { style: 'currency', currency: 'PYG' }).format(value)
 }

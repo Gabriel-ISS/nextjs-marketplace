@@ -1,12 +1,13 @@
 import { FilterManager, RelevantFilterData } from '@/_lib/filter-manager';
 import { Filter, Group } from '@/_lib/models';
+import { CustomError } from '@/_lib/utils';
 import mongoose from "mongoose";
 import { getServerSession } from 'next-auth';
 
 
 const { MONGO_URL } = process.env;
 
-if (!MONGO_URL) throw new Error("MONGO_URL is not defined.");
+if (!MONGO_URL) throw new CustomError("MONGO_URL is not defined.", { send: true });
 
 let cached = (global as any).mongoose;
 
@@ -24,13 +25,13 @@ export const connectDB = async () => {
 
 export async function checkAuthentication() {
   const user = await getServerSession()
-  if (!user) throw new Error('Usuario no autenticado')
+  if (!user) throw new CustomError('Usuario no autenticado')
 }
 
 export async function updateFilters(product: RelevantFilterData, prevProduct: RelevantFilterData) {
   const getFilter = async (category: string) => {
     const filter = await Filter.findOne({ category })
-    if (!filter) throw new Error(`No se pudo encontrar el filtro a actualizar de categoría "${category}"`)
+    if (!filter) throw new CustomError(`No se pudo encontrar el filtro a actualizar de categoría "${category}"`)
     return filter
   }
 
@@ -68,7 +69,7 @@ export async function updateFilters(product: RelevantFilterData, prevProduct: Re
   }
   // error
   else {
-    throw new Error('Ninguna de las versiones del producto (anterior y actual) tiene una categoría asociada')
+    throw new CustomError('Ninguna de las versiones del producto (anterior y actual) tiene una categoría asociada')
   }
 }
 
@@ -126,6 +127,6 @@ export async function updateTags(newGroups: UnsavedGroup[], tags: string[], prev
     return await Group.bulkWrite(operations)
   } catch (error) {
     console.log(error)
-    throw new Error('Falla al actualizar las etiquetas')
+    throw new CustomError('Falla al actualizar las etiquetas')
   }
 }
