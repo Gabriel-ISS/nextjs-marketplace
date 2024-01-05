@@ -34,7 +34,7 @@ export class FilterManager {
         }))
       })
     } else {
-      throw new CustomError('FilterManager requires at least one input', {send: true})
+      throw new CustomError('FilterManager requires at least one input', { send: true })
     }
   }
 

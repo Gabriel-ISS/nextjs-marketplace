@@ -60,10 +60,13 @@ export async function updateFilters(product: RelevantFilterData, prevProduct: Re
   // increase/create
   else if (CurrentHasCategory && !PreviousHasCategory) {
     const filter = await Filter.findOne({ category: product.category })
+    // increase
     if (filter) {
       return await new FilterManager({ filter }).increase(product).updateDB()
-    } else {
-      return await new FilterManager({ product }).increase(product).updateDB()
+    }
+    // create
+    else {
+      return await new FilterManager({ product }).updateDB()
     }
   }
   // reduce/remove

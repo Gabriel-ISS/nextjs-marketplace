@@ -27,7 +27,7 @@ export default function ProductItem({ product, adminMode, setProducts }: Props) 
   function deleteProductHandler() {
     openModal(<MessageModal title='Advertencia' message='El producto se eliminara permanentemente' onAccept={async () => {
       try {
-        const message = await deleteProduct(product._id, product.category)
+        const message = await deleteProduct(product._id)
         openModal(<MessageModal title='Éxito' message={message} onAccept={() => {
           setProducts(products => {
             const index = products.findIndex(p => p.name == product.name)
