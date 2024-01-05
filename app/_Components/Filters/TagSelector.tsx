@@ -1,7 +1,7 @@
 import style from '@/_Components/Filters/Filters.module.scss'
 import Loader from '@/_Components/Loader'
 import useAppStore from '@/_store/useStore'
-import { ChangeEvent, useEffect, useState } from 'react'
+import { ChangeEvent, useEffect } from 'react'
 
 
 interface Props {
@@ -21,15 +21,15 @@ export default function TagSelector({ selectHandler, checked, editor }: Props) {
   useEffect(loadTags, [])
 
   return (
-    <Loader isLoading={isLoading} meanwhile={<span>Cargando etiquetas...</span>}>
-      {data && (
-        <fieldset className={style.filter_group}>
-          <legend className={style.filter_group__title}>
-            Etiquetas
-            {editor && (
-              <button className={style.filter_group__add_btn} onClick={editor.addTag}>Añadir +</button>
-            )}
-          </legend>
+    <fieldset className={style.filter_group}>
+      <legend className={style.filter_group__title}>
+        Etiquetas
+        {editor && (
+          <button className={style.filter_group__add_btn} onClick={editor.addTag}>Añadir +</button>
+        )}
+      </legend>
+      <Loader isLoading={isLoading} meanwhile={<span>Cargando etiquetas...</span>}>
+        {data && (
           <div className={style.filter_group__options}>
             {data.map((tag, i) => (
               <div className={style.filter_group__option} key={tag}>
@@ -47,8 +47,8 @@ export default function TagSelector({ selectHandler, checked, editor }: Props) {
               </div>
             ))}
           </div>
-        </fieldset>
-      )}
-    </Loader>
+        )}
+      </Loader>
+    </fieldset>
   )
 }

@@ -38,30 +38,32 @@ export default function CategoryFiltersSelector({ category, brandHandler, common
   return (
     <Loader isLoading={isLoading} meanwhile={<span>Cargando filtros de categoría...</span>}>
       {data && <>
-        <fieldset className={style.filter_group}>
-          <legend className={style.filter_group__title}>
-            Marcas
-            {editor && (
-              <button className={style.filter_group__add_btn} onClick={editor.addBrand}>Añadir +</button>
-            )}
-          </legend>
-          <div className={style.filter_group__options}>
-            {data.brands.map(brand => (
-              <div className={style.filter_group__option} key={brand}>
-                <label>
-                  <input
-                    type={editor ? 'radio' : 'checkbox'}
-                    name='brand'
-                    value={brand}
-                    id={brand}
-                    onChange={brandHandler}
-                    checked={checkedBrands.includes(brand)}
-                  />{brand}
-                </label>
-              </div>
-            ))}
-          </div>
-        </fieldset>
+        {data.brands.length || editor ? (
+          <fieldset className={style.filter_group}>
+            <legend className={style.filter_group__title}>
+              Marcas
+              {editor && (
+                <button className={style.filter_group__add_btn} onClick={editor.addBrand}>Añadir +</button>
+              )}
+            </legend>
+            <div className={style.filter_group__options}>
+              {data.brands.map(brand => (
+                <div className={style.filter_group__option} key={brand}>
+                  <label>
+                    <input
+                      type={editor ? 'radio' : 'checkbox'}
+                      name='brand'
+                      value={brand}
+                      id={brand}
+                      onChange={brandHandler}
+                      checked={checkedBrands.includes(brand)}
+                    />{brand}
+                  </label>
+                </div>
+              ))}
+            </div>
+          </fieldset>
+        ): null}
 
         <fieldset className={style.common_properties}>
           {editor &&

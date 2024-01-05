@@ -21,15 +21,15 @@ export default function CategorySelector({ selectHandler, checked, editor }: Pro
   useEffect(loadCategories, [])
 
   return (
-    <Loader isLoading={isLoading} meanwhile={<span>Cargando categorías...</span>}>
-      {data && (
-        <fieldset className={style.filter_group}>
-          <legend className={style.filter_group__title}>
-            Categorías
-            {editor && (
-              <button className={style.filter_group__add_btn} onClick={editor.addCategory}>Añadir +</button>
-            )}
-          </legend>
+    <fieldset className={style.filter_group}>
+      <legend className={style.filter_group__title}>
+        Categorías
+        {editor && (
+          <button className={style.filter_group__add_btn} onClick={editor.addCategory}>Añadir +</button>
+        )}
+      </legend>
+      <Loader isLoading={isLoading} meanwhile={<span>Cargando categorías...</span>}>
+        {data && (
           <div className={style.filter_group__options}>
             {data.map(category => (
               <div className={style.filter_group__option} key={category}>
@@ -47,8 +47,8 @@ export default function CategorySelector({ selectHandler, checked, editor }: Pro
               </div>
             ))}
           </div>
-        </fieldset>
-      )}
-    </Loader>
+        )}
+      </Loader>
+    </fieldset>
   )
 }
