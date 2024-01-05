@@ -5,7 +5,7 @@ import style from '@/_Components/Search.module.scss'
 import useAppStore from '@/_store/useStore'
 import { usePathname, useRouter } from 'next/navigation'
 import QueryString from 'qs'
-import { ChangeEvent, KeyboardEvent, useState } from 'react'
+import { ChangeEvent, KeyboardEvent, useEffect, useState } from 'react'
 import { FaSearch } from 'react-icons/fa'
 
 
@@ -19,6 +19,7 @@ export default function Search({ className }: Props) {
   const [search, setSearch] = useState(() => {
     return useAppStore.getState().query.data.search || ''
   })
+  const searchQuery = useAppStore(s => s.query.data.search)
   const setQuery = useAppStore(s => s.query.setter)
 
   function setSearchInQuery(search: string) {
@@ -34,6 +35,11 @@ export default function Search({ className }: Props) {
       router.push(`/products?${QueryString.stringify(query)}`)
     }
   }
+
+  useEffect(() => {
+    if (!searchQuery) return;
+    setSearch(searchQuery)
+  }, [searchQuery])
 
   function handleInput(e: ChangeEvent<HTMLInputElement>) {
     setSearch(e.currentTarget.value)
