@@ -5,6 +5,7 @@ import styles from '@/_Components/Header.module.scss'
 import { useRef, useState } from 'react';
 import { MdMenu } from 'react-icons/md'
 import { exo2 } from '@/_lib/fonts';
+import ProductsLink from '@/_Components/ProductsLink';
 
 
 export default function Header() {
@@ -65,7 +66,7 @@ export default function Header() {
             onTransitionEnd={handleTransitionEnd}>
             <ul className={styles.nav__links_list}>
               <li><Link href="/">Inicio</Link></li>
-              <li><Link href="/products">Productos</Link></li>
+              <li><ProductsLink/></li>
               <li><Link href="/about">Sobre nosotros</Link></li>
             </ul>
           </div>
