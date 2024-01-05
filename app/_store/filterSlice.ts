@@ -19,8 +19,9 @@ export type FilterSlice = {
   }
   query: {
     data: Query
+    setPage(newPage: number): void
     setter: StateUpdater<Query>
-    setFromString(query: string): void 
+    setFromString(query: string): void
     setTag(tag: string): void
   }
 }
@@ -87,14 +88,25 @@ const filterSlice: Slice<FilterSlice> = (set) => ({
   },
   query: {
     data: {},
+    setPage(newPage) {
+      set(prev => {
+        prev.query.data.page = newPage
+      })
+    },
     setter(setQuery) {
       set(prev => {
         setQuery(prev.query.data)
+        // restablecemos la pagina
+        delete prev.query.data.page
       })
     },
     setFromString(query) {
       set(prev => {
         prev.query.data = QueryString.parse(query)
+        const q = prev.query.data
+        if (q.page) {
+          q.page = Number(q.page)
+        }
       })
     },
     setTag(tag) {

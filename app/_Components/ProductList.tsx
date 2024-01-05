@@ -1,6 +1,7 @@
 'use client'
 
 import Loader from '@/_Components/Loader'
+import Pagination from '@/_Components/Pagination'
 import ProductItem from '@/_Components/ProductItem'
 import style from '@/_Components/ProductList.module.scss'
 import useFetch from '@/_hooks/useFetch'
@@ -15,17 +16,28 @@ interface Props {
 
 export default function ProductList({ adminMode }: Props) {
   const searchParams = useSearchParams().toString()
-  const [products, setProducts, isLoading, _setLoading] = useFetch<Product[] | null>({
+  const [data, setData, isLoading, _setLoading] = useFetch({
     fetcher: () => getProducts(searchParams),
     dependencyList: [searchParams]
   })
 
+  const setProducts: StateUpdater<Product[]> = (updater) => {
+    setData(prev => {
+      updater(prev?.products as Product[])
+    })
+  }
+
   return (
-    <section className={style.products}>
+    <section className={style.section}>
       <Loader isLoading={isLoading} meanwhile={<span>Cargando productos...</span>}>
-        {products && products.map(product => (
-          <ProductItem key={product._id} product={product} adminMode={adminMode} setProducts={setProducts as StateUpdater<Product[]>} />
-        ))}
+        {data && <>
+          <div className={style.products}>
+            {data.products.map(product => (
+              <ProductItem key={product._id} product={product} adminMode={adminMode} setProducts={setProducts} />
+            ))}
+          </div>
+          <Pagination totalPages={data.totalPages} />
+        </>}
       </Loader>
     </section>
   )

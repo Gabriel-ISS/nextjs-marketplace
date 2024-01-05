@@ -9,6 +9,7 @@
   //fallback
   height: 100vh;
   height: 100dvh;
+  overflow: auto;
   z-index: 2;
   padding: 1rem;
 
@@ -31,6 +32,9 @@
     z-index: 3;
     width: 3rem;
     height: 3rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 
     background-color: var(--blue);
     color: var(--white);

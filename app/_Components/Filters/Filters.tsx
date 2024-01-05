@@ -1,15 +1,16 @@
 'use client'
 
-import style from '@/_Components/Filters/Filters.module.scss'
-import { ChangeEvent, useEffect, useMemo, useState } from 'react'
-import { IoMdClose } from 'react-icons/io'
-import CategorySelector from '@/_Components/Filters/CategorySelector'
 import CategoryFiltersSelector from '@/_Components/Filters/CategoryFiltersSelector'
+import CategorySelector from '@/_Components/Filters/CategorySelector'
+import style from '@/_Components/Filters/Filters.module.scss'
 import TagSelector from '@/_Components/Filters/TagSelector'
-import { useRouter, useSearchParams } from 'next/navigation'
 import useScrollLock from '@/_hooks/useLockScroll'
 import useAppStore from '@/_store/useStore'
+import { useRouter, useSearchParams } from 'next/navigation'
 import QueryString from 'qs'
+import { ChangeEvent, useEffect, useMemo, useState } from 'react'
+import { IoMdClose } from 'react-icons/io'
+import { FaFilter } from 'react-icons/fa'
 
 
 export default function Filters() {
@@ -31,7 +32,7 @@ export default function Filters() {
     }
   }, [query])
 
-  function toggleModal() {
+  function toggleSidebar() {
     if (isOpen) {
       setIsOpen(false)
       unlockScroll()
@@ -117,8 +118,8 @@ export default function Filters() {
       />
       <TagSelector checked={query.tags || []} selectHandler={tagHandler} />
 
-      <button className={style.filters__toggle_btn} onClick={toggleModal}>
-        {isOpen ? <IoMdClose size='100%' /> : 'F'}
+      <button className={style.filters__toggle_btn} onClick={toggleSidebar}>
+        {isOpen ? <IoMdClose size='100%' /> : <FaFilter size='70%' />}
       </button>
 
     </aside>

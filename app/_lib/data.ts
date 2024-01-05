@@ -4,7 +4,7 @@ import { DEFAULT_PRODUCT } from '@/_lib/constants'
 import { Filter, Group, Product, User } from '@/_lib/models'
 import { connectDB } from '@/_lib/server-utils'
 import { CustomError } from '@/_lib/utils'
-import { FilterQuery } from 'mongoose'
+import { FilterQuery, PipelineStage } from 'mongoose'
 import QueryString from 'qs'
 
 
@@ -56,8 +56,8 @@ export async function getCategoryFiltersNC(category: string): Promise<FilterNoCo
   }
 }
 
-export async function getProducts(queryString: string): Promise<Product[]> {
-  const LIMIT_PER_PAGE = 10
+export async function getProducts(queryString: string): Promise<{ products: Product[], totalPages: number }> {
+  const LIMIT_PER_PAGE = 2
   let page = 1
   let mongoQuery: FilterQuery<Product> = {}
   if (queryString.length) {
@@ -87,8 +87,10 @@ export async function getProducts(queryString: string): Promise<Product[]> {
   }
 
   try {
+    const count = await Product.countDocuments(mongoQuery)
+    const totalPages = Math.ceil(count / LIMIT_PER_PAGE)
     const products = await Product.find(mongoQuery).limit(LIMIT_PER_PAGE).skip(LIMIT_PER_PAGE * (page - 1))
-    return JSON.parse(JSON.stringify(products))
+    return JSON.parse(JSON.stringify({ products, totalPages }))
   } catch (error) {
     throw new CustomError('Fallo al obtener los productos')
   }
@@ -108,7 +110,7 @@ export async function getProduct(id?: string): Promise<Product> {
 export async function getAdmin(credentials: Pick<User, 'name' | 'password'>): Promise<User> {
   // credentials también incluye información como el callbackURL
   const user = await User.findOne({
-    name: credentials.name, 
+    name: credentials.name,
     password: credentials.password
   });
   if (!user) throw new CustomError('Usuario o contraseña incorrectos.');

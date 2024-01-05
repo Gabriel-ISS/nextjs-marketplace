@@ -9,7 +9,8 @@
 
 .principal_view {
   @include autoMargin(1000px);
-  width: 100%;
+  display: grid;
+  grid-template-rows: auto 1fr;
 }
 
 .search {

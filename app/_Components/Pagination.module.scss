@@ -1,0 +1,15 @@
+.pagination {
+  display: flex;
+  justify-content: space-between;
+  //width: 100%;
+
+  &__next, &__prev {
+    min-height: 3rem;
+    display: flex;
+    align-items: center;
+    gap: 1ch;
+
+    color: var(--text-c1);
+    background-color: var(--bg4);
+  }
+}

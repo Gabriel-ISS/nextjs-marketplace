@@ -90,6 +90,11 @@ button,
   &:hover {
     filter: brightness(.8)
   }
+
+  &:disabled {
+    filter: brightness(.5) !important;
+    pointer-events: none;
+  }
 }
 
 input,
