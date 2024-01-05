@@ -46,6 +46,8 @@ export default function Filters() {
     const category = event.currentTarget.value
     setQuery(query => {
       query.category = category
+      delete query.brands
+      delete query.properties
     })
   }
 
