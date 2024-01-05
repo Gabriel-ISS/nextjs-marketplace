@@ -57,7 +57,7 @@ export async function getCategoryFiltersNC(category: string): Promise<FilterNoCo
 }
 
 export async function getProducts(queryString: string): Promise<{ products: Product[], totalPages: number }> {
-  const LIMIT_PER_PAGE = 10
+  const LIMIT_PER_PAGE = 3 * 6;
   let page = 1
   let mongoQuery: FilterQuery<Product> = {}
   if (queryString.length) {

@@ -4,7 +4,7 @@ import { Document } from 'mongoose';
 
 type CustomFilterConstructorProps = {
   filter?: UnsavedFilter2 & Document,
-  product?: Product
+  product?: Pick<Product, RelevantFilterDataKeys>
 }
 
 export type RelevantFilterDataKeys = 'category' | 'brand' | 'properties'

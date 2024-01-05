@@ -161,7 +161,7 @@ export default function CropImage({ aspect, imgSrc, imageName, fileType, onSaveC
     )
     const options = {
       maxSizeMB: 1,
-      maxWidthOrHeight: 1920,
+      maxWidthOrHeight: 1024,
       useWebWorker: true
     }
     try {

@@ -65,7 +65,7 @@ export function Header({ children, onClose }: HeaderProps) {
   // TODO: span o h5 es el elemento correcto?
   return (
     <div className={style.modal__header}>
-      <span className={style.modal__title} data-theme={theme}>{children}</span>
+      <h2 className={style.modal__title} data-theme={theme}>{children}</h2>
       <button className={style.modal__close_btn} data-theme={theme} onClick={closeModal}>
         <IoMdClose size='1.9rem' />
       </button>
