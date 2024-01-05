@@ -14,7 +14,7 @@ export default async function () {
   return (
     <main className={style.main}>
       <Filters />
-      <div className={style.principal_view}>
+      <div className={style.principal_view} data-mode-admin={adminMode}>
         <Search className={style.search} />
         {adminMode && (
           <Link className={style.add_product_btn} href='/admin/product' role='button'>Registrar producto <AiFillFileAdd /></Link>

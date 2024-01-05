@@ -11,6 +11,10 @@
   @include autoMargin(1000px);
   display: grid;
   grid-template-rows: auto 1fr;
+
+  &[data-mode-admin="true"] {
+    grid-template-rows: auto auto 1fr;
+  }
 }
 
 .search {
