@@ -3,7 +3,7 @@
 import CategoryFiltersSelector from '@/_Components/Filters/Admin/CategoryFiltersSelector'
 import CategorySelector from '@/_Components/Filters/Admin/CategorySelector'
 import TagSelector from '@/_Components/Filters/Admin/TagSelector'
-import { CustomFormikError } from '@/_Components/Inputs'
+import { CustomFormikError, ImageFileData } from '@/_Components/Inputs'
 import inputStyle from '@/_Components/Inputs.module.scss'
 import Loader from '@/_Components/Loader'
 import CropImageModal from '@/_Components/Modal/CropImageModal'
