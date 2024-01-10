@@ -18,7 +18,7 @@ export const productSchema: ObjectSchema<Omit<Product, '_id'>> = object({
   brand: string().required(requiredMessage('Marca')),
   properties: array().of(object({
     name: string().required(),
-    values: array().of(string().required()).required(),
+    values: array().of(string().required()).required().min(1, 'Valor de propiedad'),
   })).required().min(3, minItemsMessage('Propiedades comunes')),
   tags: array().of(string().required()).required(),
 })

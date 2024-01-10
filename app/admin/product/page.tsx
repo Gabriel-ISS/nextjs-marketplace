@@ -3,7 +3,7 @@
 import CategoryFiltersSelector from '@/_Components/Filters/Admin/CategoryFiltersSelector'
 import CategorySelector from '@/_Components/Filters/Admin/CategorySelector'
 import TagSelector from '@/_Components/Filters/Admin/TagSelector'
-import { CustomFormikError, ImageFileData } from '@/_Components/Inputs'
+import { CustomFormikError } from '@/_Components/Inputs'
 import inputStyle from '@/_Components/Inputs.module.scss'
 import Loader from '@/_Components/Loader'
 import CropImageModal from '@/_Components/Modal/CropImageModal'
@@ -305,7 +305,7 @@ export default function ({ searchParams }: PageProps) {
                     <div className={style.editor__filters}>
                       <CategorySelector selectHandler={categoryHandler} addCategory={addCategory} />
                       <CategoryFiltersSelector
-                        category={{ name: values.category, isNew: values.category.length == 0 }}
+                        category={{ name: values.category, isNew: values.category == newFilters.category }}
                         brandHandler={brandHandler}
                         propertyValueHandler={propertyValueHandler}
                         addBrand={addBrand}
@@ -318,7 +318,7 @@ export default function ({ searchParams }: PageProps) {
                     <button 
                     className={style.editor__save_btn} 
                     type='submit' 
-                    disabled={isSubmitting || Boolean(Object.keys(errors).length)}
+                    disabled={isSubmitting}
                     >
                       Guardar
                     </button>
@@ -402,7 +402,7 @@ const Input = ({ field, form, label, handler, ...props }: CustomInputProps) => {
     <input id={field.name} {...field} {...props} onChange={_handler} autoComplete='off' />
     <CustomFormikError name={field.name} />
   </>
-};
+}
 
 const TextArea = ({ field, form, label }: CustomInputProps) => {
   return <>
@@ -410,4 +410,4 @@ const TextArea = ({ field, form, label }: CustomInputProps) => {
     <textarea id={field.name} {...field} />
     <CustomFormikError name={field.name} />
   </>
-};
+}

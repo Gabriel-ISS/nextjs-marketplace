@@ -32,7 +32,6 @@ export default function ProductItem({ product, adminMode, setProducts }: Props) 
           setProducts(products => {
             const index = products.findIndex(p => p.name == product.name)
             products.splice(index, 1)
-            router.refresh()
           })
         }} />, 'green')
       } catch (error: any) {

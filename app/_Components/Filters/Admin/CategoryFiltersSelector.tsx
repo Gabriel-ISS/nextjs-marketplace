@@ -21,7 +21,7 @@ interface Props {
 }
 
 export default function CategoryFiltersSelector({ category, brandHandler, propertyValueHandler, addBrand, addProperty, addPropertyValue }: Props) {
-  const { setFieldValue, setValues, values: productValues } = useFormikContext<Product>()
+  const { setFieldValue, setValues, values: productValues, errors } = useFormikContext<Product>()
   const { loadCategoryFilters, clearCategoryFilters, state: { data, isLoading } } = useAppStore(s => ({
     loadCategoryFilters: s.filters.categoryFilters.load,
     clearCategoryFilters: s.filters.categoryFilters.clear,
@@ -124,7 +124,6 @@ export default function CategoryFiltersSelector({ category, brandHandler, proper
                   {propertyName}
                   <button type='button' className={style.filter_group__add_btn} onClick={() => addPropertyValue(propertyName, propertyIndex, updateProduct)}>Añadir +</button>
                 </legend>
-                <CustomFormikError name={`properties[${propertyIndex}].values`} />
                 <div className={style.filter_group__options}>
                   {values.map((name, valueIndex) => (
                     <div className={style.filter_group__option} key={name}>
