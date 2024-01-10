@@ -33,4 +33,10 @@ type DataState<T> = {
   isLoading: boolean
 }
 
+type ImageFileData = {
+  base64Img: string,
+  name: string
+  type: string
+}
+
 type Projection<T, N extends 1 | -1> = { [key in keyof T]: N }

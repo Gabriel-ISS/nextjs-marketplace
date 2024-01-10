@@ -1,12 +1,12 @@
 'use client'
 
-import { Input } from '@/_Components/Inputs';
 import MessageModal from '@/_Components/Modal/MessageModal';
 import useWritableState from '@/_hooks/useWritableState';
 import useAppStore from '@/_store/useStore';
-import style from '@/admin/auth/page.module.scss'
+import style from '@/admin/auth/page.module.scss';
 import { signIn } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
+import React, { ChangeEvent, HTMLInputTypeAttribute } from 'react';
 
 export default function () {
   const router = useRouter()
@@ -51,4 +51,34 @@ export default function () {
       </form>
     </main>
   )
+}
+
+interface InputProps {
+  label: string
+  field: string
+  value: string | number
+  handler(field: string, value: string): void
+  inputType?: HTMLInputTypeAttribute
+  as?: string
+  className?: string
+}
+
+export function Input({ label, field, value, handler, inputType, as, className }: InputProps) {
+  const imp = React.createElement(as || 'input', {
+    type: inputType || 'text',
+    value,
+    onChange: inputHandler,
+    name: field,
+    required: true,
+    className
+  })
+
+  function inputHandler(e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) {
+    handler(field, e.currentTarget.value)
+  }
+
+  return <div>
+    <label>{label}</label>
+    {imp}
+  </div>
 }
