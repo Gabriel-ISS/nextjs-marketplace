@@ -1,25 +1,27 @@
 'use client'
 
-
-import CategoryFiltersSelector from '@/_Components/Filters/CategoryFiltersSelector'
-import CategorySelector from '@/_Components/Filters/CategorySelector'
-import TagSelector from '@/_Components/Filters/TagSelector'
-import { ImageFileData, ImageInput, Input } from '@/_Components/Inputs'
+import CategoryFiltersSelector from '@/_Components/Filters/Admin/CategoryFiltersSelector'
+import CategorySelector from '@/_Components/Filters/Admin/CategorySelector'
+import TagSelector from '@/_Components/Filters/Admin/TagSelector'
+import { CustomFormikError, ImageFileData } from '@/_Components/Inputs'
+import inputStyle from '@/_Components/Inputs.module.scss'
 import Loader from '@/_Components/Loader'
 import CropImageModal from '@/_Components/Modal/CropImageModal'
 import InputModal from '@/_Components/Modal/InputModal'
 import MessageModal from '@/_Components/Modal/MessageModal'
 import TagModal from '@/_Components/Modal/TagModal'
 import Product from '@/_Components/Product'
-import useLoadState from '@/_hooks/useLoadState'
+import { StateUpdater } from '@/_hooks/useWritableState'
 import { saveProduct } from '@/_lib/actions'
-import { DEFAULT_PRODUCT } from '@/_lib/constants'
 import { getProduct } from '@/_lib/data'
+import { getBase64 } from '@/_lib/utils'
+import { productSchema } from '@/_lib/validation-schemas'
 import useAppStore from '@/_store/useStore'
 import style from '@/admin/product/page.module.scss'
+import { Field, Form, Formik, FormikContextType } from 'formik'
 import { produce } from 'immer'
 import { useRouter } from 'next/navigation'
-import { ChangeEvent, useEffect, useState } from 'react'
+import { ChangeEvent, ChangeEventHandler, FocusEventHandler, HTMLInputTypeAttribute, useEffect, useState } from 'react'
 
 
 let newFilters: NewFilters = {
@@ -44,33 +46,28 @@ export default function ({ searchParams }: PageProps) {
     setCategoryFilters: s.filters.categoryFilters.setter,
     setTags: s.filters.tags.setter
   }))
-  const [product, setProduct, isLoading, _setLoading] = useLoadState<Product>(DEFAULT_PRODUCT)
-  const [currentCategory, setCurrentCategory] = useState({
-    name: '',
-    isNew: true
-  })
+  const [initialProduct, setInitialProduct] = useState<Product | null>(null)
+  const [isLoading, setLoading] = useState(false)
   const [originalPrice, setOriginalPrice] = useState(0)
 
 
   useEffect(() => {
     (async () => {
       try {
+        setLoading(true)
         const product = await getProduct(searchParams.id)
-        setProduct(() => product)
-        setCurrentCategory({
-          name: product.category,
-          isNew: product.category == ''
-        })
+        setInitialProduct(product)
         setOriginalPrice(product.price.current)
         newFilters = { category: '', brand: '', properties: [], tags: [] }
         lastSelectedIsNew = { category: false, brand: false }
-      } catch (error) {
-        alert('Error al obtener productos')
+      } catch (error: any) {
+        openModal(<MessageModal title='Error' message={error.message} />, 'red')
       }
+      setLoading(false)
     })()
   }, [])
 
-  function imageHandler(data: ImageFileData) {
+  function imageHandler(data: ImageFileData, setProduct: StateUpdater<Product>) {
     openModal(<CropImageModal imageData={data} onSaveCrop={croppedImage => {
       setProduct(product => {
         product.image = croppedImage
@@ -78,13 +75,9 @@ export default function ({ searchParams }: PageProps) {
     }} />)
   }
 
-  function textHandler(name: string, value: string) {
-    setProduct(product => {
-      product[name as 'name' | 'note'] = value
-    })
-  }
+  function priceHandler(e: ChangeEvent<HTMLInputElement>, setProduct: StateUpdater<Product>) {
+    const value = e.currentTarget.value
 
-  function priceHandler(_name: string, value: string) {
     setProduct(product => {
       const newPrice = parseInt(value) || 0
       if (originalPrice > newPrice) {
@@ -94,7 +87,7 @@ export default function ({ searchParams }: PageProps) {
     })
   }
 
-  function addCategory() {
+  function addCategory(setProduct: StateUpdater<Product>) {
     openModal(<InputModal title='Agregar categoría' onAccept={category => {
       // omit
       const categories = useAppStore.getState().filters.categories.state.data
@@ -121,17 +114,10 @@ export default function ({ searchParams }: PageProps) {
         product.category = category
         product.properties = []
       })
-
-      setCurrentCategory({
-        name: category,
-        isNew: true
-      })
     }} />)
   }
 
-  function categoryHandler(e: ChangeEvent<HTMLInputElement>) {
-    const category = e.target.value
-
+  function categoryHandler() {
     if (lastSelectedIsNew.category) {
       // remove new filter
       setCategories(categories => {
@@ -142,20 +128,9 @@ export default function ({ searchParams }: PageProps) {
 
     // set last selected
     lastSelectedIsNew.category = false
-
-    // update product
-    setProduct(product => {
-      product.category = category
-    })
-
-    // extra: set current category
-    setCurrentCategory({
-      name: category,
-      isNew: false
-    })
   }
 
-  function addBrand() {
+  function addBrand(setProduct: StateUpdater<Product>) {
     openModal(<InputModal title='Agregar marca' onAccept={brand => {
       const brands = useAppStore.getState().filters.categoryFilters.state.data.brands
       if (brands.includes(brand)) return;
@@ -178,9 +153,7 @@ export default function ({ searchParams }: PageProps) {
     }} />)
   }
 
-  function brandHandler(e: ChangeEvent<HTMLInputElement>) {
-    const brand = e.target.value
-
+  function brandHandler() {
     if (lastSelectedIsNew.brand) {
       setCategoryFilters(filters => {
         filters.brands.pop()
@@ -189,10 +162,6 @@ export default function ({ searchParams }: PageProps) {
     }
 
     lastSelectedIsNew.brand = false
-
-    setProduct(product => {
-      product.brand = brand
-    })
   }
 
   function addProperty() {
@@ -207,16 +176,11 @@ export default function ({ searchParams }: PageProps) {
 
       setCategoryFilters(filters => {
         filters.properties.push(newProperty)
-        newFilters.properties.push(newProperty)
-      })
-
-      setProduct(product => {
-        product.properties.push(newProperty)
       })
     }} />)
   }
 
-  function addPropertyValue(propertyName: string, propertyIndexForFilters: number) {
+  function addPropertyValue(propertyName: string, propertyIndexForFilters: number, setProduct: StateUpdater<Product>) {
     openModal(<InputModal title='Agregar valor de característica' onAccept={propertyValue => {
       const values = useAppStore.getState().filters.categoryFilters.state.data.properties[propertyIndexForFilters].values;
       if (values.includes(propertyValue)) return;
@@ -258,48 +222,19 @@ export default function ({ searchParams }: PageProps) {
     const
       propertyValue = e.currentTarget.value,
       propertyIndexForNewFilters = newFilters.properties.findIndex(property => property.name == propertyName),
-      propertyIndexForProduct = product.properties.findIndex(property => property.name == propertyName),
       clickedValueIsNew = newFilters.properties[propertyIndexForNewFilters]?.values.includes(propertyValue),
-      isSelected = !product.properties[propertyIndexForProduct]?.values.includes(propertyValue)
+      isSelected = e.currentTarget.checked
 
     if (clickedValueIsNew && !isSelected) {
       setCategoryFilters(filters => {
         filters.properties[propertyIndexForFilters].values.splice(propertyValueIndexForFilters, 1)
       })
-      console.log(newFilters)
       const propertyValueIndexForNewFilters = newFilters.properties[propertyIndexForNewFilters].values.indexOf(propertyValue)
       newFilters.properties[propertyIndexForNewFilters].values.splice(propertyValueIndexForNewFilters, 1)
     }
-
-    setProduct(product => {
-      const
-        properties = product.properties,
-        currentProperty = properties[propertyIndexForProduct] as Product['properties'][number] | undefined,
-        propertyValues = currentProperty?.values;
-
-      if (isSelected) {
-        if (propertyValues) {
-          propertyValues.push(propertyValue)
-        } else {
-          properties.push({
-            name: propertyName,
-            values: [propertyValue]
-          })
-        }
-      } else {
-        if (!propertyValues) throw new Error('Se esta deseleccionando un valor de una propiedad que no se encuentra');
-        if (propertyValues.length > 1) {
-          const propertyValueIndexForProduct = propertyValues.indexOf(propertyValue)
-          propertyValues.splice(propertyValueIndexForProduct, 1)
-        } else {
-          properties.splice(propertyIndexForProduct, 1)
-
-        }
-      }
-    })
   }
 
-  function addTag() {
+  function addTag(setProduct: StateUpdater<Product>) {
     openModal(<TagModal title='Agregar etiqueta' onAccept={(tag, img) => {
       const tags = useAppStore.getState().filters.tags.state.data
       if (tags.includes(tag)) return;
@@ -321,9 +256,8 @@ export default function ({ searchParams }: PageProps) {
   function tagHandler(indexForFilters: number, e: ChangeEvent<HTMLInputElement>) {
     const
       tag = e.currentTarget.value,
-      indexForProduct = product.tags.indexOf(tag),
       indexForNewFilters = newFilters.tags.findIndex(t => t.name == tag),
-      isSelected = indexForProduct == -1,
+      isSelected = e.currentTarget.checked,
       isNew = indexForNewFilters != -1;
 
     if (isNew && !isSelected) {
@@ -332,17 +266,9 @@ export default function ({ searchParams }: PageProps) {
         newFilters.tags.splice(indexForNewFilters, 1)
       })
     }
-
-    setProduct(product => {
-      if (isSelected) {
-        product.tags.push(tag)
-      } else {
-        product.tags.splice(indexForProduct, 1)
-      }
-    })
   }
 
-  async function save() {
+  async function save(product: Product) {
     try {
       const finalProduct = produce(product, p => {
         if (originalPrice > p.price.current) {
@@ -360,35 +286,128 @@ export default function ({ searchParams }: PageProps) {
   return (
     <main className={style.main}>
       <Loader isLoading={isLoading} meanwhile={<span>Cargando producto...</span>}>
-        {product && <Product product={product} />}
+        {initialProduct && <>
+          <Formik<Product>
+            initialValues={initialProduct}
+            validationSchema={productSchema}
+            onSubmit={save}
+          >
+            {({ isSubmitting, errors, values }) => (
+              <>
+                <Product product={values} />
+                <aside className={style.editor}>
+                  <Form>
+                    <Field name='image' component={ImageInput} handler={imageHandler} />
+                    <Field name='name' component={Input} label='Nombre' type='text' />
+                    <Field name='price.current' component={Input} label='Precio' type='number' handler={priceHandler} />
+                    <Field name='note' component={TextArea} label='Nota (opcional)' as='textarea' />
+
+                    <div className={style.editor__filters}>
+                      <CategorySelector selectHandler={categoryHandler} addCategory={addCategory} />
+                      <CategoryFiltersSelector
+                        category={{ name: values.category, isNew: values.category.length == 0 }}
+                        brandHandler={brandHandler}
+                        propertyValueHandler={propertyValueHandler}
+                        addBrand={addBrand}
+                        addProperty={addProperty}
+                        addPropertyValue={addPropertyValue}
+                      />
+                      <TagSelector selectHandler={tagHandler} addTag={addTag} />
+                    </div>
+
+                    <button 
+                    className={style.editor__save_btn} 
+                    type='submit' 
+                    disabled={isSubmitting || Boolean(Object.keys(errors).length)}
+                    >
+                      Guardar
+                    </button>
+                  </Form>
+                </aside>
+              </>
+            )}
+          </Formik>
+        </>}
       </Loader>
-      <aside className={style.editor}>
-        <ImageInput handler={imageHandler} />
-        <Input label='Nombre' field='name' value={product.name} handler={textHandler} />
-        <Input label='Precio' field='price' value={product.price.current} handler={priceHandler} inputType='number' />
-        <Input label='Nota (opcional)' field='note' value={product.note || ''} handler={textHandler} as='textarea' />
-        <div className={style.editor__filters}>
-          <CategorySelector
-            selectHandler={categoryHandler}
-            checked={product.category}
-            editor={{ addCategory }}
-          />
-          <CategoryFiltersSelector
-            checkedBrands={[product.brand]}
-            checkedProperties={product.properties}
-            editor={{ addBrand, addProperty, addPropertyValue }}
-            category={currentCategory}
-            brandHandler={brandHandler}
-            commonPropertiesHandler={propertyValueHandler}
-          />
-          <TagSelector
-            checked={product.tags}
-            editor={{ addTag }}
-            selectHandler={tagHandler}
-          />
-        </div>
-        <button className={style.editor__save_btn} onClick={save}>Guardar</button>
-      </aside>
     </main>
   )
 }
+
+interface FormikFieldComponentProps {
+  field: {
+    name: string
+    onChange: ChangeEventHandler
+    onBlur: FocusEventHandler
+    value: any
+  }
+  form: FormikContextType<Product>
+}
+
+interface ImageInputProps extends FormikFieldComponentProps {
+  className?: string
+  handler(data: ImageFileData, productUpdater: StateUpdater<Product>): void
+}
+
+const ImageInput = ({ field, form, className, handler }: ImageInputProps) => {
+  const [isReading, setIsReading] = useState(false)
+
+  const updateProduct: StateUpdater<Product> = updater => {
+    form.setValues(produce(updater))
+  }
+
+  async function _handler(e: ChangeEvent<HTMLInputElement>) {
+    const file = (e.target.files as FileList)[0]
+    setIsReading(true)
+    const base64Img = await getBase64(file)
+    setIsReading(false)
+    handler({ base64Img, name: file.name, type: file.type }, updateProduct)
+  }
+
+  return <div className={inputStyle.img_input}>
+    <label
+      htmlFor={field.name}
+      className={`${inputStyle.img_input__btn} ${className ? className : ''}`}
+      role='button'>
+      {isReading ? 'Leyendo imagen' : 'Elige una imagen'}
+    </label>
+    <input
+      id={field.name}
+      className={inputStyle.img_input__input}
+      type='file'
+      accept='image/*'
+      onChange={_handler}
+    />
+    <CustomFormikError name={field.name} />
+  </div>
+}
+
+interface CustomInputProps extends FormikFieldComponentProps {
+  label: string
+  type: HTMLInputTypeAttribute
+  handler?(e: ChangeEvent<HTMLInputElement>, productUpdater: StateUpdater<Product>): void
+}
+
+const Input = ({ field, form, label, handler, ...props }: CustomInputProps) => {
+  const updateProduct: StateUpdater<Product> = updater => {
+    form.setValues(produce(updater))
+  }
+
+  const _handler = (e: ChangeEvent<HTMLInputElement>) => {
+    if (handler) handler(e, updateProduct);
+    else field.onChange(e)
+  };
+
+  return <>
+    <label htmlFor={field.name}>{label}</label>
+    <input id={field.name} {...field} {...props} onChange={_handler} autoComplete='off' />
+    <CustomFormikError name={field.name} />
+  </>
+};
+
+const TextArea = ({ field, form, label }: CustomInputProps) => {
+  return <>
+    <label htmlFor={field.name}>{label}</label>
+    <textarea id={field.name} {...field} />
+    <CustomFormikError name={field.name} />
+  </>
+};

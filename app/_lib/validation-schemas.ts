@@ -1,19 +1,24 @@
 import { ObjectSchema, object, string, number, array } from 'yup'
 
-export const productSchema: ObjectSchema<Product> = object({
-  _id: string().required(),
-  image: string().required(),
-  name: string().required(),
+const requiredMessage = (field: string) => `"${field}" es un campo requerido.`
+const minLengthMessage = (field: string) => `"${field}" debe tener como mínimo \${min} caracteres.`
+const maxLengthMessage = (field: string) => `"${field}" debe tener como máximo \${max} caracteres.`
+const minValueMessage = (field: string) => `"${field}" debe ser de al menos \${min}.`
+const minItemsMessage = (field: string) => `"${field}" requiere al menos \${min} elementos.`
+
+export const productSchema: ObjectSchema<Omit<Product, '_id'>> = object({
+  image: string().required(requiredMessage('Imagen')),
+  name: string().required(requiredMessage('Nombre')).min(8, minLengthMessage('Nombre')).max(50, maxLengthMessage('Nombre')),
   price: object({
     old: number().optional(),
-    current: number().required(),
+    current: number().required().min(5000, minValueMessage('Precio')),
   }).required(),
   note: string().optional(),
-  category: string().required(),
-  brand: string().required(),
+  category: string().required(requiredMessage('Categoría')),
+  brand: string().required(requiredMessage('Marca')),
   properties: array().of(object({
     name: string().required(),
     values: array().of(string().required()).required(),
-  })).required(),
+  })).required().min(3, minItemsMessage('Propiedades comunes')),
   tags: array().of(string().required()).required(),
 })

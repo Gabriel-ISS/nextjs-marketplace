@@ -7,12 +7,9 @@ import { ChangeEvent, useEffect } from 'react'
 interface Props {
   selectHandler: (indexForFilters: number, e: ChangeEvent<HTMLInputElement>) => void
   checked: string[]
-  editor?: {
-    addTag: () => void
-  }
 }
 
-export default function TagSelector({ selectHandler, checked, editor }: Props) {
+export default function TagSelector({ selectHandler, checked }: Props) {
   const { loadTags, state: { data, isLoading } } = useAppStore(s => ({
     loadTags: s.filters.tags.load,
     state: s.filters.tags.state
@@ -24,9 +21,6 @@ export default function TagSelector({ selectHandler, checked, editor }: Props) {
     <fieldset className={style.filter_group}>
       <legend className={style.filter_group__title}>
         Etiquetas
-        {editor && (
-          <button className={style.filter_group__add_btn} onClick={editor.addTag}>Añadir +</button>
-        )}
       </legend>
       <Loader isLoading={isLoading} meanwhile={<span>Cargando etiquetas...</span>}>
         {data && (

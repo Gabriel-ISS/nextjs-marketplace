@@ -12,7 +12,7 @@
   overflow-y: auto;
 
   &__filters {
-    margin-bottom: 1rem;
+    margin-top: 1rem;
     padding-block: .5rem;
 
     background-color: var(--bg1);
@@ -21,5 +21,6 @@
 
   &__save_btn {
     @include largeBtn();
+    margin-top: .7rem;
   }
 }

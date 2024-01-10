@@ -13,14 +13,9 @@ interface Props {
   commonPropertiesHandler: (propertyName: string, propertyIndexForFilters: number, propertyValueIndexForFilters: number, event: ChangeEvent<HTMLInputElement>) => void
   checkedBrands: string[]
   checkedProperties: FilterNoCounted['properties']
-  editor?: {
-    addBrand: () => void
-    addProperty: () => void
-    addPropertyValue: (propertyName: string, propertyIndex: number) => void
-  }
 }
 
-export default function CategoryFiltersSelector({ category, brandHandler, commonPropertiesHandler, checkedBrands, checkedProperties, editor }: Props) {
+export default function CategoryFiltersSelector({ category, brandHandler, commonPropertiesHandler, checkedBrands, checkedProperties }: Props) {
   const { loadCategoryFilters, clearCategoryFilters, state: { data, isLoading } } = useAppStore(s => ({
     loadCategoryFilters: s.filters.categoryFilters.load,
     clearCategoryFilters: s.filters.categoryFilters.clear,
@@ -38,20 +33,17 @@ export default function CategoryFiltersSelector({ category, brandHandler, common
   return (
     <Loader isLoading={isLoading} meanwhile={<span>Cargando filtros de categoría...</span>}>
       {data && <>
-        {data.brands.length || editor ? (
+        {data.brands.length ? (
           <fieldset className={style.filter_group}>
             <legend className={style.filter_group__title}>
               Marcas
-              {editor && (
-                <button className={style.filter_group__add_btn} onClick={editor.addBrand}>Añadir +</button>
-              )}
             </legend>
             <div className={style.filter_group__options}>
               {data.brands.map(brand => (
                 <div className={style.filter_group__option} key={brand}>
                   <label>
                     <input
-                      type={editor ? 'radio' : 'checkbox'}
+                      type='checkbox'
                       name='brand'
                       value={brand}
                       id={brand}
@@ -66,24 +58,10 @@ export default function CategoryFiltersSelector({ category, brandHandler, common
         ): null}
 
         <fieldset className={style.common_properties}>
-          {editor &&
-            <legend className={style.common_properties__label}>
-              Características únicas
-              <button
-                className={style.filter_group__add_btn}
-                onClick={editor.addProperty}>
-                Añadir +
-              </button>
-            </legend>
-          }
-          <div className={editor ? style.common_properties__container : undefined}>
             {data.properties.map(({ name: propertyName, values }, propertyIndex) => (
               <fieldset className={style.filter_group} key={propertyName}>
                 <legend className={style.filter_group__title}>
                   {propertyName}
-                  {editor && (
-                    <button className={style.filter_group__add_btn} onClick={() => editor.addPropertyValue(propertyName, propertyIndex)}>Añadir +</button>
-                  )}
                 </legend>
                 <div className={style.filter_group__options}>
                   {values.map((name, valueIndex) => (
@@ -104,7 +82,6 @@ export default function CategoryFiltersSelector({ category, brandHandler, common
                 </div>
               </fieldset>
             ))}
-          </div>
         </fieldset>
       </>}
     </Loader>

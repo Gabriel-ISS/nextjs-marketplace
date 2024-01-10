@@ -113,6 +113,7 @@ button {
 
 label {
   display: block;
+  margin-top: 1rem;
   font-weight: bold;
 
   +input[type="text"],
@@ -122,6 +123,5 @@ label {
   +textarea {
     width: 100%;
     margin-top: .5rem;
-    margin-bottom: 1rem;
   }
 }
