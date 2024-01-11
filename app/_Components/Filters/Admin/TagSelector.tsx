@@ -14,7 +14,7 @@ interface Props {
 }
 
 export default function TagSelector({ selectHandler, addTag }: Props) {
-  const { setFieldValue, setValues } = useFormikContext()
+  const { setValues } = useFormikContext<Product>()
   const { loadTags, state: { data, isLoading } } = useAppStore(s => ({
     loadTags: s.filters.tags.load,
     state: s.filters.tags.state
@@ -29,7 +29,16 @@ export default function TagSelector({ selectHandler, addTag }: Props) {
   }
 
   function tagHandler(index: number, e: ChangeEvent<HTMLInputElement>) {
-    setFieldValue(e.currentTarget.name, e.currentTarget.value)
+    const isChecked = e.currentTarget.checked
+    const tag = e.currentTarget.value
+    setValues(produce(product => {
+      if (isChecked) {
+        product.tags.push(tag)
+      } else {
+        const index = product.tags.indexOf(tag)
+        product.tags.splice(index, 1)
+      }
+    }));
     selectHandler(index, e)
   }
 

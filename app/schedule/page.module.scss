@@ -1,7 +1,7 @@
 @import '../vars';
 
 .main {
-  @include autoMargin();
+  @include autoMargin(300px);
   padding-block: 2rem;
   display: flex;
   flex-direction: column;
