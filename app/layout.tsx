@@ -6,7 +6,7 @@ import Footer from '@/_Components/Footer'
 import Modal from '@/_Components/Modal/Modal'
 
 export const metadata: Metadata = {
-  title: 'Tienda Virtual',
+  title: 'NextMarket',
   description: 'Este es solo un ejemplo',
 }
 

@@ -16,10 +16,9 @@ import { FaFilter } from 'react-icons/fa'
 export default function Filters() {
   const router = useRouter()
   const searchParams = useSearchParams()
-  const [queryWasEstablished, setQueryWasEstablished] = useState(false)
   const [isOpen, setIsOpen] = useState(false)
   const { lockScroll, unlockScroll } = useScrollLock()
-  const { data: query, setter: setQuery, setFromString: setQueryFromString } = useAppStore(s => s.query)
+  const { data: query, wasEstablished: queryWasEstablished, setter: setQuery, setFromString: setQueryFromString } = useAppStore(s => s.query)
   const checkedProperties: FilterNoCounted['properties'] = useMemo(() => {
     if (!query.properties) return [];
     return Object.entries(query.properties).map(([name, values]) => ({ name, values }))
@@ -28,8 +27,7 @@ export default function Filters() {
   useEffect(() => {
     if (queryWasEstablished) {
       router.replace(`/products?${QueryString.stringify(query)}`)
-      setQueryWasEstablished(true)
-    } else if (searchParams.size/*  && !Object.keys(query).length */) {
+    } else if (searchParams.size) {
       setQueryFromString(searchParams.toString())
     }
   }, [query])

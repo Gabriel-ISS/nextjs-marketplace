@@ -58,7 +58,7 @@ export default function Search({ className }: Props) {
 
   return (
     <div className={`${style.search} ${className || ''}`}>
-      <input className={style.search__input} type="text" name="search" value={search} placeholder="Buscar productos en PC Click" onChange={handleInput} onKeyDown={handleEnter} />
+      <input className={style.search__input} type="text" name="search" value={search} placeholder="Buscar productos en NextMarket" onChange={handleInput} onKeyDown={handleEnter} />
       <button className={style.search__btn} onClick={handleClick}><FaSearch size='100%' /></button>
     </div>
   )

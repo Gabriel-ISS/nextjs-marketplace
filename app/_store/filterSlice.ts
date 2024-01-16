@@ -1,4 +1,4 @@
-import { StateUpdater } from '@/_hooks/useWritableState'
+import { Produce, StateUpdater } from '@/_hooks/useWritableState'
 import { getCategories, getCategoryFiltersNC } from '@/_lib/data'
 import { getProductTagsNC } from '@/_lib/data'
 import { ImmerSet, Slice } from '@/_store/useStore'
@@ -19,8 +19,8 @@ export type FilterSlice = {
   }
   query: {
     data: Query
-    setPage(newPage: number): void
-    setter: StateUpdater<Query>
+    wasEstablished: boolean
+    setter(setQuery: Produce<Query>, resetPage?: boolean): void
     setFromString(query: string): void
     setTag(tag: string): void
   }
@@ -88,16 +88,12 @@ const filterSlice: Slice<FilterSlice> = (set) => ({
   },
   query: {
     data: {},
-    setPage(newPage) {
-      set(prev => {
-        prev.query.data.page = newPage
-      })
-    },
-    setter(setQuery) {
+    wasEstablished: false,
+    setter(setQuery, resetPage = true) {
       set(prev => {
         setQuery(prev.query.data)
-        // restablecemos la pagina
-        delete prev.query.data.page
+        prev.query.wasEstablished = true
+        if (resetPage) delete prev.query.data.page
       })
     },
     setFromString(query) {
@@ -107,6 +103,7 @@ const filterSlice: Slice<FilterSlice> = (set) => ({
         if (q.page) {
           q.page = Number(q.page)
         }
+        prev.query.wasEstablished = true
       })
     },
     setTag(tag) {

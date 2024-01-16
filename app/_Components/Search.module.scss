@@ -6,7 +6,7 @@
   overflow: hidden;
 
   border-radius: 2rem;
-  border: 1px solid var(--blue);
+  border: 1px solid var(--primary);
   box-shadow: 0 .1rem .5rem var(--shadow-c);
 
   &__input {
@@ -22,7 +22,7 @@
     
     padding: .4rem;
 
-    background-color: var(--blue);
+    background-color: var(--primary);
     color: var(--white);
     border-radius: 100%;
   }

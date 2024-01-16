@@ -57,7 +57,7 @@ export default function CategoryFiltersSelector({ category, brandHandler, common
           </fieldset>
         ): null}
 
-        <fieldset className={style.common_properties}>
+        <fieldset className={style['common_properties--no_padding']}>
             {data.properties.map(({ name: propertyName, values }, propertyIndex) => (
               <fieldset className={style.filter_group} key={propertyName}>
                 <legend className={style.filter_group__title}>

@@ -10,7 +10,7 @@ $screen-xl: 1200px;
   padding-inline: 1rem;
 }
 
-@mixin largeBtn($bg-color: var(--blue), $color: var(--white)) {
+@mixin largeBtn($bg-color: var(--primary), $color: var(--white)) {
   width: 100%;
   padding: .7rem;
 

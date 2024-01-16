@@ -36,9 +36,9 @@ export default function ProductList({ adminMode }: Props) {
               <ProductItem key={product._id} product={product} adminMode={adminMode} setProducts={setProducts} />
             ))}
           </div>
-          <Pagination totalPages={data.totalPages} />
         </>}
       </Loader>
+      <Pagination totalPages={data?.totalPages || 0} />
     </section>
   )
 }

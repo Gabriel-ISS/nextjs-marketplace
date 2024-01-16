@@ -2,7 +2,7 @@ import { Draft, produce } from "immer";
 import { useState } from "react";
 
 
-type Produce<T> = (draft: Draft<T>) => void
+export type Produce<T> = (draft: Draft<T>) => void
 export type StateUpdater<T> = (updater: Produce<T>) => void
 
 export default function useWritableState<T>(defaultState: T) {

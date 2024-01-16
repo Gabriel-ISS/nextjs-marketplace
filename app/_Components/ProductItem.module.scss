@@ -40,7 +40,7 @@
   }
 
   &__tag {
-    @include tag(var(--blue));
+    @include tag(var(--primary));
   }
 }
 

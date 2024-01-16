@@ -10,11 +10,13 @@ interface Props {
 
 export default function Pagination({ totalPages }: Props) {
   const page = useAppStore(s => s.query.data.page || 1)
-  const setPage = useAppStore(s => s.query.setPage)
+  const setQuery = useAppStore(s => s.query.setter)
 
   const changePage = (e: MouseEvent<HTMLButtonElement>) => {
     const toAdd = Number(e.currentTarget.value)
-    setPage(page + toAdd)
+    setQuery(q => {
+      q.page = page + toAdd
+    }, false)
   }
 
   return (

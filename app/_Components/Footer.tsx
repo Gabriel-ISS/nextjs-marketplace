@@ -21,7 +21,7 @@ export default function Footer() {
           <li><a className={style.facebook} href="#"><FaFacebook /></a></li>
         </ul>
       </div>
-      <small className={style.footer__copyright}>© PC Click - Todos los derechos reservados.</small>
+      <small className={style.footer__copyright}>© NextMarket - Todos los derechos reservados.</small>
     </footer>
   )
 }

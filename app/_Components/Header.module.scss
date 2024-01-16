@@ -11,8 +11,16 @@
   background-color: var(--bg2);
   box-shadow: 0 0 .5rem 0 var(--shadow-c);
 
-  &__primary_link:hover {
-    text-decoration: none;
+  &__primary_link {
+    &:hover {
+      text-decoration: none;
+    }
+
+    h1 {
+      display: inline-flex;
+      align-items: center;
+      gap: .7rem;
+    }
   }
 
   &__content {
@@ -71,10 +79,11 @@
         font-weight: 700;
         font-variant-caps: all-small-caps;
         color: var(--muted);
-        transition: color 400ms;
+        transition: color 200ms;
 
         &:hover {
-          color: var(--blue);
+          color: var(--primary);
+          text-decoration: none;
         }
       }
     }
@@ -83,11 +92,12 @@
   &__menu_btn {
     width: 45px;
     height: 45px;
+    padding: 0;
     display: flex;
     justify-content: center;
     align-items: center;
     background: none;
-    color: var(--blue);
+    color: var(--primary);
 
     @media (width > $screen-md) {
       display: none;

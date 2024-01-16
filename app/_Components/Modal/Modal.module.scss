@@ -33,7 +33,7 @@
   }
 
   &[data-theme="blue"] {
-    border-color: var(--blue);
+    border-color: var(--primary);
   }
 
   &[data-theme="green"] {
@@ -61,7 +61,7 @@
     margin-block: 0;
 
     &[data-theme="blue"] {
-      color: var(--blue);
+      color: var(--primary);
     }
 
     &[data-theme="green"] {
@@ -85,7 +85,7 @@
     transition: color 200ms;
 
     &[data-theme="blue"]:hover {
-      color: var(--blue);
+      color: var(--primary);
     }
 
     &[data-theme="green"]:hover {

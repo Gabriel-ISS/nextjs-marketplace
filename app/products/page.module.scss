@@ -1,8 +1,9 @@
 @import '../vars';
 
 .main {
+  display: grid;
+
   @media (width > $screen-sm) {
-    display: grid;
     grid-template-columns: clamp(19rem, 23vw, 22rem) 1fr;
   }
 }

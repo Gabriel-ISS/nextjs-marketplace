@@ -65,30 +65,25 @@
   height: 2.5rem;
 
   border-radius: 50%;
-  outline: 2px solid;
-  transition: outline-offset 200ms ease-out;
+  transition: transform 200ms ease-out;
 
   &:hover {
-    outline-offset: 5px;
+    transform: scale(1.2);
   }
 }
 
 .whatsapp {
   background-color: #25D366;
-  outline-color: #25D366;
 }
 
 .tiktok {
   background-color: #000000;
-  outline-color: #000000;
 }
 
 .instagram {
   background-color: #E4405F;
-  outline-color: #E4405F;
 }
 
 .facebook {
   background-color: #0866FF;
-  outline-color: #0866FF;
 }

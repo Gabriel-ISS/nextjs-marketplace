@@ -9,11 +9,13 @@
   gap: 2rem;
 
   &__img {
+    justify-self: center;
     width: min(100%, 500px);
     aspect-ratio: 1;
 
     background-color: var(--bg2);
     border-radius: var(--br);
+    box-shadow: 0 0 .5rem 0 var(--shadow-c);
   }
 
   &__data {
