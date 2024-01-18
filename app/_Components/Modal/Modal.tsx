@@ -62,7 +62,6 @@ export function Header({ children, onClose }: HeaderProps) {
     if (onClose) onClose()
   }
 
-  // TODO: span o h5 es el elemento correcto?
   return (
     <div className={style.modal__header}>
       <h2 className={style.modal__title} data-theme={theme}>{children}</h2>

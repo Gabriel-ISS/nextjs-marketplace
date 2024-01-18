@@ -14,7 +14,6 @@ export default function Footer() {
           <li><Link href="/policy">Política de cambio, devolución y reembolso</Link></li>
         </ul>
         <ul className={style.footer__social_media_l}>
-          {/* TODO: completar */}
           <li><a className={style.whatsapp} href="#"><FaWhatsapp /></a></li>
           <li><a className={style.tiktok} href="#"><FaTiktok /></a></li>
           <li><a className={style.instagram} href="#"><FaInstagram /></a></li>

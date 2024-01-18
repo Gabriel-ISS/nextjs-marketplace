@@ -1,5 +1,5 @@
 import { Filter } from '@/_lib/models';
-import { CustomError } from '@/_lib/utils';
+import { ServerSideError } from '@/_lib/utils';
 import { Document } from 'mongoose';
 
 type CustomFilterConstructorProps = {
@@ -34,7 +34,7 @@ export class FilterManager {
         }))
       })
     } else {
-      throw new CustomError('FilterManager requires at least one input', { send: true })
+      throw new ServerSideError('FilterManager requires at least one input', { send: true })
     }
   }
 
@@ -92,7 +92,7 @@ export class FilterManager {
     const index = this.data.brands.findIndex(b => b.name == brand)
     const toUpdate = this.data.brands[index]
 
-    if (!toUpdate) throw new CustomError(`No se puede reducir ni eliminar la marca ${brand} porque no existe`)
+    if (!toUpdate) throw new ServerSideError(`No se puede reducir ni eliminar la marca ${brand} porque no existe`)
 
     if (toUpdate.used > 1) {
       toUpdate.used--;
@@ -106,7 +106,7 @@ export class FilterManager {
       const index = values.findIndex(v => v.name == p_value)
       const updatableValue = values[index]
 
-      if (!updatableValue) throw new CustomError('No se puede reducir ni eliminar una propiedad de valor porque no se encuentra')
+      if (!updatableValue) throw new ServerSideError('No se puede reducir ni eliminar una propiedad de valor porque no se encuentra')
 
       if (updatableValue.used > 1) {
         updatableValue.used--;
@@ -121,7 +121,7 @@ export class FilterManager {
       const index = this.data.properties.findIndex(p => p.name == property.name)
       const updatableProperty = this.data.properties[index]
 
-      if (!updatableProperty) throw new CustomError(`No se puede eliminar ni reducir la propiedad ${property.name} porque no existe`)
+      if (!updatableProperty) throw new ServerSideError(`No se puede eliminar ni reducir la propiedad ${property.name} porque no existe`)
 
       this.reduceOrRemovePropertyValue(updatableProperty.values, property.values)
 

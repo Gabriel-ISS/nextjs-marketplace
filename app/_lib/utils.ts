@@ -1,5 +1,5 @@
 type ExtraData = { send?: boolean }
-export class CustomError extends Error {
+export class ServerSideError extends Error {
   constructor(message: string, extraData: ExtraData = {}) {
     if (extraData.send) {
       super('Por favor reporte el error a la empresa.\n' + message)

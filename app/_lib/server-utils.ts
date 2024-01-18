@@ -1,13 +1,14 @@
+import { deleteImages, saveTagImage } from '@/_lib/aws-s3';
 import { FilterManager, RelevantFilterData } from '@/_lib/filter-manager';
 import { Filter, Group } from '@/_lib/models';
-import { CustomError } from '@/_lib/utils';
+import { ServerSideError } from '@/_lib/utils';
 import mongoose from "mongoose";
 import { getServerSession } from 'next-auth';
-
+import { Types } from 'mongoose'
 
 const { MONGO_URL } = process.env;
 
-if (!MONGO_URL) throw new CustomError("MONGO_URL is not defined.", { send: true });
+if (!MONGO_URL) throw new ServerSideError("MONGO_URL is not defined.", { send: true });
 
 let cached = (global as any).mongoose;
 
@@ -25,13 +26,13 @@ export const connectDB = async () => {
 
 export async function checkAuthentication() {
   const user = await getServerSession()
-  if (!user) throw new CustomError('Usuario no autenticado')
+  if (!user) throw new ServerSideError('Usuario no autenticado')
 }
 
 export async function updateFilters(product: RelevantFilterData, prevProduct: RelevantFilterData) {
   const getFilter = async (category: string) => {
     const filter = await Filter.findOne({ category })
-    if (!filter) throw new CustomError(`No se pudo encontrar el filtro a actualizar de categoría "${category}"`)
+    if (!filter) throw new ServerSideError(`No se pudo encontrar el filtro a actualizar de categoría "${category}"`)
     return filter
   }
 
@@ -76,11 +77,10 @@ export async function updateFilters(product: RelevantFilterData, prevProduct: Re
   }
   // error
   else {
-    throw new CustomError('Ninguna de las versiones del producto (anterior y actual) tiene una categoría asociada')
+    throw new ServerSideError('Ninguna de las versiones del producto (anterior y actual) tiene una categoría asociada')
   }
 }
 
-// TODO: guardar imagen
 export async function updateTags(newGroups: UnsavedGroup[], tags: string[], prevTags: string[]) {
   const separateTags = async () => {
     const existAndSelectedGroups = await Group.find({ name: { $in: tags } })
@@ -94,12 +94,22 @@ export async function updateTags(newGroups: UnsavedGroup[], tags: string[], prev
     const reduceGroups = await Group.find({ name: { $in: reduce } })
 
     const toReduce = reduceGroups.filter(g => g.used > 1).map(g => g.name)
-    const toDelete = reduceGroups.filter(g => g.used <= 1).map(g => g.name)
+    const _toDelete = reduceGroups.filter(g => g.used <= 1)
+    const toDelete = _toDelete.map(g => g.name)
+    const toDeleteImages = _toDelete.map(g => g.image)
 
-    return { toReduce, toDelete, toIncrease }
+    return { toReduce, toDelete, toIncrease, toDeleteImages }
   }
 
-  const { toReduce, toDelete, toIncrease } = await separateTags()
+  const { toReduce, toDelete, toIncrease, toDeleteImages } = await separateTags()
+
+  await Promise.all(newGroups.map(async g => {
+    const id = new Types.ObjectId()
+    // @ts-ignore
+    g._id = id
+    g.image = await saveTagImage(id.inspect(), g.image)
+  }))
+
 
   type FirstParam<T> = T extends (param: infer U) => any ? U : never
   const operations: FirstParam<typeof Group.bulkWrite> = []
@@ -131,9 +141,11 @@ export async function updateTags(newGroups: UnsavedGroup[], tags: string[], prev
   newGroups.forEach(group => operations.push({ insertOne: query.insert(group) }))
 
   try {
-    return await Group.bulkWrite(operations)
+    return Promise.all([
+      Group.bulkWrite(operations),
+      deleteImages(...toDeleteImages)
+    ])
   } catch (error) {
-    console.log(error)
-    throw new CustomError('Falla al actualizar las etiquetas')
+    throw new ServerSideError('Falla al actualizar las etiquetas')
   }
 }

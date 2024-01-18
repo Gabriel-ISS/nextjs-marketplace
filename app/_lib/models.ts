@@ -1,4 +1,4 @@
-import { Model, Schema, model, models } from 'mongoose';
+import { Document, Model, Schema, model, models } from 'mongoose';
 
 
 const RequiredNumber = { type: Number, required: true }

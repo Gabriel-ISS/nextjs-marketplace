@@ -1,5 +1,5 @@
 import { getAdmin } from '@/_lib/data'
-import { CustomError } from '@/_lib/utils'
+import { ServerSideError } from '@/_lib/utils'
 import NextAuth, { NextAuthOptions } from 'next-auth'
 import Credentials from 'next-auth/providers/credentials'
 
@@ -18,7 +18,7 @@ const options: NextAuthOptions = {
         password: { type: 'password', label: 'Contraseña' },
       },
       async authorize(credentials, _req) {
-        if (!credentials) throw new CustomError('No se han enviado las credenciales')
+        if (!credentials) throw new ServerSideError('No se han enviado las credenciales')
         return await getAdmin(credentials) as any
       }
     })

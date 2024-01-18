@@ -1,7 +1,6 @@
 import style from '@/about/page.module.scss'
 
 export default function () {
-  // TODO: completar
   return (
     <main className={style.main}>
       <div>

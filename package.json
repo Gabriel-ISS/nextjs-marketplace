@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@aws-sdk/client-s3": "^3.490.0",
     "@types/qs": "^6.9.10",
     "browser-image-compression": "^2.0.2",
     "formik": "^2.4.5",
