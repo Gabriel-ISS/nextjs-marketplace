@@ -43,6 +43,7 @@
     animation: resize 1.6s ease-in-out infinite forwards;
 
     @keyframes resize {
+
       0%,
       100% {
         transform: scale(1);
@@ -86,13 +87,15 @@
 
   &__option {
     @include tag(var(--muted));
-
-    label {
-      margin: 0;
-    }
+    margin: 0;
 
     &:has(input:checked) {
       background-color: var(--primary)
+    }
+
+    &:hover {
+      box-shadow: 0 0 7px var(--primary);
+      background-color: var(--primary);
     }
 
     input {

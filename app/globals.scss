@@ -85,8 +85,9 @@ button,
 [role="button"] {
   display: block;
 
+  transition: filter 200ms;
   &:hover {
-    filter: brightness(.8)
+    filter: brightness(.8);
   }
 
   &:disabled {

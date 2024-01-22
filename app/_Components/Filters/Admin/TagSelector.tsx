@@ -48,17 +48,15 @@ export default function TagSelector({ selectHandler, addTag }: Props) {
         Etiquetas
         <button type='button' className={style.filter_group__add_btn} onClick={() => addTag(updateProduct)}>Añadir +</button>
       </legend>
-      <CustomFormikError name='tags'/>
+      <CustomFormikError name='tags' />
       <Loader isLoading={isLoading} meanwhile={<span>Cargando etiquetas...</span>}>
         {data && (
           <div className={style.filter_group__options}>
             {data.map((tag, i) => (
-              <div className={style.filter_group__option} key={tag}>
-                <label>
-                  <Field type='checkbox' name='tags' value={tag} onChange={(e: ChangeEvent<HTMLInputElement>) => tagHandler(i, e)} />
-                  {tag}
-                </label>
-              </div>
+              <label className={style.filter_group__option} key={tag}>
+                <Field type='checkbox' name='tags' value={tag} onChange={(e: ChangeEvent<HTMLInputElement>) => tagHandler(i, e)} />
+                {tag}
+              </label>
             ))}
           </div>
         )}

@@ -26,19 +26,17 @@ export default function CategorySelector({ selectHandler, checked }: Props) {
         {data && (
           <div className={style.filter_group__options}>
             {data.map(category => (
-              <div className={style.filter_group__option} key={category}>
-                <label>
-                  <input
-                    type='radio'
-                    name='category'
-                    value={category}
-                    id={category}
-                    onChange={selectHandler}
-                    checked={category == checked}
-                  />
-                  {category}
-                </label>
-              </div>
+              <label className={style.filter_group__option} key={category}>
+                <input
+                  type='radio'
+                  name='category'
+                  value={category}
+                  id={category}
+                  onChange={selectHandler}
+                  checked={category == checked}
+                />
+                {category}
+              </label>
             ))}
           </div>
         )}

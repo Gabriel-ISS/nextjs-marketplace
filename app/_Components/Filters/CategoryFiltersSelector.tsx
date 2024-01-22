@@ -40,48 +40,44 @@ export default function CategoryFiltersSelector({ category, brandHandler, common
             </legend>
             <div className={style.filter_group__options}>
               {data.brands.map(brand => (
-                <div className={style.filter_group__option} key={brand}>
-                  <label>
-                    <input
-                      type='checkbox'
-                      name='brand'
-                      value={brand}
-                      id={brand}
-                      onChange={brandHandler}
-                      checked={checkedBrands.includes(brand)}
-                    />{brand}
-                  </label>
-                </div>
+                <label className={style.filter_group__option} key={brand}>
+                  <input
+                    type='checkbox'
+                    name='brand'
+                    value={brand}
+                    id={brand}
+                    onChange={brandHandler}
+                    checked={checkedBrands.includes(brand)}
+                  />{brand}
+                </label>
               ))}
             </div>
           </fieldset>
-        ): null}
+        ) : null}
 
         <fieldset className={style['common_properties--no_padding']}>
-            {data.properties.map(({ name: propertyName, values }, propertyIndex) => (
-              <fieldset className={style.filter_group} key={propertyName}>
-                <legend className={style.filter_group__title}>
-                  {propertyName}
-                </legend>
-                <div className={style.filter_group__options}>
-                  {values.map((name, valueIndex) => (
-                    <div className={style.filter_group__option} key={name}>
-                      <label>
-                        {name}
-                        <input
-                          type='checkbox'
-                          name={propertyName}
-                          value={name}
-                          id={name}
-                          onChange={e => commonPropertiesHandler(propertyName, propertyIndex, valueIndex, e)}
-                          checked={Boolean(checkedProperties.find(property => property.name == propertyName)?.values.includes(name))}
-                        />
-                      </label>
-                    </div>
-                  ))}
-                </div>
-              </fieldset>
-            ))}
+          {data.properties.map(({ name: propertyName, values }, propertyIndex) => (
+            <fieldset className={style.filter_group} key={propertyName}>
+              <legend className={style.filter_group__title}>
+                {propertyName}
+              </legend>
+              <div className={style.filter_group__options}>
+                {values.map((name, valueIndex) => (
+                  <label className={style.filter_group__option} key={name}>
+                    {name}
+                    <input
+                      type='checkbox'
+                      name={propertyName}
+                      value={name}
+                      id={name}
+                      onChange={e => commonPropertiesHandler(propertyName, propertyIndex, valueIndex, e)}
+                      checked={Boolean(checkedProperties.find(property => property.name == propertyName)?.values.includes(name))}
+                    />
+                  </label>
+                ))}
+              </div>
+            </fieldset>
+          ))}
         </fieldset>
       </>}
     </Loader>

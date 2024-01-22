@@ -90,17 +90,15 @@ export default function CategoryFiltersSelector({ category, brandHandler, proper
           <CustomFormikError name='brand' />
           <div className={style.filter_group__options}>
             {data.brands.map(brand => (
-              <div className={style.filter_group__option} key={brand}>
-                <label>
-                  <Field
-                    type='radio'
-                    name='brand'
-                    value={brand}
-                    onChange={_brandHandler}
-                  />
-                  {brand}
-                </label>
-              </div>
+              <label className={style.filter_group__option} key={brand}>
+                <Field
+                  type='radio'
+                  name='brand'
+                  value={brand}
+                  onChange={_brandHandler}
+                />
+                {brand}
+              </label>
             ))}
           </div>
         </fieldset>
@@ -126,18 +124,16 @@ export default function CategoryFiltersSelector({ category, brandHandler, proper
                 </legend>
                 <div className={style.filter_group__options}>
                   {values.map((name, valueIndex) => (
-                    <div className={style.filter_group__option} key={name}>
-                      <label>
-                        {name}
-                        <Field
-                          type='checkbox'
-                          name={`properties[${propertyIndex}].values`}
-                          value={name}
-                          onChange={(e: ChangeEvent<HTMLInputElement>) => _propertyValueHandler(propertyName, propertyIndex, valueIndex, e)}
-                          checked={Boolean(productValues.properties.find(p => p.name == propertyName)?.values.includes(name))}
-                        />
-                      </label>
-                    </div>
+                    <label className={style.filter_group__option} key={name}>
+                      {name}
+                      <Field
+                        type='checkbox'
+                        name={`properties[${propertyIndex}].values`}
+                        value={name}
+                        onChange={(e: ChangeEvent<HTMLInputElement>) => _propertyValueHandler(propertyName, propertyIndex, valueIndex, e)}
+                        checked={Boolean(productValues.properties.find(p => p.name == propertyName)?.values.includes(name))}
+                      />
+                    </label>
                   ))}
                 </div>
               </fieldset>

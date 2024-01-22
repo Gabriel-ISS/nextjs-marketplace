@@ -26,19 +26,17 @@ export default function TagSelector({ selectHandler, checked }: Props) {
         {data && (
           <div className={style.filter_group__options}>
             {data.map((tag, i) => (
-              <div className={style.filter_group__option} key={tag}>
-                <label>
-                  <input
-                    type='checkbox'
-                    name='category'
-                    value={tag}
-                    id={tag}
-                    onChange={e => selectHandler(i, e)}
-                    checked={Boolean(checked.includes(tag))}
-                  />
-                  {tag}
-                </label>
-              </div>
+              <label className={style.filter_group__option} key={tag}>
+                <input
+                  type='checkbox'
+                  name='category'
+                  value={tag}
+                  id={tag}
+                  onChange={e => selectHandler(i, e)}
+                  checked={Boolean(checked.includes(tag))}
+                />
+                {tag}
+              </label>
             ))}
           </div>
         )}

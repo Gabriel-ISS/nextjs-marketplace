@@ -4,7 +4,7 @@
   display: grid;
 
   @media (width > $screen-sm) {
-    grid-template-columns: clamp(19rem, 23vw, 22rem) 1fr;
+    grid-template-columns: clamp(15rem, 24vw, 22rem) 1fr;
   }
 }
 

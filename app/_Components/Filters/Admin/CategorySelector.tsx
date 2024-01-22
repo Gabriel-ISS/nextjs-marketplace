@@ -39,17 +39,15 @@ export default function CategorySelector({ selectHandler, addCategory }: Props) 
         Categorías
         <button type='button' className={style.filter_group__add_btn} onClick={() => addCategory(updateProduct)}>Añadir +</button>
       </legend>
-      <CustomFormikError name='category'/>
+      <CustomFormikError name='category' />
       <Loader isLoading={isLoading} meanwhile={<span>Cargando categorías...</span>}>
         {data && (
           <div className={style.filter_group__options}>
             {data.map(category => (
-              <div className={style.filter_group__option} key={category}>
-                <label>
-                  <Field type='radio' name='category' value={category} onChange={categoryHandler} />
-                  {category}
-                </label>
-              </div>
+              <label className={style.filter_group__option} key={category}>
+                <Field type='radio' name='category' value={category} onChange={categoryHandler} />
+                {category}
+              </label>
             ))}
           </div>
         )}
