@@ -3,7 +3,7 @@
 .main {
   display: grid;
 
-  @media (width > $screen-sm) {
+  @media (width > $screen-md) {
     grid-template-columns: clamp(16rem, 24vw, 22rem) 1fr;
   }
 }
