@@ -4,7 +4,7 @@ import Link from 'next/link'
 import styles from '@/_Components/Header.module.scss'
 import { useRef, useState } from 'react';
 import { MdMenu } from 'react-icons/md'
-import { exo2 } from '@/_lib/fonts';
+import { satisfy } from '@/_lib/fonts';
 import ProductsLink from '@/_Components/ProductsLink';
 import Image from 'next/image';
 
@@ -49,7 +49,7 @@ export default function Header() {
       <nav className={styles.nav}>
 
         <div className={styles.nav__content}>
-          <Link className={styles.nav__primary_link} href="/"><h1 className={exo2.className}><img src='/logo.svg' alt='logo' width={33} height={33} /> NextMarket</h1></Link>
+          <Link className={styles.nav__primary_link} href="/"><h1 className={satisfy.className}><img src='/logo.svg' alt='logo' width={33} height={33} /> NextMarket</h1></Link>
 
           <button
             className={styles.nav__menu_btn}

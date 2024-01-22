@@ -1,37 +1,45 @@
 .prod_group {
-  display: flex;
-  align-items: center;
-  justify-content: center;
   position: relative;
-  aspect-ratio: 1;
+  
+  background-color: var(--bg4);
+  border-radius: var(--br);
   overflow: hidden;
 
-  border-radius: var(--br);
-  background-color: var(--bg4);
-  background-size: contain;
+
+  transform: scale(0.97);
+  filter: brightness(.6);
+  transition: transform 200ms, filter 200ms;
+  &:hover {
+    transform: scale(1.03);
+    filter: brightness(1);
+  }
 
 
-  &__name_container {
-    position: absolute;
-    inset: 0;
-
+  &__container {
     display: flex;
-    justify-content: center;
-    align-items: center;
-
-    color: var(--white);
-    background-color: rgba($color: #000000, $alpha: .3);
-
-    transition: background-color 400ms;
+    margin-bottom: 0;
 
     &:hover {
       text-decoration: none;
-      background-color: var(--shadow-c);
     }
   }
 
   &__name {
+    position: absolute;
+    inset: 0;
+    top: auto;
+
+    margin: 0;
+    padding: .2rem .5rem;
+
+    background-color: var(--primary);
     color: var(--white);
-    margin: .5rem;
+    border-radius: var(--br);
+  }
+
+  &__img {
+    max-width: 100%;
+    aspect-ratio: 1;
+    object-fit: cover;
   }
 }

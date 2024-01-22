@@ -1,10 +1,68 @@
 @import './vars';
 
 .search_section {
-  @include autoMargin();
-  min-height: 50vh;
-  display: flex;
-  align-items: center;
+  display: grid;
+  min-height: clamp(22rem, 12rem + 30vw, 44rem);
+
+  background-image: url('/header2.jpg');
+  background-size: cover;
+  background-position: center;
+
+  &__container {
+    @include autoMargin(1500px);
+    padding-inline: 0;
+    position: relative;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding-bottom: 7rem;
+  }
+
+  &__text_container {
+    margin: 4rem 3rem;
+    max-width: 380px;
+  }
+
+  &__title {
+    font-size: 3rem;
+    font-weight: bold;
+    letter-spacing: .2rem;
+    color: var(--primary);
+
+    $stroke-color: var(--white);
+
+    text-shadow:
+      2px 0 $stroke-color,
+      -2px 0 $stroke-color,
+      0 2px $stroke-color,
+      0 -2px $stroke-color,
+      1px 1px $stroke-color,
+      -1px -1px $stroke-color,
+      1px -1px $stroke-color,
+      -1px 1px $stroke-color;
+  }
+
+  &__slogan {
+    font-size: 1.4rem;
+    font-style: italic;
+    color: var(--white);
+  }
+
+  &__searcher_container {
+    position: absolute;
+    bottom: 3rem;
+
+    display: flex;
+    justify-content: center;
+
+    padding-inline: 1rem;
+    width: 100%;
+  }
+
+  &__searcher {
+    max-width: clamp(20rem, 10rem + 50vw, 55rem);
+  }
 }
 
 .products {
@@ -14,9 +72,28 @@
   gap: 1.5rem;
   margin-block: 3rem 4rem;
 
+  &__container {
+    margin: 0;
+    padding: .6rem;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
+    gap: .5rem;
+
+    list-style: none;
+
+    background-color: var(--bg3);
+    border-radius: var(--br);
+
+    &:not(:has(:hover)) {
+      li {
+        transform: scale(1);
+        filter: brightness(1);
+      }
+    }
+  }
+
   &__title {
     margin: 0;
-    font-size: 1.25rem;
     color: var(--primary);
 
     @media (width > $screen-md) {
@@ -25,16 +102,4 @@
     }
   }
 
-  &__container {
-    margin: 0;
-    padding: .6rem;
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-    gap: .3rem;
-
-    list-style: none;
-    
-    background-color: var(--bg3);
-    border-radius: var(--br);
-  }
 }

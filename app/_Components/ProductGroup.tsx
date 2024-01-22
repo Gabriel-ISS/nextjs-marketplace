@@ -23,8 +23,9 @@ export default function ProductGroup({ name, image }: Props) {
   }
 
   return (
-    <li className={style.prod_group} style={{ backgroundImage: `url('${image}')` }}>
-      <Link className={style.prod_group__name_container} href={url} onClick={linkHandler}>
+    <li className={style.prod_group}>
+      <Link className={style.prod_group__container} href={url} onClick={linkHandler}>
+        <img className={style.prod_group__img} src={image} alt={name} />
         <h3 className={style.prod_group__name}>{name}</h3>
       </Link>
     </li>

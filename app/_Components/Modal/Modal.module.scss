@@ -2,7 +2,7 @@
   position: fixed;
 
   background-color: var(--bg1);
-  color: var(--text-c1);
+  color: var(--text-color);
   border: 1px solid;
   border-radius: var(--br);
 
@@ -79,7 +79,7 @@
     right: .7rem;
     top: .7rem;
 
-    color: var(--text-c1);
+    color: var(--text-color);
     background: none;
 
     transition: color 200ms;

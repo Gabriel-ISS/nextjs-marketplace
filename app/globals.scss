@@ -1,7 +1,7 @@
 @import './vars';
 
 :root {
-  --text-c1: #161A30;
+  --text-color: #161A30;
   --muted: #8D8D8D;
 
   --white: white;
@@ -22,7 +22,7 @@
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --text-c1: white;
+    --text-color: white;
     --muted: #8D8D8D;
 
     --bg1: rgb(21, 21, 21);
@@ -54,7 +54,7 @@ html {
 
 body {
   margin: 0px;
-  color: var(--text-c1);
+  color: var(--text-color);
   background-color: var(--bg1);
 
   height: 100lvh;
@@ -97,7 +97,7 @@ button,
 
 input,
 textarea {
-  color: var(--text-c1);
+  color: var(--text-color);
   background-color: var(--bg1);
 }
 
