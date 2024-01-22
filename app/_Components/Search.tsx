@@ -45,7 +45,7 @@ export default function Search({ className }: Props) {
     setSearch(e.currentTarget.value)
   }
 
-  
+
   function handleClick() {
     setSearchInQuery(search)
   }
@@ -58,7 +58,14 @@ export default function Search({ className }: Props) {
 
   return (
     <div className={`${style.search} ${className || ''}`}>
-      <input className={style.search__input} type="text" name="search" value={search} placeholder="Buscar productos en NextMarket" onChange={handleInput} onKeyDown={handleEnter} />
+      <input
+        className={style.search__input}
+        type="text" name="search"
+        value={search}
+        placeholder="Buscar productos en NextMarket"
+        onChange={handleInput} onKeyDown={handleEnter}
+        autoComplete='off'
+      />
       <button className={style.search__btn} onClick={handleClick}><FaSearch size='100%' /></button>
     </div>
   )
