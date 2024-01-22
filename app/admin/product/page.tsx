@@ -9,7 +9,7 @@ import Loader from '@/_Components/Loader'
 import CropImageModal from '@/_Components/Modal/CropImageModal'
 import InputModal from '@/_Components/Modal/InputModal'
 import MessageModal from '@/_Components/Modal/MessageModal'
-import TagModal from '@/_Components/Modal/TagModal'
+import NamedImageModal from '@/_Components/Modal/NamedImageModal'
 import Product from '@/_Components/Product'
 import { StateUpdater } from '@/_hooks/useWritableState'
 import { saveProduct } from '@/_lib/actions'
@@ -26,6 +26,7 @@ import { ChangeEvent, ChangeEventHandler, FocusEventHandler, HTMLInputTypeAttrib
 
 let newFilters: NewFilters = {
   category: '',
+  category_img: '',
   brand: '',
   properties: [],
   tags: []
@@ -58,7 +59,7 @@ export default function ({ searchParams }: PageProps) {
         const product = await getProduct(searchParams.id)
         setInitialProduct(product)
         setOriginalPrice(product.price.current)
-        newFilters = { category: '', brand: '', properties: [], tags: [] }
+        newFilters = { category: '', category_img: '', brand: '', properties: [], tags: [] }
         lastSelectedIsNew = { category: false, brand: false }
       } catch (error: any) {
         openModal(<MessageModal title='Error' message={error.message} />, 'red')
@@ -88,7 +89,7 @@ export default function ({ searchParams }: PageProps) {
   }
 
   function addCategory(setProduct: StateUpdater<Product>) {
-    openModal(<InputModal title='Agregar categoría' onAccept={category => {
+    openModal(<NamedImageModal title='Agregar categoría' onAccept={(category, img) => {
       // omit
       const categories = useAppStore.getState().filters.categories.state.data
       if (categories.includes(category)) return;
@@ -105,6 +106,7 @@ export default function ({ searchParams }: PageProps) {
 
       // update newFilters
       newFilters.category = category
+      newFilters.category_img = img
 
       // set last selected
       lastSelectedIsNew.category = true
@@ -124,6 +126,7 @@ export default function ({ searchParams }: PageProps) {
         categories.pop()
       })
       newFilters.category = ''
+      newFilters.category_img = ''
     }
 
     // set last selected
@@ -235,7 +238,7 @@ export default function ({ searchParams }: PageProps) {
   }
 
   function addTag(setProduct: StateUpdater<Product>) {
-    openModal(<TagModal title='Agregar etiqueta' onAccept={(tag, img) => {
+    openModal(<NamedImageModal title='Agregar etiqueta' onAccept={(tag, img) => {
       const tags = useAppStore.getState().filters.tags.state.data
       if (tags.includes(tag)) return;
 
@@ -276,7 +279,7 @@ export default function ({ searchParams }: PageProps) {
         }
         p.properties = p.properties.filter(property => property.values.length)
       })
-      const message = await saveProduct(finalProduct, newFilters.tags)
+      const message = await saveProduct(finalProduct, newFilters.tags, newFilters.category_img)
       openModal(<MessageModal title='Éxito' message={message} onAccept={() => router.push('/products')} />, 'green')
     } catch (error: any) {
       openModal(<MessageModal title='Error' message={error.message} />, 'red')

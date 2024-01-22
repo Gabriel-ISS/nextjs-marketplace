@@ -72,6 +72,10 @@
   gap: 1.5rem;
   margin-block: 3rem 4rem;
 
+  @media (width > $screen-md) {
+    @include autoMargin(1200px);
+  }
+
   &__container {
     margin: 0;
     padding: .6rem;
@@ -83,6 +87,10 @@
 
     background-color: var(--bg3);
     border-radius: var(--br);
+
+    @media (width > $screen-md) {
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    }
 
     &:not(:has(:hover)) {
       li {

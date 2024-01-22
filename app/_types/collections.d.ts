@@ -18,6 +18,7 @@ type Property = {
 
 type Filter = {
   category: string
+  category_img: string
   brands: Brand[]
   properties: Property[]
 }

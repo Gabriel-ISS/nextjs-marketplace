@@ -14,19 +14,18 @@ type Filter<T, Loader = () => void> = {
 export type FilterSlice = {
   filters: {
     categories: Filter<string[]>
-    categoryFilters: Filter<FilterNoCounted, (category: string) => void> & { clear: () => void }
+    categoryFilters: Filter<FilterForFilters, (category: string) => void> & { clear: () => void }
     tags: Filter<string[]>
   }
   query: {
     data: Query
     wasEstablished: boolean
-    setter(setQuery: Produce<Query>, resetPage?: boolean): void
+    setter(setQuery: Produce<Query> | Query, resetPage?: boolean): void
     setFromString(query: string): void
-    setTag(tag: string): void
   }
 }
 
-const defaultCategoryFilters: FilterNoCounted = {
+const defaultCategoryFilters: FilterForFilters = {
   category: '',
   brands: [],
   properties: []
@@ -89,11 +88,15 @@ const filterSlice: Slice<FilterSlice> = (set) => ({
   query: {
     data: {},
     wasEstablished: false,
-    setter(setQuery, resetPage = true) {
+    setter(nextStateOrUpdater, resetPage = true) {
       set(prev => {
-        setQuery(prev.query.data)
-        prev.query.wasEstablished = true
-        if (resetPage) delete prev.query.data.page
+        if (typeof nextStateOrUpdater == 'function') {
+          nextStateOrUpdater(prev.query.data)
+          prev.query.wasEstablished = true
+          if (resetPage) delete prev.query.data.page
+        } else {
+          prev.query.data = nextStateOrUpdater
+        }
       })
     },
     setFromString(query) {
@@ -104,12 +107,6 @@ const filterSlice: Slice<FilterSlice> = (set) => ({
           q.page = Number(q.page)
         }
         prev.query.wasEstablished = true
-      })
-    },
-    setTag(tag) {
-      set(prev => {
-        prev.query.data = {}
-        prev.query.data.tags = [tag]
       })
     }
   }

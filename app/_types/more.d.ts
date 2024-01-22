@@ -3,7 +3,7 @@ type PageProps = {
   searchParams: Record<string, string | undefined>
 }
 
-type Query = Partial<Pick<FilterNoCounted, 'category' | 'brands'>> & {
+type Query = Partial<Pick<FilterForFilters, 'category' | 'brands'>> & {
   properties?: {
     [name: string]: string[]
   }
@@ -13,17 +13,18 @@ type Query = Partial<Pick<FilterNoCounted, 'category' | 'brands'>> & {
   page?: number
 }
 
-type FilterNoCounted = {
+type FilterForFilters = {
   category: string
   brands: string[]
 } & Pick<Product, 'properties'>
 
-type NewFilters = Omit<FilterNoCounted, 'brands'> & {
+type NewFilters = Omit<FilterForFilters, 'brands'> & {
+  category_img: string
   tags: UnsavedGroup[]
 } & Pick<Product, 'brand'>
 
 /** Product Filter Data */
-type PFData = Omit<FilterNoCounted, 'brands'> & {
+type PFData = Omit<FilterForFilters, 'brands'> & {
   brand: string
   tags: string[]
 }

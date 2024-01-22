@@ -81,7 +81,7 @@ export default function CategoryFiltersSelector({ category, brandHandler, proper
 
   return (
     <Loader isLoading={isLoading} meanwhile={<span>Cargando filtros de categoría...</span>}>
-      {data && <>
+      {data && category.name.length > 0 && <>
         <fieldset className={style.filter_group}>
           <legend className={style.filter_group__title}>
             Marcas

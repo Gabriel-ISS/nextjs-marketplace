@@ -4,12 +4,12 @@
   display: grid;
 
   @media (width > $screen-sm) {
-    grid-template-columns: clamp(15rem, 24vw, 22rem) 1fr;
+    grid-template-columns: clamp(16rem, 24vw, 22rem) 1fr;
   }
 }
 
 .principal_view {
-  @include autoMargin(1000px);
+  @include autoMargin(1300px);
   display: grid;
   grid-template-rows: auto 1fr;
 

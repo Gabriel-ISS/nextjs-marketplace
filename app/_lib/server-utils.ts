@@ -29,7 +29,7 @@ export async function checkAuthentication() {
   if (!user) throw new ServerSideError('Usuario no autenticado')
 }
 
-export async function updateFilters(product: RelevantFilterData, prevProduct: RelevantFilterData) {
+export async function updateFilters(product: RelevantFilterData, prevProduct: RelevantFilterData, rawCategoryImg: string) {
   const getFilter = async (category: string) => {
     const filter = await Filter.findOne({ category })
     if (!filter) throw new ServerSideError(`No se pudo encontrar el filtro a actualizar de categoría "${category}"`)
@@ -67,7 +67,12 @@ export async function updateFilters(product: RelevantFilterData, prevProduct: Re
     }
     // create
     else {
-      return await new FilterManager({ product }).updateDB()
+      return await new FilterManager({ 
+        product: {
+          data: product,
+          rawCategoryImage: rawCategoryImg
+        }
+       }).updateDB()
     }
   }
   // reduce/remove
@@ -107,7 +112,7 @@ export async function updateTags(newGroups: UnsavedGroup[], tags: string[], prev
     const id = new Types.ObjectId()
     // @ts-ignore
     g._id = id
-    g.image = await saveTagImage(id.inspect(), g.image)
+    g.image = await saveTagImage(id.toString(), g.image)
   }))
 
 

@@ -19,7 +19,7 @@ export default function Filters() {
   const [isOpen, setIsOpen] = useState(false)
   const { lockScroll, unlockScroll } = useScrollLock()
   const { data: query, wasEstablished: queryWasEstablished, setter: setQuery, setFromString: setQueryFromString } = useAppStore(s => s.query)
-  const checkedProperties: FilterNoCounted['properties'] = useMemo(() => {
+  const checkedProperties: FilterForFilters['properties'] = useMemo(() => {
     if (!query.properties) return [];
     return Object.entries(query.properties).map(([name, values]) => ({ name, values }))
   }, [query.properties])

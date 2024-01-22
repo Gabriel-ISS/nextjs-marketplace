@@ -38,11 +38,11 @@ export async function getCategories(): Promise<string[]> {
   }
 }
 
-export async function getCategoryFiltersNC(category: string): Promise<FilterNoCounted> {
+export async function getCategoryFiltersNC(category: string): Promise<FilterForFilters> {
   try {
     const filters = await Filter.findOne({ category })
     if (!filters) throw new ServerSideError(`No se encontraron los filtros para la categoría "${category}"`)
-    const noCounted: FilterNoCounted = {
+    const noCounted: FilterForFilters = {
       category: filters.category,
       brands: filters.brands.map(brand => brand.name),
       properties: filters.properties.map(property => ({
@@ -53,6 +53,18 @@ export async function getCategoryFiltersNC(category: string): Promise<FilterNoCo
     return noCounted
   } catch (error) {
     throw new ServerSideError('Falla al obtener los filtros (NC)')
+  }
+}
+
+export async function getCategoriesWithImage() {
+  try {
+    const categoriesContainers = await Filter.find({}, { category: 1, category_img: 1 })
+    return categoriesContainers.map(obj =>( {
+      name: obj.category,
+      image: obj.category_img
+    }))
+  } catch (error) {
+    throw new ServerSideError('Falla al obtener las categorías')
   }
 }
 

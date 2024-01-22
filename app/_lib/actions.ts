@@ -8,7 +8,7 @@ import { checkAuthentication, updateFilters, updateTags } from '@/_lib/server-ut
 import { ServerSideError, withoutID } from '@/_lib/utils'
 
 
-export async function saveProduct(product: Product, newTags: UnsavedGroup[]) {
+export async function saveProduct(product: Product, newTags: UnsavedGroup[], rawCategoryImg: string) {
   await checkAuthentication()
   const getPrevProduct = async () => {
     if (productExist) {
@@ -49,7 +49,7 @@ export async function saveProduct(product: Product, newTags: UnsavedGroup[]) {
 
   await Promise.all([
     createOrUpdateProduct(),
-    updateFilters(product, prevProduct),
+    updateFilters(product, prevProduct, rawCategoryImg),
     updateTags(newTags, product.tags, prevProduct.tags)
   ])
 
@@ -69,7 +69,7 @@ export async function deleteProduct(_id: string) {
   await Promise.all([
     deleteImages(prevProduct.image),
     prevProduct.deleteOne(),
-    updateFilters(DEFAULT_PRODUCT, prevProduct),
+    updateFilters(DEFAULT_PRODUCT, prevProduct, ''),
     updateTags([], [], prevProduct.tags)
   ])
 

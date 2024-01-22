@@ -1,10 +1,14 @@
+import { deleteImages, saveCategoryImage } from '@/_lib/aws-s3';
 import { Filter } from '@/_lib/models';
 import { ServerSideError } from '@/_lib/utils';
 import { Document } from 'mongoose';
 
 type CustomFilterConstructorProps = {
   filter?: UnsavedFilter2 & Document,
-  product?: Pick<Product, RelevantFilterDataKeys>
+  product?: {
+    data: Pick<Product, RelevantFilterDataKeys>,
+    rawCategoryImage: string
+  }
 }
 
 export type RelevantFilterDataKeys = 'category' | 'brand' | 'properties'
@@ -15,17 +19,20 @@ export type _RelevantFilterData = Pick<NewFilters, Exclude<RelevantFilterDataKey
 
 export class FilterManager {
   data: UnsavedFilter2 & Document;
+  rawCategoryImg: string = '';
 
   constructor({ filter, product }: CustomFilterConstructorProps) {
     if (filter) {
       this.data = filter
     } else if (product) {
       this.data = new Filter({
-        category: product.category,
+        category: product.data.category,
+        category_img: product.rawCategoryImage,
         brands: [{
-          name: product.brand,
+          name: product.data.brand,
           used: 1
-        }], properties: product.properties.map(p => ({
+        }],
+        properties: product.data.properties.map(p => ({
           name: p.name,
           values: p.values.map(v => ({
             name: v,
@@ -33,6 +40,7 @@ export class FilterManager {
           }))
         }))
       })
+      this.rawCategoryImg = product.rawCategoryImage
     } else {
       throw new ServerSideError('FilterManager requires at least one input', { send: true })
     }
@@ -180,12 +188,17 @@ export class FilterManager {
 
   async updateDB() {
     if (this.data.isNew) {
+      const imgLink = await saveCategoryImage(this.data._id, this.rawCategoryImg)
+      this.data.category_img = imgLink
       return await this.data.save()
     } else {
       if (this.data.brands.length || this.data.properties.length) {
         return await this.data.save()
       } else {
-        return await this.data.deleteOne()
+        return await Promise.all([
+          deleteImages(this.data.category_img),
+          this.data.deleteOne(),
+        ])
       }
     }
   }

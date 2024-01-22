@@ -23,6 +23,7 @@ const
 
 const getProductKey = (productID: string, fileExtension: string) => `products/${productID}/${Date.now()}.${fileExtension}`
 const getTagKey = (tagID: string, fileExtension: string) => `tags/${tagID}/${Date.now()}.${fileExtension}`
+const getCategoryKey = (tagID: string, fileExtension: string) => `categories/${tagID}/${Date.now()}.${fileExtension}`
 
 export async function saveImage(pathGenerator: (extension: string) => string, base64Image: string): Promise<string> {
   // data:image/jpeg;base64,/9j/4AAQSkZJRgA...
@@ -48,6 +49,10 @@ export async function saveImage(pathGenerator: (extension: string) => string, ba
 
 export async function saveProductImage(productID: string, base64Image: string): Promise<string> {
   return await saveImage(extension => getProductKey(productID, extension), base64Image)
+}
+
+export async function saveCategoryImage(filterID: string, base64Image: string): Promise<string> {
+  return await saveImage(extension => getCategoryKey(filterID, extension), base64Image)
 }
 
 export async function saveTagImage(tagID: string, base64Image: string): Promise<string> {

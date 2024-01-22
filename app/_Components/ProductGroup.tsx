@@ -4,22 +4,32 @@ import style from '@/_Components/ProductGroup.module.scss'
 import useAppStore from '@/_store/useStore'
 import Link from 'next/link'
 import QueryString from 'qs'
+import { useState } from 'react'
 
 
 interface Props {
   name: string
   image: string
+  type: 'tag' | 'category'
 }
 
-export default function ProductGroup({ name, image }: Props) {
-  const query: Query = {
-    tags: [name]
-  }
-  const url = `/products?${QueryString.stringify(query)}`
-  const setTag = useAppStore(s => s.query.setTag)
+export default function ProductGroup({ name, image, type }: Props) {
+  const [query] = useState<Query>(() => {
+    if (type == 'tag') {
+      return {tags: [name]}
+    }
+    else if (type == 'category') {
+      return {category: name}
+    }
+    else {
+      throw new Error(`El tipo de grupo no puede ser ${type}`)
+    }
+  })
+  const [url] = useState(() => `/products?${QueryString.stringify(query)}`)
+  const setQuery = useAppStore(s => s.query.setter)
 
   function linkHandler() {
-    setTag(name)
+    setQuery(query)
   }
 
   return (

@@ -25,9 +25,9 @@ const productSchema = new Schema<Product & Document>({
   tags: [String],
 })
 
-
 const filterSchema = new Schema<Filter & Document>({
   category: RequiredString,
+  category_img: RequiredString,
   brands: [{
     name: RequiredString,
     used: UsedSchema

@@ -12,7 +12,7 @@ interface Props {
   brandHandler: ChangeEventHandler<HTMLInputElement>
   commonPropertiesHandler: (propertyName: string, propertyIndexForFilters: number, propertyValueIndexForFilters: number, event: ChangeEvent<HTMLInputElement>) => void
   checkedBrands: string[]
-  checkedProperties: FilterNoCounted['properties']
+  checkedProperties: FilterForFilters['properties']
 }
 
 export default function CategoryFiltersSelector({ category, brandHandler, commonPropertiesHandler, checkedBrands, checkedProperties }: Props) {
