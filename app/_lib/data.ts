@@ -69,7 +69,7 @@ export async function getCategoriesWithImage() {
 }
 
 export async function getProducts(queryString: string): Promise<{ products: Product[], totalPages: number }> {
-  const LIMIT_PER_PAGE = 3 * 6;
+  const LIMIT_PER_PAGE = 3 * 4;
   let page = 1
   let mongoQuery: FilterQuery<Product> = {}
   if (queryString.length) {
