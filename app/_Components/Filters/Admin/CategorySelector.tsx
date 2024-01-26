@@ -1,11 +1,14 @@
+import ErrorBlock from '@/_Components/ErrorBlock'
 import style from '@/_Components/Filters/Filters.module.scss'
 import { CustomFormikError } from '@/_Components/Inputs'
 import Loader from '@/_Components/Loader'
+import useFetch from '@/_hooks/useFetch'
+import useThrottleEffect from '@/_hooks/useThrottleEffect'
 import { StateUpdater } from '@/_hooks/useWritableState'
 import useAppStore from '@/_store/useStore'
 import { Field, useFormikContext } from 'formik'
 import { produce } from 'immer'
-import { ChangeEvent, ChangeEventHandler, useEffect } from 'react'
+import { ChangeEvent, useEffect } from 'react'
 
 
 interface Props {
@@ -15,12 +18,15 @@ interface Props {
 
 export default function CategorySelector({ selectHandler, addCategory }: Props) {
   const { setFieldValue, setValues } = useFormikContext()
-  const { loadCategories, state: { data, isLoading } } = useAppStore(s => ({
+  const { loadCategories, state: { error, isLoading, data } } = useAppStore(s => ({
     loadCategories: s.filters.categories.load,
+    setCategories: s.filters.categories.setter,
     state: s.filters.categories.state
   }))
 
-  useEffect(loadCategories, [])
+  useThrottleEffect(loadCategories, [])
+
+  if (error) return <ErrorBlock className={style.error}>{error}</ErrorBlock>
 
   const updateProduct: StateUpdater<Product> = updater => {
     setValues(produce(draft => {

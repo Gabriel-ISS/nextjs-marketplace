@@ -2,8 +2,10 @@ import style from '@/page.module.scss'
 import Search from '@/_Components/Search'
 import ProductGroup from '@/_Components/ProductGroup'
 import { satisfy } from '@/_lib/fonts'
-import { getCategoriesWithImage, getProductTags as getProductGroups } from '@/_lib/data'
+import { getCategoriesWithImage, getProductGroups } from '@/_lib/data'
 import { ComponentProps } from 'react'
+import { ClientError } from '@/_lib/utils'
+import ErrorBlock from '@/_Components/ErrorBlock'
 
 export default async function () {
   const productGroups = await getProductGroups()
@@ -22,8 +24,16 @@ export default async function () {
           </div>
         </div>
       </section>
-      <ProductSection title='Encuentre en NextMarket' data={productGroups} type='tag' />
-      <ProductSection title='Variedad de productos electrónicos' data={productCategories} type='category' />
+      {
+        !productGroups.success ?
+          <ErrorBlock>{productGroups.error}</ErrorBlock> :
+          <ProductSection title='Encuentre en NextMarket' data={productGroups.success} type='tag' />
+      }
+      {
+        !productCategories.success ?
+          <ErrorBlock>{productCategories.error}</ErrorBlock> :
+          <ProductSection title='Variedad de productos electrónicos' data={productCategories.success} type='category' />
+      }
     </main>
   )
 }

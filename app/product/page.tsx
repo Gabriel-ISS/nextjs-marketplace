@@ -4,11 +4,13 @@ import style from '@/product/page.module.scss'
 
 
 export default async function ({ searchParams }: PageProps) {
-  const product = await getProduct(searchParams.id as string)
+  const productRes = await getProduct(searchParams.id as string)
+
+  if (!productRes.success) throw new Error(productRes.error)
 
   return (
     <main className={style.main}>
-      <Product product={product} />
+      <Product product={productRes.success} />
     </main>
   )
 }

@@ -1,4 +1,4 @@
-import { ServerSideError } from '@/_lib/utils';
+import { ServerSideError } from '@/_lib/server-utils';
 import { DeleteObjectsCommand, ListObjectsCommand, PutObjectCommand, S3 } from '@aws-sdk/client-s3';
 
 function getClient() {

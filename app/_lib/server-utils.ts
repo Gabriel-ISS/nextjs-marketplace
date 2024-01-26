@@ -1,27 +1,44 @@
+import 'server-only';
+
 import { deleteImages, saveTagImage } from '@/_lib/aws-s3';
 import { FilterManager, RelevantFilterData } from '@/_lib/filter-manager';
 import { Filter, Group } from '@/_lib/models';
-import { ServerSideError } from '@/_lib/utils';
-import mongoose from "mongoose";
+import { Types, mongo } from "mongoose";
 import { getServerSession } from 'next-auth';
-import { Types } from 'mongoose'
+import { S_ERROR_TAG } from '@/constants';
 
-const { MONGO_URL } = process.env;
-
-if (!MONGO_URL) throw new ServerSideError("MONGO_URL is not defined.", { send: true });
-
-let cached = (global as any).mongoose;
-
-if (!cached) {
-  cached = (global as any).mongoose = { conn: null };
+type ExtraData = { send?: boolean }
+export class ServerSideError extends Error {
+  constructor(message: string, extraData: ExtraData = {}) {
+    if (extraData.send) {
+      super(S_ERROR_TAG + 'Por favor reporte el error a la empresa.\n' + message)
+    } else {
+      super(S_ERROR_TAG + message)
+    }
+  }
 }
 
-export const connectDB = async () => {
-  if (cached.conn) return cached.conn;
+export function getErrorMessage(error: unknown, defaultMessage: string) {
+  let message = defaultMessage
 
-  cached.conn = await mongoose.connect(MONGO_URL);
+  if (error instanceof ServerSideError) {
+    message = error.message
+  }
+  // error desconocido
+  else if (error instanceof Error) {
+    console.log(error.message)
+  }
+  // error desconocido
+  else if (error && typeof error == 'object' && 'message' in error) {
+    console.log(error.message)
+  } 
+  else {
+    message = 'Algo ha salido mal'
+  }
 
-  return cached.conn;
+  return {
+    error: message
+  }
 }
 
 export async function checkAuthentication() {
@@ -120,12 +137,12 @@ export async function updateTags(newGroups: UnsavedGroup[], tags: string[], prev
   const operations: FirstParam<typeof Group.bulkWrite> = []
 
   const query = {
-    deleteMany: (tags: string[]): mongoose.mongo.DeleteManyModel => ({
+    deleteMany: (tags: string[]): mongo.DeleteManyModel => ({
       filter: {
         name: { $in: tags }
       }
     }),
-    increase: (tags: string[], incrementValue: 1 | -1): mongoose.mongo.UpdateManyModel => ({
+    increase: (tags: string[], incrementValue: 1 | -1): mongo.UpdateManyModel => ({
       filter: {
         name: { $in: tags }
       },
@@ -135,7 +152,7 @@ export async function updateTags(newGroups: UnsavedGroup[], tags: string[], prev
         }
       }
     }),
-    insert: (group: UnsavedGroup): mongoose.mongo.InsertOneModel => ({
+    insert: (group: UnsavedGroup): mongo.InsertOneModel => ({
       document: group
     }),
   }

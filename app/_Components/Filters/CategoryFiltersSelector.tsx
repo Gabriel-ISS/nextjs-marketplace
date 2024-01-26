@@ -1,7 +1,9 @@
+import ErrorBlock from '@/_Components/ErrorBlock'
 import style from '@/_Components/Filters/Filters.module.scss'
 import Loader from '@/_Components/Loader'
-import useAppStore from '@/_store/useStore'
-import { ChangeEvent, ChangeEventHandler, useEffect, useState } from 'react'
+import useFetch from '@/_hooks/useFetch'
+import { getCategoryFiltersNC } from '@/_lib/data'
+import { ChangeEvent, ChangeEventHandler } from 'react'
 
 
 interface Props {
@@ -16,19 +18,19 @@ interface Props {
 }
 
 export default function CategoryFiltersSelector({ category, brandHandler, commonPropertiesHandler, checkedBrands, checkedProperties }: Props) {
-  const { loadCategoryFilters, clearCategoryFilters, state: { data, isLoading } } = useAppStore(s => ({
-    loadCategoryFilters: s.filters.categoryFilters.load,
-    clearCategoryFilters: s.filters.categoryFilters.clear,
-    state: s.filters.categoryFilters.state
-  }))
+  const { isLoading, data, error } = useFetch<FilterForFilters>(
+    async ({ manager, setData }) => {
+      if (category.isNew) {
+        setData(null)
+        return
+      } else {
+        return await manager(() => getCategoryFiltersNC(category.name))
+      }
+    },
+    [category.name]
+  )
 
-  useEffect(() => {
-    if (category.isNew) {
-      clearCategoryFilters()
-    } else {
-      loadCategoryFilters(category.name)
-    }
-  }, [category.name])
+  if (error) return <ErrorBlock>{error}</ErrorBlock>
 
   return (
     <Loader isLoading={isLoading} meanwhile={<span>Cargando filtros de categoría...</span>}>

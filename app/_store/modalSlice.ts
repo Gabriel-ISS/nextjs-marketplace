@@ -1,21 +1,23 @@
-import React from 'react'
-import { Slice } from '@/_store/useStore'
+import React, { ComponentProps } from 'react'
+import { Slice, State } from '@/_store/useStore'
+import MessageModal from '@/_Components/Modal/MessageModal'
 
 
-type ModalColors = 'blue' | 'green' | 'red' | 'yellow'
+export type ModalColor = 'blue' | 'green' | 'red' | 'yellow'
 
 export type Modal = {
   isActive: boolean
   content: React.JSX.Element
-  theme: ModalColors
+  theme: ModalColor
 }
 
 export type ModalSlice = {
   modal: {
     element: Modal
-    open: (content: React.JSX.Element, theme?: ModalColors) => void
-    close: () => void
-    onCloseEnd: () => void
+    open(content: React.JSX.Element, theme?: ModalColor): void
+    openMessage(props: ComponentProps<typeof MessageModal>): void
+    close(): void
+    onCloseEnd(): void
   }
 }
 
@@ -25,6 +27,12 @@ const modalSlice: Slice<ModalSlice> = (set) => ({
     open(content, theme) {
       set(prev => {
         prev.modal.element = { isActive: true, content, theme: theme || 'blue' }
+      })
+    },
+    openMessage(props) {
+      set(prev => {
+        prev.modal.element.isActive = true
+        prev.modal.element.content = MessageModal(props)
       })
     },
     close() {

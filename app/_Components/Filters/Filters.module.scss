@@ -128,3 +128,13 @@
     border-radius: var(--br);
   }
 }
+
+.error {
+  margin-inline: .5rem;
+  margin-bottom: .5rem;
+  width: auto;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+}

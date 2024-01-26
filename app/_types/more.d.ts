@@ -13,6 +13,16 @@ type Query = Partial<Pick<FilterForFilters, 'category' | 'brands'>> & {
   page?: number
 }
 
+type ActionRes<T = string> = {
+  success?: undefined
+  error: string
+} | {
+  success: T
+  error?: undefined
+}
+
+type SuccessRes<T> = NonNullable<Awaited<ReturnType<T>>['success']>
+
 type FilterForFilters = {
   category: string
   brands: string[]
@@ -32,6 +42,7 @@ type PFData = Omit<FilterForFilters, 'brands'> & {
 type DataState<T> = {
   data: T
   isLoading: boolean
+  error?: string
 }
 
 type Projection<T, N extends 1 | -1> = { [key in keyof T]: N }

@@ -1,6 +1,8 @@
+import ErrorBlock from '@/_Components/ErrorBlock'
 import style from '@/_Components/Filters/Filters.module.scss'
 import { CustomFormikError } from '@/_Components/Inputs'
 import Loader from '@/_Components/Loader'
+import useThrottleEffect from '@/_hooks/useThrottleEffect'
 import { StateUpdater } from '@/_hooks/useWritableState'
 import useAppStore from '@/_store/useStore'
 import { Field, useFormikContext } from 'formik'
@@ -21,20 +23,22 @@ interface Props {
 }
 
 export default function CategoryFiltersSelector({ category, brandHandler, propertyValueHandler, addBrand, addProperty, addPropertyValue }: Props) {
-  const { setFieldValue, setValues, values: productValues, errors } = useFormikContext<Product>()
-  const { loadCategoryFilters, clearCategoryFilters, state: { data, isLoading } } = useAppStore(s => ({
+  const { setFieldValue, setValues, values: productValues } = useFormikContext<Product>()
+  const { loadCategoryFilters, clearCategoryFilters, state: { error, isLoading, data } } = useAppStore(s => ({
     loadCategoryFilters: s.filters.categoryFilters.load,
     clearCategoryFilters: s.filters.categoryFilters.clear,
     state: s.filters.categoryFilters.state
   }))
 
-  useEffect(() => {
+  useThrottleEffect(() => {
     if (category.isNew) {
       clearCategoryFilters()
     } else {
       loadCategoryFilters(category.name)
     }
   }, [category.name])
+
+  if (error) return <ErrorBlock className={style.error}>{error}</ErrorBlock>
 
   const updateProduct: StateUpdater<Product> = updater => {
     setValues(produce(draft => {

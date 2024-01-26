@@ -1,7 +1,9 @@
+import ErrorBlock from '@/_Components/ErrorBlock'
 import style from '@/_Components/Filters/Filters.module.scss'
 import Loader from '@/_Components/Loader'
-import useAppStore from '@/_store/useStore'
-import { ChangeEvent, useEffect } from 'react'
+import useFetch from '@/_hooks/useFetch'
+import { getProductGroupsNC } from '@/_lib/data'
+import { ChangeEvent } from 'react'
 
 
 interface Props {
@@ -10,12 +12,9 @@ interface Props {
 }
 
 export default function TagSelector({ selectHandler, checked }: Props) {
-  const { loadTags, state: { data, isLoading } } = useAppStore(s => ({
-    loadTags: s.filters.tags.load,
-    state: s.filters.tags.state
-  }))
+  const { error, isLoading, data } = useFetch<string[]>(({ manager }) => manager(() => getProductGroupsNC()))
 
-  useEffect(loadTags, [])
+  if (error) return <ErrorBlock>{error}</ErrorBlock>
 
   return (
     <fieldset className={style.filter_group}>

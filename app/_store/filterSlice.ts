@@ -1,20 +1,15 @@
 import { Produce, StateUpdater } from '@/_hooks/useWritableState'
-import { getCategories, getCategoryFiltersNC } from '@/_lib/data'
-import { getProductTagsNC } from '@/_lib/data'
+import { getCategories, getCategoryFiltersNC, getProductGroupsNC } from '@/_lib/data'
+import { fetchRetry } from '@/_lib/utils'
 import { ImmerSet, Slice } from '@/_store/useStore'
+import { Draft } from 'immer'
 import QueryString from 'qs'
 
-
-type Filter<T, Loader = () => void> = {
-  state: DataState<T>
-  load: Loader
-  setter: StateUpdater<T>
-}
 
 export type FilterSlice = {
   filters: {
     categories: Filter<string[]>
-    categoryFilters: Filter<FilterForFilters, (category: string) => void> & { clear: () => void }
+    categoryFilters: Filter<FilterForFilters, [category: string]> & { clear: () => void }
     tags: Filter<string[]>
   }
   query: {
@@ -25,41 +20,15 @@ export type FilterSlice = {
   }
 }
 
-const defaultCategoryFilters: FilterForFilters = {
-  category: '',
-  brands: [],
-  properties: []
-}
-
 const filterSlice: Slice<FilterSlice> = (set) => ({
   filters: {
-    categories: {
-      state: {
-        data: [],
-        isLoading: false
-      },
-      load() {
-        loader(set, 'categories', getCategories)
-      },
-      setter(updater) {
-        set(prev => {
-          updater(prev.filters.categories.state.data)
-        })
-      },
-    },
+    categories: filterInitializer(set, 'categories', [] as string[], getCategories),
     categoryFilters: {
-      state: {
-        data: defaultCategoryFilters,
-        isLoading: false
-      },
-      load(category) {
-        loader(set, 'categoryFilters', () => getCategoryFiltersNC(category))
-      },
-      setter(updater) {
-        set(prev => {
-          updater(prev.filters.categoryFilters.state.data)
-        })
-      },
+      ...filterInitializer(set, 'categoryFilters', {
+        category: '',
+        brands: [],
+        properties: []
+      } as FilterForFilters, getCategoryFiltersNC),
       clear() {
         set(prev => {
           prev.filters.categoryFilters.state.data = {
@@ -70,32 +39,19 @@ const filterSlice: Slice<FilterSlice> = (set) => ({
         })
       }
     },
-    tags: {
-      state: {
-        data: [],
-        isLoading: false
-      },
-      load() {
-        loader(set, 'tags', getProductTagsNC)
-      },
-      setter(updater) {
-        set(prev => {
-          updater(prev.filters.tags.state.data)
-        })
-      }
-    }
+    tags: filterInitializer(set, 'tags', [] as string[], getProductGroupsNC),
   },
   query: {
     data: {},
     wasEstablished: false,
-    setter(nextStateOrUpdater, resetPage = true) {
+    setter(updater, resetPage = true) {
       set(prev => {
-        if (typeof nextStateOrUpdater == 'function') {
-          nextStateOrUpdater(prev.query.data)
+        if (typeof updater == 'function') {
+          updater(prev.query.data)
           prev.query.wasEstablished = true
           if (resetPage) delete prev.query.data.page
         } else {
-          prev.query.data = nextStateOrUpdater
+          prev.query.data = updater
         }
       })
     },
@@ -114,17 +70,59 @@ const filterSlice: Slice<FilterSlice> = (set) => ({
 
 export default filterSlice
 
-async function loader<Filter extends keyof FilterSlice['filters']>(
-  set: ImmerSet,
-  filter: Filter,
-  fetcher: () => Promise<FilterSlice['filters'][Filter]['state']['data']>
-) {
-  // for some reason without this promise fetcher promise doesn't work, check in data.ts
-  await new Promise<void>(resolve => resolve())
-  set(prev => { prev.filters[filter].state.isLoading = true })
-  const data = await fetcher()
-  set(prev => {
-    prev.filters[filter].state.data = data
-    prev.filters[filter].state.isLoading = false
-  })
+
+
+type Filter<T, Params extends [...args: any] = []> = {
+  state: DataState<T>
+  setter: StateUpdater<T>
+  load(...args: Params): void
+  setLoading(loading: boolean): void
 }
+
+type Filters = FilterSlice['filters']
+
+const filterInitializer = <
+  FilterKey extends keyof Filters,
+  T extends Filters[FilterKey]['state']['data'],
+  Fetcher extends (...args: any) => Promise<ActionRes<any>>
+>(
+  set: ImmerSet,
+  filterKey: FilterKey,
+  initialState: T,
+  fetcher: Fetcher
+): Filter<T, Parameters<Fetcher>> => ({
+  state: {
+    data: initialState,
+    isLoading: false
+  },
+  setter(updater) {
+    set(prev => {
+      updater(prev.filters[filterKey].state.data as Draft<T>)
+    })
+  },
+  async load(...args) {
+
+    fetchRetry(_load, 500, 3)
+
+    async function _load() {
+      set(prev => { prev.filters[filterKey].state.isLoading = true })
+      const res = await fetcher(...args)
+      set(prev => {
+        const FState = prev.filters[filterKey].state
+        if (!res.success) {
+          FState.error = res.error
+          FState.isLoading = false
+          return;
+        }
+        FState.data = res.success
+        FState.isLoading = false
+        delete FState.error
+      })
+    }
+  },
+  setLoading(loading) {
+    set(prev => {
+      prev.filters.categories.state.isLoading = loading
+    })
+  },
+})

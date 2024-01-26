@@ -26,17 +26,17 @@ export default function ProductItem({ product, adminMode, setProducts }: Props) 
 
   function deleteProductHandler() {
     openModal(<MessageModal title='Advertencia' message='El producto se eliminara permanentemente' onAccept={async () => {
-      try {
-        const message = await deleteProduct(product._id)
-        openModal(<MessageModal title='Éxito' message={message} onAccept={() => {
+        const res = await deleteProduct(product._id)
+        if (res.success)
+        openModal(<MessageModal title='Éxito' message={res.success} onAccept={() => {
           setProducts(products => {
             const index = products.findIndex(p => p.name == product.name)
             products.splice(index, 1)
           })
         }} />, 'green')
-      } catch (error: any) {
-        openModal(<MessageModal title='Error' message={error.message} />, 'red')
-      }
+        if (res.error) {
+          openModal(<MessageModal title='Error' message={res.error} />, 'red')
+        }
     }} />, 'yellow')
   }
 

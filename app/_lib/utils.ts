@@ -1,12 +1,23 @@
-type ExtraData = { send?: boolean }
-export class ServerSideError extends Error {
-  constructor(message: string, extraData: ExtraData = {}) {
-    if (extraData.send) {
-      super('Por favor reporte el error a la empresa.\n' + message)
-    } else {
+import { C_ERROR_TAG, S_ERROR_TAG } from '@/constants';
+
+
+export class ClientError extends Error {
+  constructor(message: string) {
+    if (message.startsWith(S_ERROR_TAG)) {
       super(message)
+    } else {
+      super(C_ERROR_TAG + message)
     }
   }
+}
+
+export function fetchRetry(fetcher: () => Promise<any>, interval: number, attempts: number) {
+  const id = setInterval(() => {
+    fetcher().then(() => clearInterval(id))
+  }, interval)
+  setTimeout(() => {
+    clearInterval(id)
+  }, interval * attempts)
 }
 
 export function getLocalCurrency(value: number) {

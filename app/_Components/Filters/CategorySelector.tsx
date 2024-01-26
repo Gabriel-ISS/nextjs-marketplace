@@ -1,5 +1,8 @@
+import ErrorBlock from '@/_Components/ErrorBlock'
 import style from '@/_Components/Filters/Filters.module.scss'
 import Loader from '@/_Components/Loader'
+import useFetch from '@/_hooks/useFetch'
+import { getCategories } from '@/_lib/data'
 import useAppStore from '@/_store/useStore'
 import { ChangeEventHandler, useEffect, useState } from 'react'
 
@@ -10,12 +13,9 @@ interface Props {
 }
 
 export default function CategorySelector({ selectHandler, checked }: Props) {
-  const { loadCategories, state: { data, isLoading } } = useAppStore(s => ({
-    loadCategories: s.filters.categories.load,
-    state: s.filters.categories.state
-  }))
+  const { error, isLoading, data } = useFetch<string[]>(({ manager }) => manager(() => getCategories()))
 
-  useEffect(loadCategories, [])
+  if (error) return <ErrorBlock>{error}</ErrorBlock>
 
   return (
     <fieldset className={style.filter_group}>

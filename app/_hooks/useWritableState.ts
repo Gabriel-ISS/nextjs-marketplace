@@ -8,7 +8,7 @@ export type StateUpdater<T> = (updater: Produce<T>) => void
 export default function useWritableState<T>(defaultState: T) {
   const [state, setState] = useState(defaultState)
 
-  function updateState(updater: Produce<T>) {
+  const updateState: StateUpdater<T> = (updater) => {
     setState(produce(updater))
   }
 

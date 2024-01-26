@@ -1,40 +1,60 @@
-import useLoadState from '@/_hooks/useLoadState';
-import { StateUpdater } from '@/_hooks/useWritableState';
-import { useEffect } from 'react';
+import { useThrottle } from '@/_hooks/useThrottle';
+import { fetchRetry } from '@/_lib/utils';
+import { useThrottleCallback } from '@react-hook/throttle';
+import { DependencyList, Dispatch, SetStateAction, useEffect, useState } from 'react';
 
 
-interface Config<T = any> {
-  fetcher: () => Promise<T>
-  message?: string
-  condition?: () => boolean
-  then?: (data: T, setData: StateUpdater<T | null>) => void
-  dependencyList?: any[]
+type setState<T> = Dispatch<SetStateAction<T>>
+type ActionResHandler<T> = (res: ActionRes<T>) => void
+type Manager<T> = (fetcher: () => Promise<ActionRes<T>>) => Promise<boolean>
+
+type Data<T> = {
+  manager: Manager<T>
+  setData: setState<T | null>
+  setLoading: setState<boolean>
+  setError: setState<string | null>
+  actionResHandler: ActionResHandler<T>
 }
 
-export default function useFetch<T>({
-  fetcher,
-  message,
-  condition,
-  then,
-  dependencyList
-}: Config<T>) {
-  const [data, setData, loading, setLoading] = useLoadState<T | null>(null)
+export default function useFetch<T>(
+  fn: (dt: Data<T>) => Promise<any>,
+  dependencyList?: DependencyList
+) {
+  const [data, setData] = useState<T | null>(null)
+  const [isLoading, setLoading] = useState<boolean>(false)
+  const [error, setError] = useState<string | null>(null)
+
+  const throttleFn = useThrottleCallback((dt: Data<T>) => {
+    fetchRetry(() => fn(dt), 500, 3)
+  })
+
+  const actionResHandler: ActionResHandler<T> = (res: ActionRes<T>) => {
+    if (res.success) {
+      setData(res.success)
+    } else {
+      setError(res.error as string)
+    }
+  }
+
+  const manager: Manager<T> = async (fetcher) => {
+    setLoading(true)
+    try {
+      const res = await fetcher()
+      actionResHandler(res)
+    } catch (error) {
+      setError('Algo ha salido mal')
+    }
+    setLoading(false)
+    return true
+  }
 
   useEffect(() => {
-    if (condition === undefined ? true : condition()) {
-      setLoading(true)
-      fetcher()
-        .then(data => {
-          then ? then(data, setData) : setData(() => data)
-        })
-        .catch(error => {
-          alert(message || 'Error al obtener datos')
-        })
-        .finally(() => {
-          setLoading(false)
-        })
-    }
+    throttleFn({ manager, setData, setLoading, setError, actionResHandler })
   }, dependencyList || [])
 
-  return [data, setData, loading, setLoading] as const
+  return {
+    data, setData,
+    isLoading, setLoading,
+    error, setError
+  }
 }

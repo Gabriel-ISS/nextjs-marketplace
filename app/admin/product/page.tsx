@@ -1,5 +1,6 @@
 'use client'
 
+import ErrorBlock from '@/_Components/ErrorBlock'
 import CategoryFiltersSelector from '@/_Components/Filters/Admin/CategoryFiltersSelector'
 import CategorySelector from '@/_Components/Filters/Admin/CategorySelector'
 import TagSelector from '@/_Components/Filters/Admin/TagSelector'
@@ -11,6 +12,7 @@ import InputModal from '@/_Components/Modal/InputModal'
 import MessageModal from '@/_Components/Modal/MessageModal'
 import NamedImageModal from '@/_Components/Modal/NamedImageModal'
 import Product from '@/_Components/Product'
+import useFetch from '@/_hooks/useFetch'
 import { StateUpdater } from '@/_hooks/useWritableState'
 import { saveProduct } from '@/_lib/actions'
 import { getProduct } from '@/_lib/data'
@@ -21,7 +23,7 @@ import style from '@/admin/product/page.module.scss'
 import { Field, Form, Formik, FormikContextType } from 'formik'
 import { produce } from 'immer'
 import { useRouter } from 'next/navigation'
-import { ChangeEvent, ChangeEventHandler, FocusEventHandler, HTMLInputTypeAttribute, useEffect, useState } from 'react'
+import { ChangeEvent, ChangeEventHandler, FocusEventHandler, HTMLInputTypeAttribute, useState } from 'react'
 
 
 let newFilters: NewFilters = {
@@ -47,26 +49,27 @@ export default function ({ searchParams }: PageProps) {
     setCategoryFilters: s.filters.categoryFilters.setter,
     setTags: s.filters.tags.setter
   }))
-  const [initialProduct, setInitialProduct] = useState<Product | null>(null)
-  const [isLoading, setLoading] = useState(false)
   const [originalPrice, setOriginalPrice] = useState(0)
 
 
-  useEffect(() => {
+  const { error, isLoading, data: initialProduct, setData: setInitialProduct} = useFetch<Product>(async ({ setLoading, actionResHandler }) => {
     (async () => {
-      try {
-        setLoading(true)
-        const product = await getProduct(searchParams.id)
-        setInitialProduct(product)
-        setOriginalPrice(product.price.current)
-        newFilters = { category: '', category_img: '', brand: '', properties: [], tags: [] }
-        lastSelectedIsNew = { category: false, brand: false }
-      } catch (error: any) {
-        openModal(<MessageModal title='Error' message={error.message} />, 'red')
-      }
+      setLoading(true)
+      const res = await getProduct(searchParams.id)
+      actionResHandler(res)
+      if (!res.success) return;
+      
+      const product = res.success
+      setInitialProduct(product)
+      setOriginalPrice(product.price.current)
+      newFilters = { category: '', category_img: '', brand: '', properties: [], tags: [] }
+      lastSelectedIsNew = { category: false, brand: false }
       setLoading(false)
+      return;
     })()
   }, [])
+
+  if (error) return <ErrorBlock>{error}</ErrorBlock>
 
   function imageHandler(data: ImageFileData, setProduct: StateUpdater<Product>) {
     openModal(<CropImageModal imageData={data} onSaveCrop={croppedImage => {
@@ -272,17 +275,18 @@ export default function ({ searchParams }: PageProps) {
   }
 
   async function save(product: Product) {
-    try {
-      const finalProduct = produce(product, p => {
-        if (originalPrice > p.price.current) {
-          p.price.old = originalPrice
-        }
-        p.properties = p.properties.filter(property => property.values.length)
-      })
-      const message = await saveProduct(finalProduct, newFilters.tags, newFilters.category_img)
-      openModal(<MessageModal title='Éxito' message={message} onAccept={() => router.push('/products')} />, 'green')
-    } catch (error: any) {
-      openModal(<MessageModal title='Error' message={error.message} />, 'red')
+    const finalProduct = produce(product, p => {
+      if (originalPrice > p.price.current) {
+        p.price.old = originalPrice
+      }
+      p.properties = p.properties.filter(property => property.values.length)
+    })
+    const res = await saveProduct(finalProduct, newFilters.tags, newFilters.category_img)
+    if (res.success) {
+      openModal(<MessageModal title='Éxito' message={res.success} onAccept={() => router.push('/products')} />, 'green')
+    }
+    if (res.error) {
+      openModal(<MessageModal title='Error' message={res.error} />, 'red')
     }
   }
 
@@ -318,10 +322,10 @@ export default function ({ searchParams }: PageProps) {
                       <TagSelector selectHandler={tagHandler} addTag={addTag} />
                     </div>
 
-                    <button 
-                    className={style.editor__save_btn} 
-                    type='submit' 
-                    disabled={isSubmitting}
+                    <button
+                      className={style.editor__save_btn}
+                      type='submit'
+                      disabled={isSubmitting}
                     >
                       Guardar
                     </button>
