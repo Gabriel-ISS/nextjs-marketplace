@@ -41,7 +41,7 @@ let lastSelectedIsNew = {
 }
 
 
-export default function ({ searchParams }: PageProps) {
+export default function ProductEditor({ searchParams }: PageProps) {
   const router = useRouter()
   const { openModal, setCategories, setCategoryFilters, setTags } = useAppStore(s => ({
     openModal: s.modal.open,

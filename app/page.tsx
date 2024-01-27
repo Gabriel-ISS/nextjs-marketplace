@@ -7,7 +7,7 @@ import { ComponentProps } from 'react'
 import { ClientError } from '@/_lib/utils'
 import ErrorBlock from '@/_Components/ErrorBlock'
 
-export default async function () {
+export default async function App() {
   const productGroups = await getProductGroups()
   const productCategories = await getCategoriesWithImage()
 

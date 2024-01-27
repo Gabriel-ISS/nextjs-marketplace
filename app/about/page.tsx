@@ -1,6 +1,6 @@
 import style from '@/about/page.module.scss'
 
-export default function () {
+export default function About() {
   return (
     <main className={style.main}>
       <div>

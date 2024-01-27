@@ -8,7 +8,7 @@ import { signIn } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import React, { ChangeEvent, HTMLInputTypeAttribute } from 'react';
 
-export default function () {
+export default function Auth() {
   const router = useRouter()
   const openModal = useAppStore(s => s.modal.open)
   const [credentials, setCredentials] = useWritableState({

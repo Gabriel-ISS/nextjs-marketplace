@@ -1,13 +1,13 @@
 import style from '@/schedule/page.module.scss'
 
-export default function () {
+export default function Schedule() {
   const schedule = [
-    ['Lunes', '7:30 - 18:00'],
-    ['Martes', '7:30 - 18:00'],
-    ['Miércoles', '7:30 - 18:00'],
-    ['Jueves', '7:30 - 18:00'],
-    ['Viernes', '7:30 - 18:00'],
-    ['Sábado', '8:00 - 12:00'],
+    ['Lunes', '7:00 - 18:00'],
+    ['Martes', '7:00 - 18:00'],
+    ['Miércoles', '7:00 - 18:00'],
+    ['Jueves', '7:00 - 18:00'],
+    ['Viernes', '7:00 - 18:00'],
+    ['Sábado', '7:00 - 12:00'],
     ['Domingo', 'CERRADO'],
   ]
   return (

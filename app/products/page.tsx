@@ -7,7 +7,7 @@ import Link from 'next/link';
 import { AiFillFileAdd } from 'react-icons/ai';
 
 
-export default async function () {
+export default async function Products() {
   const session = await getServerSession()
   const adminMode = session != null
 
