@@ -1,4 +1,3 @@
-import { useThrottle } from '@/_hooks/useThrottle';
 import { fetchRetry } from '@/_lib/utils';
 import { useThrottleCallback } from '@react-hook/throttle';
 import { DependencyList, Dispatch, SetStateAction, useEffect, useState } from 'react';

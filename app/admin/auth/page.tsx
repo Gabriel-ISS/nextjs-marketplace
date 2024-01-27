@@ -63,7 +63,7 @@ interface InputProps {
   className?: string
 }
 
-export function Input({ label, field, value, handler, inputType, as, className }: InputProps) {
+function Input({ label, field, value, handler, inputType, as, className }: InputProps) {
   const imp = React.createElement(as || 'input', {
     type: inputType || 'text',
     value,
