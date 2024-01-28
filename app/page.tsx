@@ -1,11 +1,10 @@
-import style from '@/page.module.scss'
-import Search from '@/_Components/Search'
-import ProductGroup from '@/_Components/ProductGroup'
-import { satisfy } from '@/_lib/fonts'
-import { getCategoriesWithImage, getProductGroups } from '@/_lib/data'
-import { ComponentProps } from 'react'
-import { ClientError } from '@/_lib/utils'
 import ErrorBlock from '@/_Components/ErrorBlock'
+import ProductGroup from '@/_Components/ProductGroup'
+import Search from '@/_Components/Search'
+import { getCategoriesWithImage, getProductGroups } from '@/_lib/data'
+import { satisfy } from '@/_lib/fonts'
+import style from '@/page.module.scss'
+import { ComponentProps } from 'react'
 
 export default async function App() {
   const productGroups = await getProductGroups()
@@ -17,7 +16,7 @@ export default async function App() {
         <div className={style.search_section__container}>
           <div className={style.search_section__text_container}>
             <span className={`${satisfy.className} ${style.search_section__title}`}>NextMarket</span>
-            <p className={style.search_section__slogan}>Encuentre en toda la electronica que necesita en un solo lugar.</p>
+            <p className={style.search_section__slogan}>Encuentre toda la electronica que necesita en un solo lugar.</p>
           </div>
           <div className={style.search_section__searcher_container}>
             <Search className={style.search_section__searcher} />
