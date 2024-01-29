@@ -55,7 +55,7 @@ export default function Header() {
             className={styles.nav__menu_btn}
             onClick={toggleState}
           >
-            <span className={styles.hidden} aria-hidden="true">Menu</span>
+            <span className={styles.hidden} aria-hidden='true'>Menu</span>
             <MdMenu size="3rem" />
           </button>
 
@@ -66,10 +66,11 @@ export default function Header() {
             data-state={state}
             onTransitionEnd={handleTransitionEnd}>
             <ul className={styles.nav__links_list}>
-              <li><Link href="/">Inicio</Link></li>
+              <li><Link href='/'>Inicio</Link></li>
               <li><ProductsLink/></li>
-              <li><Link href="/about">Sobre nosotros</Link></li>
+              <li><Link href='/about'>Sobre nosotros</Link></li>
             </ul>
+            <Link className={styles.nav__admin_mode_btn} href='/admin/auth' role='button'>Probar modo administrador</Link>
           </div>
         </div>
 
