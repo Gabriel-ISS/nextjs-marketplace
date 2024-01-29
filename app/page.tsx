@@ -17,6 +17,7 @@ export default async function App() {
           <div className={style.search_section__text_container}>
             <span className={`${satisfy.className} ${style.search_section__title}`}>NextMarket</span>
             <p className={style.search_section__slogan}>Encuentre toda la electronica que necesita en un solo lugar.</p>
+            <p className={style.search_section__slogan}>Explore nuestro catálogo de productos de calidad y aproveche nuestras ofertas especiales.</p>
           </div>
           <div className={style.search_section__searcher_container}>
             <Search className={style.search_section__searcher} />
