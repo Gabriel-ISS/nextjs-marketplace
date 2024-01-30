@@ -22,3 +22,9 @@
 .login_btn {
   @include largeBtn();
 }
+
+.fake_cred {
+  @include autoMargin();
+  background-color: transparentize($color: $yellow, $amount: .5);
+  border: 3px solid $yellow;
+}

@@ -1,8 +1,10 @@
+@import '../vars';
+
 .prod_group {
   position: relative;
   
   background-color: var(--bg4);
-  border-radius: var(--br);
+  border-radius: $br;
   overflow: hidden;
 
 
@@ -32,9 +34,9 @@
     margin: 0;
     padding: .2rem .5rem;
 
-    background-color: var(--primary);
-    color: var(--white);
-    border-radius: var(--br);
+    background-color: $primary;
+    color: $white;
+    border-radius: $br;
   }
 
   &__img {

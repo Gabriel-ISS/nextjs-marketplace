@@ -1,10 +1,12 @@
+@import '../../vars';
+
 .modal {
   position: fixed;
 
   background-color: var(--bg1);
   color: var(--text-color);
   border: 1px solid;
-  border-radius: var(--br);
+  border-radius: $br;
 
   $transition-duration: 300ms;
 
@@ -33,19 +35,19 @@
   }
 
   &[data-theme="blue"] {
-    border-color: var(--primary);
+    border-color: $primary;
   }
 
   &[data-theme="green"] {
-    border-color: var(--green);
+    border-color: $green;
   }
 
   &[data-theme="red"] {
-    border-color: var(--red);
+    border-color: $red;
   }
 
   &[data-theme="yellow"] {
-    border-color: var(--yellow);
+    border-color: $yellow;
   }
 
   &__header {
@@ -61,15 +63,15 @@
     margin-block: 0;
 
     &[data-theme="blue"] {
-      color: var(--primary);
+      color: $primary;
     }
 
     &[data-theme="green"] {
-      color: var(--green);
+      color: $green;
     }
 
     &[data-theme="red"] {
-      color: var(--red);
+      color: $red;
     }
   }
 
@@ -85,15 +87,15 @@
     transition: color 200ms;
 
     &[data-theme="blue"]:hover {
-      color: var(--primary);
+      color: $primary;
     }
 
     &[data-theme="green"]:hover {
-      color: var(--green);
+      color: $green;
     }
 
     &[data-theme="red"]:hover {
-      color: var(--red);
+      color: $red;
     }
   }
 }

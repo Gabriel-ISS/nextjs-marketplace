@@ -16,7 +16,7 @@
     padding-block: .5rem;
 
     background-color: var(--bg1);
-    border-radius: var(--br);
+    border-radius: $br;
   }
 
   &__save_btn {

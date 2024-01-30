@@ -14,8 +14,8 @@
     aspect-ratio: 1;
 
     background-color: var(--bg2);
-    border-radius: var(--br);
-    box-shadow: 0 0 .5rem 0 var(--shadow-c);
+    border-radius: $br;
+    box-shadow: 0 0 .5rem 0 $shadow-c;
   }
 
   &__data {
@@ -58,7 +58,7 @@
     font-weight: bold;
 
     & span:last-child {
-      color: var(--muted);
+      color: $muted;
     }
   }
 }

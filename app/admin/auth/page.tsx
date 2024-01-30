@@ -37,6 +37,7 @@ export default function Auth() {
 
   return (
     <main className={style.main}>
+      <FakeCredentials />
       <form className={style.container}
         onSubmit={e => {
           e.preventDefault()
@@ -45,8 +46,8 @@ export default function Auth() {
         onKeyDown={e => {
           if (e.key == 'Enter') login()
         }}>
-        <Input className={style.input} label='Usuario' field='name' value={credentials.name} handler={textHandler} />
-        <Input className={style.input} label='Contraseña' inputType='password' field='password' value={credentials.password} handler={textHandler} />
+        <Input className={style.input} label='Usuario' minLength={5} field='name' value={credentials.name} handler={textHandler} />
+        <Input className={style.input} label='Contraseña' minLength={14} field='password' value={credentials.password} handler={textHandler} inputType='password' />
         <button className={style.login_btn} type='submit'>Ingresar</button>
       </form>
     </main>
@@ -57,19 +58,22 @@ interface InputProps {
   label: string
   field: string
   value: string | number
+  minLength: number
   handler(field: string, value: string): void
   inputType?: HTMLInputTypeAttribute
   as?: string
   className?: string
 }
 
-function Input({ label, field, value, handler, inputType, as, className }: InputProps) {
+function Input({ label, field, value, minLength, handler, inputType, as, className }: InputProps) {
   const imp = React.createElement(as || 'input', {
     type: inputType || 'text',
     value,
     onChange: inputHandler,
     name: field,
     required: true,
+    minLength: minLength,
+    maxLength: 25,
     className
   })
 
@@ -80,5 +84,19 @@ function Input({ label, field, value, handler, inputType, as, className }: Input
   return <div>
     <label>{label}</label>
     {imp}
+  </div>
+}
+
+function FakeCredentials() {
+  return <div className={style.fake_cred}>
+      <p>Puede usar estas credenciales para acceder al modo administrador.</p>
+      <p>
+        Tenga en cuenta que los productos no se guardaran, editaran, ni eliminaran en la base de datos.
+        Actualmente estas credenciales solo tienen el propósito de presentar la interfaz de administrador.
+      </p>
+    <ul>
+      <li><b>Usuario</b>: Admin Test</li>
+      <li><b>Contraseña</b>: f#@UxR79mmjL&B</li>
+    </ul>
   </div>
 }

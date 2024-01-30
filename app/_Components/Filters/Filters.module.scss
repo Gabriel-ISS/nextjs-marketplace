@@ -36,8 +36,8 @@
     justify-content: center;
     align-items: center;
 
-    background-color: var(--primary);
-    color: var(--white);
+    background-color: $primary;
+    color: $white;
     border-radius: 50%;
 
     animation: resize 1.6s ease-in-out infinite forwards;
@@ -75,7 +75,7 @@
   }
 
   &__add_btn {
-    @include tag(var(--green));
+    @include tag($green);
   }
 
   &__options {
@@ -86,16 +86,16 @@
   }
 
   &__option {
-    @include tag(var(--muted));
+    @include tag($muted);
     margin: 0;
 
     &:has(input:checked) {
-      background-color: var(--primary)
+      background-color: $primary
     }
 
     &:hover {
-      box-shadow: 0 0 7px var(--primary);
-      background-color: var(--primary);
+      box-shadow: 0 0 7px $primary;
+      background-color: $primary;
     }
 
     input {
@@ -124,8 +124,8 @@
   }
 
   &__container {
-    border: 1px solid var(--primary);
-    border-radius: var(--br);
+    border: 1px solid $primary;
+    border-radius: $br;
   }
 }
 

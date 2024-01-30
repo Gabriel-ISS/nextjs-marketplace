@@ -11,7 +11,7 @@
   $admin-btn-mb: .5rem;
 
   background-color: var(--bg2);
-  box-shadow: 0 0 .5rem 0 var(--shadow-c);
+  box-shadow: 0 0 .5rem 0 $shadow-c;
 
   &__primary_link {
     &:hover {
@@ -84,11 +84,11 @@
         font-size: 1.3rem;
         font-weight: 700;
         font-variant-caps: all-small-caps;
-        color: var(--muted);
+        color: $muted;
         transition: color 200ms;
 
         &:hover {
-          color: var(--primary);
+          color: $primary;
           text-decoration: none;
         }
       }
@@ -116,7 +116,7 @@
     justify-content: center;
     align-items: center;
     background: none;
-    color: var(--primary);
+    color: $primary;
 
     @media (width > $screen-md) {
       display: none;

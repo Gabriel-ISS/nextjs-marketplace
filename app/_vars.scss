@@ -3,6 +3,16 @@ $screen-md: 768px;
 $screen-lg: 992px;
 $screen-xl: 1200px;
 
+$muted: #8D8D8D;
+$white: white;
+$primary: #fe7b24;
+$green: rgb(123, 211, 0);
+$red: #D32525;
+$yellow: #d3ca25;
+
+$shadow-c: rgba(0, 0, 0, .45);
+
+$br: .37rem;
 
 @mixin autoMargin($maxWidth: 900px, $flexibleWidth: 100%) {
   width: min($flexibleWidth, $maxWidth);
@@ -10,13 +20,13 @@ $screen-xl: 1200px;
   padding-inline: 1rem;
 }
 
-@mixin largeBtn($bg-color: var(--primary), $color: var(--white)) {
+@mixin largeBtn($bg-color: $primary, $color: $white) {
   width: 100%;
   padding: .7rem;
 
   background-color: $bg-color;
   color: $color;
-  border-radius: var(--br);
+  border-radius: $br;
 
   font-size: large;
   font-weight: bold;
@@ -30,7 +40,7 @@ $screen-xl: 1200px;
   padding: .2rem .5rem;
 
   background-color: $bg-color;
-  color: var(--white);
+  color: $white;
   border-radius: 1rem;
 
   font-size: .8rem;

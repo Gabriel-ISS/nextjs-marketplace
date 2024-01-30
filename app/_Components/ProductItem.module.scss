@@ -6,8 +6,8 @@
   overflow: hidden;
 
   background-color: var(--bg3);
-  border-radius: var(--br);
-  box-shadow: 0 0 5px var(--shadow-c);
+  border-radius: $br;
+  box-shadow: 0 0 5px $shadow-c;
 
   &__container {
     display: flex;
@@ -40,7 +40,7 @@
   }
 
   &__tag {
-    @include tag(var(--primary));
+    @include tag($primary);
   }
 }
 
@@ -54,11 +54,11 @@
     border-radius: 0%;
 
     &--edit {
-      background-color: var(--green);
+      background-color: $green;
     }
 
     &--delete {
-      background-color: var(--red);
+      background-color: $red;
     }
   }
 }
