@@ -1,6 +1,5 @@
 import { Document, Model, Schema, model, models } from 'mongoose';
 
-
 const RequiredNumber = { type: Number, required: true }
 const RequiredString = { type: String, required: true }
 const UsedSchema = {
@@ -49,10 +48,13 @@ const groupSchema = new Schema<Group & Document>({
 
 const userSchema = new Schema<User & Document>({
   name: RequiredString,
-  password: RequiredString
+  password: RequiredString,
+  role: String
 })
 
 export const Product = (models.Product as Model<Product & Document>) || model('Product', productSchema);
 export const Filter = (models.Filter as Model<Filter & Document>) || model('Filter', filterSchema);
 export const Group = (models.Group as Model<Group & Document>) || model('Group', groupSchema);
 export const User = (models.User as Model<User & Document>) || model('User', userSchema);
+
+export const safeUserProjection: Projection<Partial<User>, 0> = { password: 0 }

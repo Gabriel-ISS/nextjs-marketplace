@@ -2,10 +2,10 @@ import 'server-only';
 
 import { deleteImages, saveTagImage } from '@/_lib/aws-s3';
 import { FilterManager, RelevantFilterData } from '@/_lib/filter-manager';
-import { Filter, Group } from '@/_lib/models';
+import { Filter, Group, User } from '@/_lib/models';
 import { Types, mongo } from "mongoose";
 import { getServerSession } from 'next-auth';
-import { S_ERROR_TAG } from '@/constants';
+import { S_ERROR_TAG, TEST_ADMIN } from '@/constants';
 
 type ExtraData = { send?: boolean }
 export class ServerSideError extends Error {
@@ -31,7 +31,7 @@ export function getErrorMessage(error: unknown, defaultMessage: string) {
   // error desconocido
   else if (error && typeof error == 'object' && 'message' in error) {
     console.log(error.message)
-  } 
+  }
   else {
     message = 'Algo ha salido mal'
   }
@@ -41,9 +41,13 @@ export function getErrorMessage(error: unknown, defaultMessage: string) {
   }
 }
 
-export async function checkAuthentication() {
-  const user = await getServerSession()
-  if (!user) throw new ServerSideError('Usuario no autenticado')
+export async function checkIfRealAdmin() {
+  const session = await getServerSession()
+  if (!session) throw new ServerSideError('Usuario no autenticado')
+  const user = await User.findOne({ name: session.user?.name }, { role: 1 })
+  if (!user) throw new ServerSideError('Usuario no encontrado')
+  if (user.role == 'fake admin') throw new ServerSideError(`Las acciones en el servidor no están autorizadas para el usuario "${TEST_ADMIN.name}"`)
+  if (user.role !== 'admin') throw new ServerSideError('Usuario no autorizado')
 }
 
 export async function updateFilters(product: RelevantFilterData, prevProduct: RelevantFilterData, rawCategoryImg: string) {
@@ -84,12 +88,12 @@ export async function updateFilters(product: RelevantFilterData, prevProduct: Re
     }
     // create
     else {
-      return await new FilterManager({ 
+      return await new FilterManager({
         product: {
           data: product,
           rawCategoryImage: rawCategoryImg
         }
-       }).updateDB()
+      }).updateDB()
     }
   }
   // reduce/remove

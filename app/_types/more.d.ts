@@ -45,4 +45,6 @@ type DataState<T> = {
   error?: string
 }
 
-type Projection<T, N extends 1 | -1> = { [key in keyof T]: N }
+type Projection<T, N extends 1 | 0> = { [key in keyof T]: N }
+
+type SafeUser = Omit<User, 'password'> 

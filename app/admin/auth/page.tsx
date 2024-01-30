@@ -4,6 +4,7 @@ import MessageModal from '@/_Components/Modal/MessageModal';
 import useWritableState from '@/_hooks/useWritableState';
 import useAppStore from '@/_store/useStore';
 import style from '@/admin/auth/page.module.scss';
+import { TEST_ADMIN } from '@/constants';
 import { signIn } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import React, { ChangeEvent, HTMLInputTypeAttribute } from 'react';
@@ -95,7 +96,7 @@ function FakeCredentials() {
         Actualmente estas credenciales solo tienen el propósito de presentar la interfaz de administrador.
       </p>
     <ul>
-      <li><b>Usuario</b>: Admin Test</li>
+      <li><b>Usuario</b>: {TEST_ADMIN.name}</li>
       <li><b>Contraseña</b>: f#@UxR79mmjL&B</li>
     </ul>
   </div>

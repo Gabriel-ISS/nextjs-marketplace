@@ -37,3 +37,16 @@ export function getBase64(file: File): Promise<string> {
 export function withoutID<O extends { _id: string }>(obj: O) {
   return Object.fromEntries(Object.entries(obj).filter(([key]) => key != '_id')) as Omit<O, '_id'>
 }
+
+export function isAdmin(user: SafeUser) {
+  return Boolean(user.role && ['admin', 'fake admin'].includes(user.role))
+}
+
+export function clearErrorMessage(errorMessage: string) {
+  if (errorMessage.startsWith(S_ERROR_TAG)) {
+    return errorMessage.slice(S_ERROR_TAG.length)
+  } else if (errorMessage.startsWith(C_ERROR_TAG)) {
+    return errorMessage.slice(C_ERROR_TAG.length)
+  }
+  return errorMessage
+}
