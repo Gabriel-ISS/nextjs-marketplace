@@ -9,6 +9,9 @@ import { signIn } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import React, { ChangeEvent, HTMLInputTypeAttribute, useState } from 'react';
 import { TbLoader2 } from "react-icons/tb";
+import { ArrowContainer, Popover } from 'react-tiny-popover';
+import { FaRegCopy } from "react-icons/fa";
+
 
 
 export default function Auth() {
@@ -104,8 +107,62 @@ function FakeCredentials() {
       Actualmente estas credenciales solo tienen el propósito de presentar la interfaz de administrador.
     </p>
     <ul>
-      <li><b>Usuario</b>: {TEST_ADMIN.name}</li>
-      <li><b>Contraseña</b>: f#@UxR79mmjL&B</li>
+      <ListItem name='Usuario' credential={TEST_ADMIN.name} />
+      <ListItem name='Contraseña' credential={TEST_ADMIN.password} />
     </ul>
   </div>
+}
+
+interface ListItemProps {
+  name: string
+  credential: string
+}
+
+function ListItem({ name, credential }: ListItemProps) {
+  return (
+    <li>
+      <span className={style.fake_cred__item}>
+        <b>{name}:</b> {credential} <CopyButton value={credential} />
+      </span>
+    </li>
+  )
+}
+
+interface CopyButtonProps {
+  value: string
+}
+
+function CopyButton({ value }: CopyButtonProps) {
+  const [isOpen, setIsOpen] = useState(false)
+
+  const copy = () => {
+    navigator.clipboard.writeText(value)
+    setIsOpen(true)
+  }
+
+  let color = getComputedStyle(document.documentElement).getPropertyValue('--bg3');
+
+  return (
+    <Popover
+      isOpen={isOpen}
+      onClickOutside={() => setIsOpen(false)}
+      positions={['right']}
+      content={({ position, childRect, popoverRect }) => (
+        <ArrowContainer
+          position={position}
+          childRect={childRect}
+          popoverRect={popoverRect}
+          arrowColor={color}
+          arrowSize={10}
+          arrowStyle={{ opacity: 0.7 }}
+          className='popover-arrow-container'
+          arrowClassName='popover-arrow'
+        >
+          <div className={style.fake_cred__tooltip}>Copiado!</div>
+        </ArrowContainer>
+      )}
+    >
+      <button className={style.fake_cred__copy_btn} onClick={copy}><FaRegCopy /> Copiar</button>
+    </Popover>
+  )
 }
