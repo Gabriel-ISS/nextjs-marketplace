@@ -7,27 +7,35 @@ import style from '@/admin/auth/page.module.scss';
 import { TEST_ADMIN } from '@/constants';
 import { signIn } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
-import React, { ChangeEvent, HTMLInputTypeAttribute } from 'react';
+import React, { ChangeEvent, HTMLInputTypeAttribute, useState } from 'react';
+import { TbLoader2 } from "react-icons/tb";
+
 
 export default function Auth() {
   const router = useRouter()
   const openModal = useAppStore(s => s.modal.open)
+  const [isSubmitting, setIsSubmitting] = useState(false)
   const [credentials, setCredentials] = useWritableState({
     name: '',
     password: ''
   })
 
+
   const login = async () => {
+    setIsSubmitting(true)
     const res = await signIn('credentials', {
       ...credentials,
       callbackUrl: '/products',
       redirect: false
     })
     if (res?.error) {
-      openModal(<MessageModal title='Error' message={res.error} />, 'red')
+      openModal(<MessageModal title='Error' message={res.error} onAccept={() => {
+        setCredentials(prev => { prev.password = '' })
+      }} />, 'red')
     } else {
       router.push(res?.url as string)
     }
+    setIsSubmitting(false)
   }
 
   const textHandler = (field: string, value: string) => {
@@ -49,7 +57,7 @@ export default function Auth() {
         }}>
         <Input className={style.input} label='Usuario' minLength={5} field='name' value={credentials.name} handler={textHandler} />
         <Input className={style.input} label='Contraseña' minLength={14} field='password' value={credentials.password} handler={textHandler} inputType='password' />
-        <button className={style.login_btn} type='submit'>Ingresar</button>
+        <button className={style.login_btn} type='submit'>{isSubmitting ? <>Verificando <TbLoader2 className={style.loader} /></> : 'Ingresar'}</button>
       </form>
     </main>
   )
@@ -90,11 +98,11 @@ function Input({ label, field, value, minLength, handler, inputType, as, classNa
 
 function FakeCredentials() {
   return <div className={style.fake_cred}>
-      <p>Puede usar estas credenciales para acceder al modo administrador.</p>
-      <p>
-        Tenga en cuenta que los productos no se guardaran, editaran, ni eliminaran en la base de datos.
-        Actualmente estas credenciales solo tienen el propósito de presentar la interfaz de administrador.
-      </p>
+    <p>Puede usar estas credenciales para acceder al modo administrador.</p>
+    <p>
+      Tenga en cuenta que los productos no se guardaran, editaran, ni eliminaran en la base de datos.
+      Actualmente estas credenciales solo tienen el propósito de presentar la interfaz de administrador.
+    </p>
     <ul>
       <li><b>Usuario</b>: {TEST_ADMIN.name}</li>
       <li><b>Contraseña</b>: f#@UxR79mmjL&B</li>

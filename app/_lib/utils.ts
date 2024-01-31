@@ -42,11 +42,15 @@ export function isAdmin(user: SafeUser) {
   return Boolean(user.role && ['admin', 'fake admin'].includes(user.role))
 }
 
-export function clearErrorMessage(errorMessage: string) {
+export function clearErrorMessage(errorMessage: string, defaultMessage?: string) {
   if (errorMessage.startsWith(S_ERROR_TAG)) {
     return errorMessage.slice(S_ERROR_TAG.length)
   } else if (errorMessage.startsWith(C_ERROR_TAG)) {
     return errorMessage.slice(C_ERROR_TAG.length)
+  }
+  if (defaultMessage) {
+    if (process.env.NODE_ENV == 'development') console.log(errorMessage)
+    return defaultMessage
   }
   return errorMessage
 }
