@@ -1,3 +1,5 @@
+@import '../vars';
+
 .search {
   display: flex;
   align-items: center;
@@ -7,8 +9,8 @@
 
   background-color: var(--bg1);
   border-radius: 2rem;
-  border: 1px solid var(--primary);
-  box-shadow: 0 .1rem .5rem var(--shadow-c);
+  border: 1px solid $primary;
+  box-shadow: 0 .1rem .5rem $shadow-c;
 
   &__input {
     width: 100%;
@@ -23,8 +25,8 @@
     
     padding: .4rem;
 
-    background-color: var(--primary);
-    color: var(--white);
+    background-color: $primary;
+    color: $white;
     border-radius: 100%;
   }
 }

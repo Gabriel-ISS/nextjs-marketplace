@@ -1,10 +1,12 @@
+@import '../vars';
+
 .price {
   font-size: .8rem;
   font-weight: bold;
-  color: var(--primary);
+  color: $primary;
 
   &--old {
-    color: var(--muted);
+    color: $muted;
     text-decoration: line-through;
     margin-right: .5rem;
   }

@@ -23,6 +23,6 @@
 }
 
 .add_product_btn {
-  @include largeBtn(var(--green));
+  @include largeBtn($green);
   text-align: center;
 }

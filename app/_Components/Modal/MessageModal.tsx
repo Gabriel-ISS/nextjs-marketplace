@@ -1,6 +1,8 @@
 import { Header } from '@/_Components/Modal/Modal';
 import useAppStore from '@/_store/useStore';
 import style from '@/_Components/Modal/MessageModal.module.scss'
+import { C_ERROR_TAG, S_ERROR_TAG } from '@/constants';
+import { clearErrorMessage } from '@/_lib/utils';
 
 
 interface Props {
@@ -21,7 +23,7 @@ export default function MessageModal({ title, message, onAccept, closeOnAccept }
 
   return <div className={style.mm}>
     <Header>{title}</Header>
-    <div className={style.mm__message}>{message}</div>
+    <div className={style.mm__message}>{title == 'Error' ? clearErrorMessage(message): message}</div>
     <button className={style.mm__btn} data-theme={theme} onClick={accept}>Aceptar</button>
   </div>
 }

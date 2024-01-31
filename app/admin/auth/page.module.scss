@@ -21,4 +21,51 @@
 
 .login_btn {
   @include largeBtn();
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  justify-content: center
+}
+
+.fake_cred {
+  @include autoMargin();
+  background-color: transparentize($color: $yellow, $amount: .5);
+  border: 3px solid $yellow;
+
+  &__item {
+    display: inline-flex;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  &__copy_btn {
+    display: flex;
+    align-items: center;
+    gap: 1ch;
+    padding: .3rem;
+    background-color: var(--bg3);
+    color: var(--text-color);
+    margin-bottom : .5rem;
+  }
+
+  
+
+  &__tooltip {
+    padding: .2rem .5rem;
+    border-radius: 3px;
+    background-color: var(--bg3);
+    color: var(--text-color);
+  }
+}
+
+.loader {
+  animation: rotate 400ms linear infinite forwards;
+
+  @keyframes rotate {
+    from {
+      transform: rotate(0turn);
+    } to {
+      transform: rotate(1turn);
+    }
+  }
 }

@@ -7,9 +7,11 @@
 .nav {
   $link-height: 1.5rem;
   $links-padding-bottom: .3rem;
+  $admin-btn-height: 3rem;
+  $admin-btn-mb: .5rem;
 
   background-color: var(--bg2);
-  box-shadow: 0 0 .5rem 0 var(--shadow-c);
+  box-shadow: 0 0 .5rem 0 $shadow-c;
 
   &__primary_link {
     &:hover {
@@ -24,7 +26,7 @@
   }
 
   &__content {
-    @include autoMargin();
+    @include autoMargin(1100px);
     min-height: 3rem;
     display: flex;
     justify-content: space-between;
@@ -33,9 +35,11 @@
   }
 
   &__collapsible {
+    display: flex;
 
     @media (width < $screen-md) {
       // el display se controla desde javascript
+      grid-auto-flow: row;
       width: 100%;
       overflow: hidden;
       padding-block: 0;
@@ -47,7 +51,7 @@
       &[data-state="opening"],
       &[data-state="opened"] {
         opacity: 1;
-        height: ($link-height * 3) + $links-padding-bottom;
+        height: ($link-height * 3) + $links-padding-bottom + $admin-btn-height + ($admin-btn-mb * 2);
       }
 
       &[data-state="closed"] {
@@ -60,11 +64,13 @@
     list-style: none;
     display: flex;
     flex-direction: column;
+    align-items: center;
     padding-bottom: $links-padding-bottom;
     padding-inline: 0;
     margin: 0;
 
     @media (width > $screen-md) {
+      min-width: 30rem;
       flex-direction: row;
       gap: 1rem;
     }
@@ -78,14 +84,27 @@
         font-size: 1.3rem;
         font-weight: 700;
         font-variant-caps: all-small-caps;
-        color: var(--muted);
+        color: $muted;
         transition: color 200ms;
 
         &:hover {
-          color: var(--primary);
+          color: $primary;
           text-decoration: none;
         }
       }
+    }
+  }
+
+  &__admin_mode_btn {
+    @include largeBtn();
+    height: $admin-btn-height;
+    margin-block: $admin-btn-mb;
+    text-align: center;
+
+    @media (width > $screen-md) {
+      height: auto;
+      padding-block: .3rem;
+      margin-block: .3rem;
     }
   }
 
@@ -97,7 +116,7 @@
     justify-content: center;
     align-items: center;
     background: none;
-    color: var(--primary);
+    color: $primary;
 
     @media (width > $screen-md) {
       display: none;

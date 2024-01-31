@@ -4,7 +4,7 @@
   position: relative;
 
   &__btn {
-    @include largeBtn(var(--green));
+    @include largeBtn($green);
     text-align: center;
     margin-top: 0;
   }
@@ -21,7 +21,7 @@
 .error_message {
   margin-bottom: .5rem;
 
-  color: var(--red);
+  color: $red;
 
   font-weight: bold;
 }

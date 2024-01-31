@@ -4,14 +4,15 @@ import { deleteImages, saveProductImage } from '@/_lib/aws-s3'
 import { DEFAULT_PRODUCT } from '@/_lib/constants'
 import { RelevantFilterDataKeys } from '@/_lib/filter-manager'
 import { Product } from '@/_lib/models'
-import { ServerSideError, checkAuthentication, getErrorMessage, updateFilters, updateTags } from '@/_lib/server-utils'
+import { ServerSideError, checkIfRealAdmin, getErrorMessage, updateFilters, updateTags } from '@/_lib/server-utils'
 import { withoutID } from '@/_lib/utils'
 import { revalidatePath } from 'next/cache'
 
 
 export async function saveProduct(product: Product, newTags: UnsavedGroup[], rawCategoryImg: string): Promise<ActionRes> {
   try {
-    await checkAuthentication()
+    await checkIfRealAdmin()
+    
     const getPrevProduct = async () => {
       if (productExist) {
         type MinProduct = Pick<Product, RelevantFilterDataKeys | 'tags' | 'image'>
@@ -67,7 +68,7 @@ export async function saveProduct(product: Product, newTags: UnsavedGroup[], raw
 
 export async function deleteProduct(_id: string): Promise<ActionRes> {
   try {
-    await checkAuthentication()
+    await checkIfRealAdmin()
 
     const prevProduct = await Product.findById(_id)
     if (!prevProduct) throw new ServerSideError('No se pudo encontrar el producto a eliminar')
