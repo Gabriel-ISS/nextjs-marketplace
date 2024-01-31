@@ -7,7 +7,7 @@ import style from '@/admin/auth/page.module.scss';
 import { TEST_ADMIN } from '@/constants';
 import { signIn } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
-import React, { ChangeEvent, HTMLInputTypeAttribute, useState } from 'react';
+import React, { ChangeEvent, HTMLInputTypeAttribute, useEffect, useState } from 'react';
 import { TbLoader2 } from "react-icons/tb";
 import { ArrowContainer, Popover } from 'react-tiny-popover';
 import { FaRegCopy } from "react-icons/fa";
@@ -134,13 +134,18 @@ interface CopyButtonProps {
 
 function CopyButton({ value }: CopyButtonProps) {
   const [isOpen, setIsOpen] = useState(false)
+  const [color, setColor] = useState('transparent')
+
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      setColor(getComputedStyle(document.documentElement).getPropertyValue('--bg3'))
+    }
+  }, [])
 
   const copy = () => {
     navigator.clipboard.writeText(value)
     setIsOpen(true)
   }
-
-  let color = getComputedStyle(document.documentElement).getPropertyValue('--bg3');
 
   return (
     <Popover
