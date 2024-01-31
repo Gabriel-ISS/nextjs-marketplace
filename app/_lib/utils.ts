@@ -11,6 +11,22 @@ export class ClientError extends Error {
   }
 }
 
+export async function actionFetch<T>(fetcher: () => Promise<ActionRes<T>>, interval: number, attempts: number): Promise<ActionRes<T>> {
+  return new Promise(resolve => {
+    const id = setInterval(() => {
+      fetcher().then(data => {
+        clearInterval(id)
+        resolve(data)
+      })
+    }, interval)
+    setTimeout(() => {
+      clearInterval(id)
+      resolve({ error: 'Timeout' })
+    }, interval * attempts)
+  })
+
+}
+
 export function fetchRetry(fetcher: () => Promise<any>, interval: number, attempts: number) {
   const id = setInterval(() => {
     fetcher().then(() => clearInterval(id))
