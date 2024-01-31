@@ -1,4 +1,4 @@
-import { C_ERROR_TAG, S_ERROR_TAG } from '@/constants';
+import { ADMIN_ROLES, C_ERROR_TAG, S_ERROR_TAG } from '@/constants';
 
 
 export class ClientError extends Error {
@@ -39,7 +39,7 @@ export function withoutID<O extends { _id: string }>(obj: O) {
 }
 
 export function isAdmin(user: SafeUser) {
-  return Boolean(user.role && ['admin', 'fake admin'].includes(user.role))
+  return Boolean(user.role && ADMIN_ROLES.includes(user.role))
 }
 
 export function clearErrorMessage(errorMessage: string, defaultMessage?: string) {

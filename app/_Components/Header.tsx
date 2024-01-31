@@ -2,14 +2,18 @@
 
 import Link from 'next/link'
 import styles from '@/_Components/Header.module.scss'
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { MdMenu } from 'react-icons/md'
 import { satisfy } from '@/_lib/fonts';
 import ProductsLink from '@/_Components/ProductsLink';
-import Image from 'next/image';
+import { getSession, signOut } from 'next-auth/react';
+import { ADMIN_ROLES } from '@/constants';
+import { usePathname, useRouter } from 'next/navigation';
 
 
 export default function Header() {
+  const router = useRouter()
+  const path = usePathname()
   const linksContainer = useRef<HTMLDivElement | null>(null)
   // Controla el estado del elemento a esconder
   const [state, setState] = useState<'closed' | 'opened' | 'opening' | 'closing'>('closed');
@@ -17,6 +21,16 @@ export default function Header() {
   const isActive = state === 'opened' || state === 'opening'
   // Para accesibilidad
   const [ariaExpanded, setArialExpanded] = useState(false);
+
+  const [role, setRole] = useState('')
+
+  useEffect(() => {
+    (async () => {
+      const res = await getSession()
+      const role = res?.user.role
+      setRole(role || '')
+    })()
+  }, [path])
 
   function toggleState() {
     if (state == 'closed') {
@@ -44,6 +58,11 @@ export default function Header() {
     }
   }
 
+  async function _signOut() {
+    await signOut({ redirect: false })
+    router.push('/admin/auth')
+  }
+
   return (
     <header className={styles.header}>
       <nav className={styles.nav}>
@@ -67,10 +86,14 @@ export default function Header() {
             onTransitionEnd={handleTransitionEnd}>
             <ul className={styles.nav__links_list}>
               <li><Link href='/'>Inicio</Link></li>
-              <li><ProductsLink/></li>
+              <li><ProductsLink /></li>
               <li><Link href='/about'>Sobre nosotros</Link></li>
             </ul>
-            <Link className={styles.nav__admin_mode_btn} href='/admin/auth' role='button'>Probar modo administrador</Link>
+            {ADMIN_ROLES.includes(role) ? (
+              <button className={styles.nav__admin_mode_btn} onClick={_signOut}>Cerrar session</button>
+            ) : (
+              <Link className={styles.nav__admin_mode_btn} href='/admin/auth' role='button'>Probar modo administrador</Link>
+            )}
           </div>
         </div>
 
