@@ -35,10 +35,10 @@ export default function Auth() {
       openModal(<MessageModal title='Error' message={res.error} onAccept={() => {
         setCredentials(prev => { prev.password = '' })
       }} />, 'red')
+      setIsSubmitting(false)
     } else {
       router.push(res?.url as string)
     }
-    setIsSubmitting(false)
   }
 
   const textHandler = (field: string, value: string) => {
