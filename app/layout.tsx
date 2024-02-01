@@ -3,7 +3,8 @@ import '@/globals.scss'
 import { openSans } from '@/_lib/fonts'
 import Header from '@/_Components/Header'
 import Footer from '@/_Components/Footer'
-import Modal from '@/_Components/Modal/Modal'
+import dynamic from 'next/dynamic'
+const Modal = dynamic(() => import('@/_Components/Modal/Modal'), {ssr: false})
 
 export const metadata: Metadata = {
   title: 'NextMarket',
