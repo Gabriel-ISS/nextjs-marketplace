@@ -1,5 +1,5 @@
 import ErrorBlock from '@/_Components/ErrorBlock'
-import style from '@/_Components/Filters/Filters.module.scss'
+import styles from '@/_Components/Filters/Filters.module.scss'
 import Loader from '@/_Components/Loader'
 import useFetch from '@/_hooks/useFetch'
 import { getCategories } from '@/_lib/data'
@@ -18,15 +18,15 @@ export default function CategorySelector({ selectHandler, checked }: Props) {
   if (error) return <ErrorBlock>{error}</ErrorBlock>
 
   return (
-    <fieldset className={style.filter_group}>
-      <legend className={style.filter_group__title}>
+    <fieldset className={styles.filter_group}>
+      <legend className={styles.filter_group__title}>
         Categorías
       </legend>
       <Loader isLoading={isLoading} meanwhile={<span>Cargando categorías...</span>}>
         {data && (
-          <div className={style.filter_group__options}>
+          <div className={styles.filter_group__options}>
             {data.map(category => (
-              <label className={style.filter_group__option} key={category}>
+              <label className={styles.filter_group__option} key={category}>
                 <input
                   type='radio'
                   name='category'

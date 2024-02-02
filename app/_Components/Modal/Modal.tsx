@@ -5,7 +5,7 @@ import { IoMdClose } from 'react-icons/io'
 import useAppStore from '@/_store/useStore'
 import useLockScroll from '@/_hooks/useLockScroll'
 import useCollapse from '@/_hooks/useCollapse'
-import style from '@/_Components/Modal/Modal.module.scss'
+import styles from '@/_Components/Modal/Modal.module.scss'
 
 
 export default function Modal() {
@@ -42,7 +42,7 @@ export default function Modal() {
   }, [isActive])
 
   return (
-    <dialog ref={ref} className={style.modal} data-state={state} data-theme={theme} onTransitionEnd={handleTransitionEnd}>
+    <dialog ref={ref} className={styles.modal} data-state={state} data-theme={theme} onTransitionEnd={handleTransitionEnd}>
       {content}
     </dialog>
   )
@@ -63,9 +63,9 @@ export function Header({ children, onClose }: HeaderProps) {
   }
 
   return (
-    <div className={style.modal__header}>
-      <h2 className={style.modal__title} data-theme={theme}>{children}</h2>
-      <button className={style.modal__close_btn} data-theme={theme} onClick={closeModal}>
+    <div className={styles.modal__header}>
+      <h2 className={styles.modal__title} data-theme={theme}>{children}</h2>
+      <button className={styles.modal__close_btn} data-theme={theme} onClick={closeModal}>
         <IoMdClose size='1.9rem' />
       </button>
     </div>

@@ -1,7 +1,7 @@
 'use client'
 
 import { clearErrorMessage } from '@/_lib/utils'
-import style from '@/error.module.scss'
+import styles from '@/error.module.scss'
 
 export default function Error({
   error,
@@ -12,10 +12,10 @@ export default function Error({
 }) {
 
   return (
-    <div className={style.container}>
+    <div className={styles.container}>
       <h2>Error</h2>
-      <p className={style.description}>{clearErrorMessage(error.message)}</p>
-      <button className={style.btn} onClick={() => reset()}>Intentar de nuevo</button>
+      <p className={styles.description}>{clearErrorMessage(error.message)}</p>
+      <button className={styles.btn} onClick={() => reset()}>Intentar de nuevo</button>
     </div>
   )
 }

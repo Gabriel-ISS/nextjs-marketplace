@@ -2,7 +2,7 @@
 
 import { getBase64 } from '@/_lib/utils'
 import React, { ChangeEvent, HTMLInputTypeAttribute, useState } from 'react'
-import style from '@/_Components/Inputs.module.scss'
+import styles from '@/_Components/Inputs.module.scss'
 import { ErrorMessage } from 'formik'
 
 export type ImageFileData = {
@@ -27,9 +27,9 @@ export function ImageInput({ className, handler }: ImageInputProps) {
     handler({ base64Img, name: file.name, type: file.type })
   }
 
-  return <div className={style.img_input}>
-    <label className={`${style.img_input__btn} ${className ? className : ''}`} htmlFor="image-selector" role='button'>{isReading ? 'Leyendo imagen' : 'Elige una imagen'}</label>
-    <input className={style.img_input__input} id='image-selector' type='file' accept='image/*' onChange={_handler} required />
+  return <div className={styles.img_input}>
+    <label className={`${styles.img_input__btn} ${className ? className : ''}`} htmlFor="image-selector" role='button'>{isReading ? 'Leyendo imagen' : 'Elige una imagen'}</label>
+    <input className={styles.img_input__input} id='image-selector' type='file' accept='image/*' onChange={_handler} required />
   </div>
 }
 
@@ -41,5 +41,5 @@ interface CustomFormikErrorProps {
 }
 
 export function CustomFormikError({ name }: CustomFormikErrorProps) {
-  return <ErrorMessage className={style.error_message} name={name} component='div' />
+  return <ErrorMessage className={styles.error_message} name={name} component='div' />
 }

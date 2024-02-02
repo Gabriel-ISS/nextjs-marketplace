@@ -1,6 +1,6 @@
 'use client'
 
-import style from '@/_Components/ProductGroup.module.scss'
+import styles from '@/_Components/ProductGroup.module.scss'
 import useAppStore from '@/_store/useStore'
 import Link from 'next/link'
 import QueryString from 'qs'
@@ -16,10 +16,10 @@ interface Props {
 export default function ProductGroup({ name, image, type }: Props) {
   const [query] = useState<Query>(() => {
     if (type == 'tag') {
-      return {tags: [name]}
+      return { tags: [name] }
     }
     else if (type == 'category') {
-      return {category: name}
+      return { category: name }
     }
     else {
       throw new Error(`El tipo de grupo no puede ser ${type}`)
@@ -33,10 +33,10 @@ export default function ProductGroup({ name, image, type }: Props) {
   }
 
   return (
-    <li className={style.prod_group}>
-      <Link className={style.prod_group__container} href={url} onClick={linkHandler}>
-        <img className={style.prod_group__img} src={image} alt={name} />
-        <h3 className={style.prod_group__name}>{name}</h3>
+    <li className={styles.prod_group}>
+      <Link className={styles.prod_group__container} href={url} onClick={linkHandler}>
+        <img className={styles.prod_group__img} src={image} alt={name} />
+        <h3 className={styles.prod_group__name}>{name}</h3>
       </Link>
     </li>
   )

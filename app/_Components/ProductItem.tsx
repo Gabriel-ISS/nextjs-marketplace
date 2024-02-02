@@ -1,6 +1,6 @@
 import MessageModal from '@/_Components/Modal/MessageModal'
 import Price from '@/_Components/Price'
-import style from '@/_Components/ProductItem.module.scss'
+import styles from '@/_Components/ProductItem.module.scss'
 import { StateUpdater } from '@/_hooks/useWritableState'
 import { deleteProduct } from '@/_lib/actions'
 import useAppStore from '@/_store/useStore'
@@ -41,23 +41,23 @@ export default function ProductItem({ product, adminMode, setProducts }: Props) 
   }
 
   return (
-    <article className={style.product}>
-      <div className={style.product__container}>
-        <img className={style.product__image} src={product.image} alt={product.name} />
-        <div className={style.product__right}>
-          <Link href={'/product?id=' + product._id} target='_blank'><h3 className={style.product__name}>{product.name} <FaExternalLinkAlt /></h3></Link>
+    <article className={styles.product}>
+      <div className={styles.product__container}>
+        <img className={styles.product__image} src={product.image} alt={product.name} />
+        <div className={styles.product__right}>
+          <Link href={'/product?id=' + product._id} target='_blank'><h3 className={styles.product__name}>{product.name} <FaExternalLinkAlt /></h3></Link>
           <Price price={product.price} />
-          <div className={style.product__tags} title='etiquetas'>
+          <div className={styles.product__tags} title='etiquetas'>
             {product.tags.map(tag => (
-              <span key={product._id + tag} className={style.product__tag}>{tag}</span>
+              <span key={product._id + tag} className={styles.product__tag}>{tag}</span>
             ))}
           </div>
         </div>
       </div>
       {adminMode && (
-        <footer className={style.admin_fn}>
-          <button className={`${style.admin_fn__btn} ${style['admin_fn__btn--edit']}`} onClick={editProduct}><FaEdit /> Edit</button>
-          <button className={`${style.admin_fn__btn} ${style['admin_fn__btn--delete']}`} onClick={deleteProductHandler}><FaTrash /> Delete</button>
+        <footer className={styles.admin_fn}>
+          <button className={`${styles.admin_fn__btn} ${styles['admin_fn__btn--edit']}`} onClick={editProduct}><FaEdit /> Edit</button>
+          <button className={`${styles.admin_fn__btn} ${styles['admin_fn__btn--delete']}`} onClick={deleteProductHandler}><FaTrash /> Delete</button>
         </footer>
       )}
     </article>

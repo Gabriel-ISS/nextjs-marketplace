@@ -19,7 +19,7 @@ import { getProduct } from '@/_lib/data'
 import { getBase64 } from '@/_lib/utils'
 import { productSchema } from '@/_lib/validation-schemas'
 import useAppStore from '@/_store/useStore'
-import style from '@/admin/product/page.module.scss'
+import styles from '@/admin/product/page.module.scss'
 import { Field, Form, Formik, FormikContextType } from 'formik'
 import { produce } from 'immer'
 import { useRouter } from 'next/navigation'
@@ -291,7 +291,7 @@ export default function ProductEditor({ searchParams }: PageProps) {
   }
 
   return (
-    <main className={style.main}>
+    <main className={styles.main}>
       <Loader isLoading={isLoading} meanwhile={<span>Cargando producto...</span>}>
         {initialProduct && <>
           <Formik<Product>
@@ -302,14 +302,14 @@ export default function ProductEditor({ searchParams }: PageProps) {
             {({ isSubmitting, errors, values }) => (
               <>
                 <Product product={values} />
-                <aside className={style.editor}>
+                <aside className={styles.editor}>
                   <Form>
                     <Field name='image' component={ImageInput} handler={imageHandler} />
                     <Field name='name' component={Input} label='Nombre' type='text' />
                     <Field name='price.current' component={Input} label='Precio' type='number' handler={priceHandler} />
                     <Field name='note' component={TextArea} label='Nota (opcional)' as='textarea' />
 
-                    <div className={style.editor__filters}>
+                    <div className={styles.editor__filters}>
                       <CategorySelector selectHandler={categoryHandler} addCategory={addCategory} />
                       <CategoryFiltersSelector
                         category={{ name: values.category, isNew: values.category == newFilters.category }}
@@ -323,7 +323,7 @@ export default function ProductEditor({ searchParams }: PageProps) {
                     </div>
 
                     <button
-                      className={style.editor__save_btn}
+                      className={styles.editor__save_btn}
                       type='submit'
                       disabled={isSubmitting}
                     >

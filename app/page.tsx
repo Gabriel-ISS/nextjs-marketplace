@@ -4,8 +4,9 @@ import Search from '@/_Components/Search'
 import { getCategoriesWithImage, getProductGroups } from '@/_lib/data'
 import { satisfy } from '@/_lib/fonts'
 import { actionFetch } from '@/_lib/utils'
-import style from '@/page.module.scss'
+import styles from '@/page.module.scss'
 import { ComponentProps } from 'react'
+
 
 export default async function App() {
   const productGroups = await actionFetch(getProductGroups, 500, 3)
@@ -13,15 +14,15 @@ export default async function App() {
 
   return (
     <main>
-      <section className={style.search_section}>
-        <div className={style.search_section__container}>
-          <div className={style.search_section__text_container}>
-            <span className={`${satisfy.className} ${style.search_section__title}`}>NextMarket</span>
-            <p className={style.search_section__slogan}>Encuentre toda la electronica que necesita en un solo lugar.</p>
-            <p className={style.search_section__slogan}>Explore nuestro catálogo de productos de calidad y aproveche nuestras ofertas especiales.</p>
+      <section className={styles.search_section}>
+        <div className={styles.search_section__container}>
+          <div className={styles.search_section__text_container}>
+            <span className={`${satisfy.className} ${styles.search_section__title}`}>NextMarket</span>
+            <p className={styles.search_section__slogan}>Encuentre toda la electronica que necesita en un solo lugar.</p>
+            <p className={styles.search_section__slogan}>Explore nuestro catálogo de productos de calidad y aproveche nuestras ofertas especiales.</p>
           </div>
-          <div className={style.search_section__searcher_container}>
-            <Search className={style.search_section__searcher} />
+          <div className={styles.search_section__searcher_container}>
+            <Search className={styles.search_section__searcher} />
           </div>
         </div>
       </section>
@@ -47,11 +48,11 @@ interface Props {
 
 function ProductSection({ title, data, type }: Props) {
   return (
-    <section className={style.products}>
-      <h2 className={`${satisfy.className} ${style.products__title}`}>{title}</h2>
-      <ul className={style.products__container}>
+    <section className={styles.products}>
+      <h2 className={`${satisfy.className} ${styles.products__title}`}>{title}</h2>
+      <ul className={styles.products__container}>
         {data.map(group => (
-          <ProductGroup key={group.name} name={group.name} image={group.image} type={type} />
+            <ProductGroup key={group.name} name={group.name} image={group.image} type={type} />
         ))}
       </ul>
     </section>

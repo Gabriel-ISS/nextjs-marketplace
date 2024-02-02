@@ -1,5 +1,5 @@
 import ErrorBlock from '@/_Components/ErrorBlock'
-import style from '@/_Components/Filters/Filters.module.scss'
+import styles from '@/_Components/Filters/Filters.module.scss'
 import { CustomFormikError } from '@/_Components/Inputs'
 import Loader from '@/_Components/Loader'
 import useThrottleEffect from '@/_hooks/useThrottleEffect'
@@ -38,7 +38,7 @@ export default function CategoryFiltersSelector({ category, brandHandler, proper
     }
   }, [category.name])
 
-  if (error) return <ErrorBlock className={style.error}>{error}</ErrorBlock>
+  if (error) return <ErrorBlock className={styles.error}>{error}</ErrorBlock>
 
   const updateProduct: StateUpdater<Product> = updater => {
     setValues(produce(draft => {
@@ -86,15 +86,15 @@ export default function CategoryFiltersSelector({ category, brandHandler, proper
   return (
     <Loader isLoading={isLoading} meanwhile={<span>Cargando filtros de categoría...</span>}>
       {data && category.name.length > 0 && <>
-        <fieldset className={style.filter_group}>
-          <legend className={style.filter_group__title}>
+        <fieldset className={styles.filter_group}>
+          <legend className={styles.filter_group__title}>
             Marcas
-            <button type='button' className={style.filter_group__add_btn} onClick={() => addBrand(updateProduct)}>Añadir +</button>
+            <button type='button' className={styles.filter_group__add_btn} onClick={() => addBrand(updateProduct)}>Añadir +</button>
           </legend>
           <CustomFormikError name='brand' />
-          <div className={style.filter_group__options}>
+          <div className={styles.filter_group__options}>
             {data.brands.map(brand => (
-              <label className={style.filter_group__option} key={brand}>
+              <label className={styles.filter_group__option} key={brand}>
                 <Field
                   type='radio'
                   name='brand'
@@ -107,28 +107,28 @@ export default function CategoryFiltersSelector({ category, brandHandler, proper
           </div>
         </fieldset>
 
-        <fieldset className={style.common_properties}>
-          <legend className={style.common_properties__label}>
+        <fieldset className={styles.common_properties}>
+          <legend className={styles.common_properties__label}>
             Características únicas
             <button
               type='button'
-              className={style.filter_group__add_btn}
+              className={styles.filter_group__add_btn}
               onClick={addProperty}>
               Añadir +
             </button>
           </legend>
           <CustomFormikError name='properties' />
-          <div className={style.common_properties__container}>
+          <div className={styles.common_properties__container}>
 
             {data.properties.map(({ name: propertyName, values }, propertyIndex) => (
-              <fieldset className={style.filter_group} key={propertyName}>
-                <legend className={style.filter_group__title}>
+              <fieldset className={styles.filter_group} key={propertyName}>
+                <legend className={styles.filter_group__title}>
                   {propertyName}
-                  <button type='button' className={style.filter_group__add_btn} onClick={() => addPropertyValue(propertyName, propertyIndex, updateProduct)}>Añadir +</button>
+                  <button type='button' className={styles.filter_group__add_btn} onClick={() => addPropertyValue(propertyName, propertyIndex, updateProduct)}>Añadir +</button>
                 </legend>
-                <div className={style.filter_group__options}>
+                <div className={styles.filter_group__options}>
                   {values.map((name, valueIndex) => (
-                    <label className={style.filter_group__option} key={name}>
+                    <label className={styles.filter_group__option} key={name}>
                       {name}
                       <Field
                         type='checkbox'

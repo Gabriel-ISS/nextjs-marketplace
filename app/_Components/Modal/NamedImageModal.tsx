@@ -2,7 +2,7 @@
 
 import CropImage from '@/_Components/CropImage'
 import { ImageFileData, ImageInput } from '@/_Components/Inputs'
-import style from '@/_Components/Modal/NamedImageModal.module.scss'
+import styles from '@/_Components/Modal/NamedImageModal.module.scss'
 import { Header } from '@/_Components/Modal/Modal'
 import useAppStore from '@/_store/useStore'
 import { useState } from 'react'
@@ -34,10 +34,10 @@ export default function NamedImageModal({ title, onAccept }: Props) {
   return (
     <>
       <Header>{title}</Header>
-      <form className={style.form}>
-        <input className={style.text_input} placeholder='Nombre' type="text" value={name} onChange={e => setName(e.target.value)} required autoFocus />
-        <ImageInput className={style.img_input} handler={imageHandler} />
-        {img && <CropImage className={style.crop} aspect={1} imgSrc={img.base64Img} imageName={img.name} fileType={img.type} onSaveCrop={saveAndClose} />}
+      <form className={styles.form}>
+        <input className={styles.text_input} placeholder='Nombre' type="text" value={name} onChange={e => setName(e.target.value)} required autoFocus />
+        <ImageInput className={styles.img_input} handler={imageHandler} />
+        {img && <CropImage className={styles.crop} aspect={1} imgSrc={img.base64Img} imageName={img.name} fileType={img.type} onSaveCrop={saveAndClose} />}
       </form>
     </>
   )

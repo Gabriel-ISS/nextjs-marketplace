@@ -1,0 +1,13 @@
+// @type
+
+@import '../vars';
+
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.spinner {
+  @include loader();
+}

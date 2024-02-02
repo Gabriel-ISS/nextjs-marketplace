@@ -3,7 +3,7 @@
 import MessageModal from '@/_Components/Modal/MessageModal';
 import useWritableState from '@/_hooks/useWritableState';
 import useAppStore from '@/_store/useStore';
-import style from '@/admin/auth/page.module.scss';
+import styles from '@/admin/auth/page.module.scss';
 import { TEST_ADMIN } from '@/constants';
 import { signIn } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
@@ -48,9 +48,9 @@ export default function Auth() {
   }
 
   return (
-    <main className={style.main}>
+    <main className={styles.main}>
       <FakeCredentials />
-      <form className={style.container}
+      <form className={styles.container}
         onSubmit={e => {
           e.preventDefault()
           login()
@@ -58,9 +58,9 @@ export default function Auth() {
         onKeyDown={e => {
           if (e.key == 'Enter') login()
         }}>
-        <Input className={style.input} label='Usuario' minLength={5} field='name' value={credentials.name} handler={textHandler} />
-        <Input className={style.input} label='Contraseña' minLength={14} field='password' value={credentials.password} handler={textHandler} inputType='password' />
-        <button className={style.login_btn} type='submit'>{isSubmitting ? <>Verificando <TbLoader2 className={style.loader} /></> : 'Ingresar'}</button>
+        <Input className={styles.input} label='Usuario' minLength={5} field='name' value={credentials.name} handler={textHandler} />
+        <Input className={styles.input} label='Contraseña' minLength={14} field='password' value={credentials.password} handler={textHandler} inputType='password' />
+        <button className={styles.login_btn} type='submit'>{isSubmitting ? <>Verificando <TbLoader2 className={styles.loader} /></> : 'Ingresar'}</button>
       </form>
     </main>
   )
@@ -100,7 +100,7 @@ function Input({ label, field, value, minLength, handler, inputType, as, classNa
 }
 
 function FakeCredentials() {
-  return <div className={style.fake_cred}>
+  return <div className={styles.fake_cred}>
     <p>Puede usar estas credenciales para acceder al modo administrador.</p>
     <p>
       Tenga en cuenta que los productos no se guardaran, editaran, ni eliminaran en la base de datos.
@@ -121,7 +121,7 @@ interface ListItemProps {
 function ListItem({ name, credential }: ListItemProps) {
   return (
     <li>
-      <span className={style.fake_cred__item}>
+      <span className={styles.fake_cred__item}>
         <b>{name}:</b> {credential} <CopyButton value={credential} />
       </span>
     </li>
@@ -163,11 +163,11 @@ function CopyButton({ value }: CopyButtonProps) {
           className='popover-arrow-container'
           arrowClassName='popover-arrow'
         >
-          <div className={style.fake_cred__tooltip}>Copiado!</div>
+          <div className={styles.fake_cred__tooltip}>Copiado!</div>
         </ArrowContainer>
       )}
     >
-      <button className={style.fake_cred__copy_btn} onClick={copy}><FaRegCopy /> Copiar</button>
+      <button className={styles.fake_cred__copy_btn} onClick={copy}><FaRegCopy /> Copiar</button>
     </Popover>
   )
 }

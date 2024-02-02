@@ -2,7 +2,7 @@
 
 import CategoryFiltersSelector from '@/_Components/Filters/CategoryFiltersSelector'
 import CategorySelector from '@/_Components/Filters/CategorySelector'
-import style from '@/_Components/Filters/Filters.module.scss'
+import styles from '@/_Components/Filters/Filters.module.scss'
 import TagSelector from '@/_Components/Filters/TagSelector'
 import useScrollLock from '@/_hooks/useLockScroll'
 import useAppStore from '@/_store/useStore'
@@ -105,7 +105,7 @@ export default function Filters() {
   }
 
   return (
-    <aside className={style.filters} data-state={isOpen ? "opened" : "closed"}>
+    <aside className={styles.filters} data-state={isOpen ? "opened" : "closed"}>
 
       <CategorySelector checked={query.category || ''} selectHandler={categoryHandler} />
       <CategoryFiltersSelector
@@ -120,7 +120,7 @@ export default function Filters() {
       />
       <TagSelector checked={query.tags || []} selectHandler={tagHandler} />
 
-      <button className={style.filters__toggle_btn} onClick={toggleSidebar}>
+      <button className={styles.filters__toggle_btn} onClick={toggleSidebar}>
         {isOpen ? <IoMdClose size='100%' /> : <FaFilter size='70%' />}
       </button>
 

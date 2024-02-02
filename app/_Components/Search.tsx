@@ -1,7 +1,7 @@
 'use client'
 
 
-import style from '@/_Components/Search.module.scss'
+import styles from '@/_Components/Search.module.scss'
 import useAppStore from '@/_store/useStore'
 import { usePathname, useRouter } from 'next/navigation'
 import QueryString from 'qs'
@@ -57,16 +57,16 @@ export default function Search({ className }: Props) {
   }
 
   return (
-    <div className={`${style.search} ${className || ''}`}>
+    <div className={`${styles.search} ${className || ''}`}>
       <input
-        className={style.search__input}
+        className={styles.search__input}
         type="text" name="search"
         value={search}
         placeholder="Buscar productos en NextMarket"
         onChange={handleInput} onKeyDown={handleEnter}
         autoComplete='off'
       />
-      <button className={style.search__btn} onClick={handleClick}><FaSearch size='100%' /></button>
+      <button className={styles.search__btn} onClick={handleClick}><FaSearch size='100%' /></button>
     </div>
   )
 }

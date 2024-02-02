@@ -1,4 +1,4 @@
-import style from '@/_Components/Pagination.module.scss'
+import styles from '@/_Components/Pagination.module.scss'
 import useAppStore from '@/_store/useStore'
 import { MouseEvent } from 'react'
 import { FaArrowLeft, FaArrowRight } from 'react-icons/fa'
@@ -20,9 +20,9 @@ export default function Pagination({ totalPages }: Props) {
   }
 
   return (
-    <div className={style.pagination}>
-      <button className={style.pagination__prev} disabled={page == 1} value={-1} onClick={changePage}><FaArrowLeft /> Anterior</button>
-      <button className={style.pagination__next} disabled={page == totalPages} value={1} onClick={changePage}>Siguiente <FaArrowRight /></button>
+    <div className={styles.pagination}>
+      <button className={styles.pagination__prev} disabled={page == 1} value={-1} onClick={changePage}><FaArrowLeft /> Anterior</button>
+      <button className={styles.pagination__next} disabled={page == totalPages} value={1} onClick={changePage}>Siguiente <FaArrowRight /></button>
     </div>
   )
 }

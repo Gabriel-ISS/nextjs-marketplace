@@ -1,6 +1,6 @@
 'use client'
 
-import style from '@/_Components/Modal/InputModal.module.scss'
+import styles from '@/_Components/Modal/InputModal.module.scss'
 import { Header } from '@/_Components/Modal/Modal'
 import useAppStore from '@/_store/useStore'
 import { MouseEvent, useState } from 'react'
@@ -24,9 +24,9 @@ export default function Modal({ title, onAccept }: Props) {
   return (
     <>
     <Header>{title}</Header>
-    <form className={style.form}>
-      <input className={style.form__input} type="text" value={value} onChange={e => setValue(e.target.value)} autoFocus />
-      <button className={style.form__btn} onClick={accept} formMethod='dialog'>Aceptar</button>
+    <form className={styles.form}>
+      <input className={styles.form__input} type="text" value={value} onChange={e => setValue(e.target.value)} autoFocus />
+      <button className={styles.form__btn} onClick={accept} formMethod='dialog'>Aceptar</button>
     </form>
     </>
   )

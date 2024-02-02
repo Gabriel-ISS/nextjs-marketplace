@@ -1,4 +1,4 @@
-import style from '@/_Components/ErrorBlock.module.scss'
+import styles from '@/_Components/ErrorBlock.module.scss'
 
 
 interface Props {
@@ -10,6 +10,6 @@ export default function ErrorBlock({children, className}: Props) {
   const classNm = className ? ' ' + className : ''
 
   return (
-    <div className={style.error + classNm}>{children}</div>
+    <div className={styles.error + classNm}>{children}</div>
   )
 }

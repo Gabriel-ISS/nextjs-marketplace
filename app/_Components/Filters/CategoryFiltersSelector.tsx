@@ -1,5 +1,5 @@
 import ErrorBlock from '@/_Components/ErrorBlock'
-import style from '@/_Components/Filters/Filters.module.scss'
+import styles from '@/_Components/Filters/Filters.module.scss'
 import Loader from '@/_Components/Loader'
 import useFetch from '@/_hooks/useFetch'
 import { getCategoryFiltersNC } from '@/_lib/data'
@@ -36,13 +36,13 @@ export default function CategoryFiltersSelector({ category, brandHandler, common
     <Loader isLoading={isLoading} meanwhile={<span>Cargando filtros de categoría...</span>}>
       {data && <>
         {data.brands.length ? (
-          <fieldset className={style.filter_group}>
-            <legend className={style.filter_group__title}>
+          <fieldset className={styles.filter_group}>
+            <legend className={styles.filter_group__title}>
               Marcas
             </legend>
-            <div className={style.filter_group__options}>
+            <div className={styles.filter_group__options}>
               {data.brands.map(brand => (
-                <label className={style.filter_group__option} key={brand}>
+                <label className={styles.filter_group__option} key={brand}>
                   <input
                     type='checkbox'
                     name='brand'
@@ -57,15 +57,15 @@ export default function CategoryFiltersSelector({ category, brandHandler, common
           </fieldset>
         ) : null}
 
-        <fieldset className={style['common_properties--no_padding']}>
+        <fieldset className={styles['common_properties--no_padding']}>
           {data.properties.map(({ name: propertyName, values }, propertyIndex) => (
-            <fieldset className={style.filter_group} key={propertyName}>
-              <legend className={style.filter_group__title}>
+            <fieldset className={styles.filter_group} key={propertyName}>
+              <legend className={styles.filter_group__title}>
                 {propertyName}
               </legend>
-              <div className={style.filter_group__options}>
+              <div className={styles.filter_group__options}>
                 {values.map((name, valueIndex) => (
-                  <label className={style.filter_group__option} key={name}>
+                  <label className={styles.filter_group__option} key={name}>
                     {name}
                     <input
                       type='checkbox'

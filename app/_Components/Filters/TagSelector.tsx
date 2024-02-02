@@ -1,5 +1,5 @@
 import ErrorBlock from '@/_Components/ErrorBlock'
-import style from '@/_Components/Filters/Filters.module.scss'
+import styles from '@/_Components/Filters/Filters.module.scss'
 import Loader from '@/_Components/Loader'
 import useFetch from '@/_hooks/useFetch'
 import { getProductGroupsNC } from '@/_lib/data'
@@ -17,15 +17,15 @@ export default function TagSelector({ selectHandler, checked }: Props) {
   if (error) return <ErrorBlock>{error}</ErrorBlock>
 
   return (
-    <fieldset className={style.filter_group}>
-      <legend className={style.filter_group__title}>
+    <fieldset className={styles.filter_group}>
+      <legend className={styles.filter_group__title}>
         Etiquetas
       </legend>
       <Loader isLoading={isLoading} meanwhile={<span>Cargando etiquetas...</span>}>
         {data && (
-          <div className={style.filter_group__options}>
+          <div className={styles.filter_group__options}>
             {data.map((tag, i) => (
-              <label className={style.filter_group__option} key={tag}>
+              <label className={styles.filter_group__option} key={tag}>
                 <input
                   type='checkbox'
                   name='category'

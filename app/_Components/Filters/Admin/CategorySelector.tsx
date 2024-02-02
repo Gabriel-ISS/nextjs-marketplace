@@ -1,5 +1,5 @@
 import ErrorBlock from '@/_Components/ErrorBlock'
-import style from '@/_Components/Filters/Filters.module.scss'
+import styles from '@/_Components/Filters/Filters.module.scss'
 import { CustomFormikError } from '@/_Components/Inputs'
 import Loader from '@/_Components/Loader'
 import useFetch from '@/_hooks/useFetch'
@@ -26,7 +26,7 @@ export default function CategorySelector({ selectHandler, addCategory }: Props) 
 
   useThrottleEffect(loadCategories, [])
 
-  if (error) return <ErrorBlock className={style.error}>{error}</ErrorBlock>
+  if (error) return <ErrorBlock className={styles.error}>{error}</ErrorBlock>
 
   const updateProduct: StateUpdater<Product> = updater => {
     setValues(produce(draft => {
@@ -40,17 +40,17 @@ export default function CategorySelector({ selectHandler, addCategory }: Props) 
   }
 
   return (
-    <fieldset className={style.filter_group}>
-      <legend className={style.filter_group__title}>
+    <fieldset className={styles.filter_group}>
+      <legend className={styles.filter_group__title}>
         Categorías
-        <button type='button' className={style.filter_group__add_btn} onClick={() => addCategory(updateProduct)}>Añadir +</button>
+        <button type='button' className={styles.filter_group__add_btn} onClick={() => addCategory(updateProduct)}>Añadir +</button>
       </legend>
       <CustomFormikError name='category' />
       <Loader isLoading={isLoading} meanwhile={<span>Cargando categorías...</span>}>
         {data && (
-          <div className={style.filter_group__options}>
+          <div className={styles.filter_group__options}>
             {data.map(category => (
-              <label className={style.filter_group__option} key={category}>
+              <label className={styles.filter_group__option} key={category}>
                 <Field type='radio' name='category' value={category} onChange={categoryHandler} />
                 {category}
               </label>

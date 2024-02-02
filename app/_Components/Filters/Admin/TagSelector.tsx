@@ -1,5 +1,5 @@
 import ErrorBlock from '@/_Components/ErrorBlock'
-import style from '@/_Components/Filters/Filters.module.scss'
+import styles from '@/_Components/Filters/Filters.module.scss'
 import { CustomFormikError } from '@/_Components/Inputs'
 import Loader from '@/_Components/Loader'
 import useThrottleEffect from '@/_hooks/useThrottleEffect'
@@ -24,7 +24,7 @@ export default function TagSelector({ selectHandler, addTag }: Props) {
 
   useThrottleEffect(loadTags, [])
 
-  if (error) return <ErrorBlock className={style.error}>{error}</ErrorBlock>
+  if (error) return <ErrorBlock className={styles.error}>{error}</ErrorBlock>
 
   const updateProduct: StateUpdater<Product> = updater => {
     setValues(produce(draft => {
@@ -47,17 +47,17 @@ export default function TagSelector({ selectHandler, addTag }: Props) {
   }
 
   return (
-    <fieldset className={style.filter_group}>
-      <legend className={style.filter_group__title}>
+    <fieldset className={styles.filter_group}>
+      <legend className={styles.filter_group__title}>
         Etiquetas
-        <button type='button' className={style.filter_group__add_btn} onClick={() => addTag(updateProduct)}>Añadir +</button>
+        <button type='button' className={styles.filter_group__add_btn} onClick={() => addTag(updateProduct)}>Añadir +</button>
       </legend>
       <CustomFormikError name='tags' />
       <Loader isLoading={isLoading} meanwhile={<span>Cargando etiquetas...</span>}>
         {data && (
-          <div className={style.filter_group__options}>
+          <div className={styles.filter_group__options}>
             {data.map((tag, i) => (
-              <label className={style.filter_group__option} key={tag}>
+              <label className={styles.filter_group__option} key={tag}>
                 <Field type='checkbox' name='tags' value={tag} onChange={(e: ChangeEvent<HTMLInputElement>) => tagHandler(i, e)} />
                 {tag}
               </label>

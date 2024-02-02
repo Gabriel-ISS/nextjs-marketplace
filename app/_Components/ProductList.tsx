@@ -4,7 +4,7 @@ import ErrorBlock from '@/_Components/ErrorBlock'
 import Loader from '@/_Components/Loader'
 import Pagination from '@/_Components/Pagination'
 import ProductItem from '@/_Components/ProductItem'
-import style from '@/_Components/ProductList.module.scss'
+import styles from '@/_Components/ProductList.module.scss'
 import useFetch from '@/_hooks/useFetch'
 import { StateUpdater } from '@/_hooks/useWritableState'
 import { getProducts } from '@/_lib/data'
@@ -33,10 +33,10 @@ export default function ProductList({ adminMode }: Props) {
   if (error) return <ErrorBlock>{error}</ErrorBlock>
 
   return (
-    <section className={style.section}>
+    <section className={styles.section}>
       <Loader isLoading={isLoading} meanwhile={<span>Cargando productos...</span>}>
         {data && <>
-          <div className={style.products}>
+          <div className={styles.products}>
             {data.products.map(product => (
               <ProductItem key={product._id} product={product} adminMode={adminMode} setProducts={setProducts} />
             ))}

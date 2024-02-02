@@ -1,4 +1,4 @@
-import style from '@/schedule/page.module.scss'
+import styles from '@/schedule/page.module.scss'
 
 export default function Schedule() {
   const schedule = [
@@ -11,11 +11,11 @@ export default function Schedule() {
     ['Domingo', 'CERRADO'],
   ]
   return (
-    <main className={style.main}>
-      <h2 className={style.title}>Horarios de atención</h2>
-      <ul className={style.days}>
+    <main className={styles.main}>
+      <h2 className={styles.title}>Horarios de atención</h2>
+      <ul className={styles.days}>
         {schedule.map(([day, schedule]) => (
-          <li className={style.day} key={day}>
+          <li className={styles.day} key={day}>
             <span>{day}</span>
             <span>{schedule}</span>
           </li>
