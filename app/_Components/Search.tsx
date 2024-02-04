@@ -1,11 +1,11 @@
 'use client'
 
-
 import styles from '@/_Components/Search.module.scss'
-import useAppStore from '@/_store/useStore'
-import { usePathname, useRouter } from 'next/navigation'
+import { getQueryObj } from '@/_lib/utils'
+import { revalidatePath } from 'next/cache'
+import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import QueryString from 'qs'
-import { ChangeEvent, KeyboardEvent, useEffect, useState } from 'react'
+import { useState } from 'react'
 import { FaSearch } from 'react-icons/fa'
 
 
@@ -14,46 +14,22 @@ interface Props {
 }
 
 export default function Search({ className }: Props) {
-  const router = useRouter()
+  const { replace } = useRouter()
   const pathname = usePathname()
-  const [search, setSearch] = useState(() => {
-    return useAppStore.getState().query.data.search || ''
+  const query = useSearchParams().toString()
+  const [term, setTerm] = useState(() => {
+    return getQueryObj(query).search || ''
   })
-  const searchQuery = useAppStore(s => s.query.data.search)
-  const setQuery = useAppStore(s => s.query.setter)
 
-  function setSearchInQuery(search: string) {
-    setQuery(query => {
-      if (search.length) {
-        query.search = search
-      } else {
-        delete query.search
-      }
-    })
-    if (pathname == '/' && search != '') {
-      const query = useAppStore.getState().query.data
-      router.push(`/products?${QueryString.stringify(query)}`)
+  function setSearchInQuery(term: string) {
+    const q = getQueryObj(query)
+    if (term.length) {
+      q.search = term
+    } else {
+      delete q.search
     }
-  }
-
-  useEffect(() => {
-    if (!searchQuery) return;
-    setSearch(searchQuery)
-  }, [searchQuery])
-
-  function handleInput(e: ChangeEvent<HTMLInputElement>) {
-    setSearch(e.currentTarget.value)
-  }
-
-
-  function handleClick() {
-    setSearchInQuery(search)
-  }
-
-  function handleEnter(e: KeyboardEvent) {
-    if (e.key == 'Enter') {
-      setSearchInQuery(search)
-    }
+    const newQueryString = QueryString.stringify(q)
+    replace(`${pathname}?${newQueryString}`)
   }
 
   return (
@@ -61,12 +37,19 @@ export default function Search({ className }: Props) {
       <input
         className={styles.search__input}
         type="text" name="search"
-        value={search}
+        value={term}
         placeholder="Buscar productos en NextMarket"
-        onChange={handleInput} onKeyDown={handleEnter}
+        onChange={e => setTerm(e.target.value)}
+        onKeyDown={e => { if (e.key == 'Enter') setSearchInQuery(term) }}
         autoComplete='off'
+        defaultValue={getQueryObj(pathname).search}
       />
-      <button className={styles.search__btn} onClick={handleClick}><FaSearch size='100%' /></button>
+      <button
+        className={styles.search__btn}
+        onClick={() => setSearchInQuery(term)}
+      >
+        <FaSearch size='100%' />
+      </button>
     </div>
   )
 }

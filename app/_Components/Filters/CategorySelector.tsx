@@ -2,20 +2,20 @@ import ErrorBlock from '@/_Components/ErrorBlock'
 import styles from '@/_Components/Filters/Filters.module.scss'
 import Loader from '@/_Components/Loader'
 import useFetch from '@/_hooks/useFetch'
+import useQuery from '@/_hooks/useQuery'
 import { getCategories } from '@/_lib/data'
-import useAppStore from '@/_store/useStore'
-import { ChangeEventHandler, useEffect, useState } from 'react'
 
 
-interface Props {
-  selectHandler: ChangeEventHandler<HTMLInputElement>
-  checked: string
-}
-
-export default function CategorySelector({ selectHandler, checked }: Props) {
+export default function CategorySelector() {
+  const [query, setQuery]= useQuery()
   const { error, isLoading, data } = useFetch<string[]>(({ manager }) => manager(() => getCategories()))
 
   if (error) return <ErrorBlock>{error}</ErrorBlock>
+
+  const filterByCategory = (category: string) => {
+    query.category = category
+    setQuery(query)
+  }
 
   return (
     <fieldset className={styles.filter_group}>
@@ -32,8 +32,8 @@ export default function CategorySelector({ selectHandler, checked }: Props) {
                   name='category'
                   value={category}
                   id={category}
-                  onChange={selectHandler}
-                  checked={category == checked}
+                  onChange={e => filterByCategory(e.target.value)}
+                  defaultChecked={category == query.category}
                 />
                 {category}
               </label>

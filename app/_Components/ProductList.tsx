@@ -1,49 +1,32 @@
-'use client'
-
 import ErrorBlock from '@/_Components/ErrorBlock'
-import Loader from '@/_Components/Loader'
 import Pagination from '@/_Components/Pagination'
 import ProductItem from '@/_Components/ProductItem'
 import styles from '@/_Components/ProductList.module.scss'
-import useFetch from '@/_hooks/useFetch'
-import { StateUpdater } from '@/_hooks/useWritableState'
 import { getProducts } from '@/_lib/data'
-import { produce } from 'immer'
-import { useSearchParams } from 'next/navigation'
 
 
 interface Props {
   adminMode: boolean
+  query: string
 }
 
-export default function ProductList({ adminMode }: Props) {
-  const searchParams = useSearchParams().toString()
+export default async function ProductList({ adminMode, query }: Props) {
+  const res = await getProducts(query)
 
-  const { error, data, isLoading, setData } = useFetch<SuccessRes<typeof getProducts>>(
-    ({ manager }) => manager(() => getProducts(searchParams)),
-    [searchParams]
-  )
-
-  const setProducts: StateUpdater<Product[]> = (updater) => {
-    setData(produce(prev => {
-      updater(prev?.products as Product[])
-    }))
-  }
-
-  if (error) return <ErrorBlock>{error}</ErrorBlock>
+  if (res.error) return <ErrorBlock>{res.error}</ErrorBlock>
 
   return (
     <section className={styles.section}>
-      <Loader isLoading={isLoading} meanwhile={<span>Cargando productos...</span>}>
-        {data && <>
-          <div className={styles.products}>
-            {data.products.map(product => (
-              <ProductItem key={product._id} product={product} adminMode={adminMode} setProducts={setProducts} />
-            ))}
-          </div>
-        </>}
-      </Loader>
-      <Pagination totalPages={data?.totalPages || 0} />
+      {res.success?.products.length ? (
+        <div className={styles.products}>
+          {res.success?.products.map(product => (
+            <ProductItem key={product._id} product={product} adminMode={adminMode} />
+          ))}
+        </div>
+      ) : (
+        <div className='center center--fill-space'>No se encontraron resultados...</div>
+      )}
+      {<Pagination totalPages={res.success?.totalPages || 0} />}
     </section>
   )
 }

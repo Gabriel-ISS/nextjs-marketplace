@@ -1,0 +1,7 @@
+// @type
+
+@import '../vars';
+
+.spinner {
+  @include loader();
+}

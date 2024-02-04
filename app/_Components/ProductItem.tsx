@@ -1,9 +1,11 @@
+'use client'
+
 import MessageModal from '@/_Components/Modal/MessageModal'
 import Price from '@/_Components/Price'
 import styles from '@/_Components/ProductItem.module.scss'
-import { StateUpdater } from '@/_hooks/useWritableState'
 import { deleteProduct } from '@/_lib/actions'
 import useAppStore from '@/_store/useStore'
+import { revalidatePath } from 'next/cache'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { FaEdit, FaTrash } from 'react-icons/fa'
@@ -13,10 +15,9 @@ import { FaExternalLinkAlt } from 'react-icons/fa'
 interface Props {
   product: Product
   adminMode: boolean
-  setProducts: StateUpdater<Product[]>
 }
 
-export default function ProductItem({ product, adminMode, setProducts }: Props) {
+export default function ProductItem({ product, adminMode }: Props) {
   const router = useRouter()
   const openModal = useAppStore(s => s.modal.open)
 
@@ -29,10 +30,7 @@ export default function ProductItem({ product, adminMode, setProducts }: Props) 
         const res = await deleteProduct(product._id)
         if (res.success)
         openModal(<MessageModal title='Éxito' message={res.success} onAccept={() => {
-          setProducts(products => {
-            const index = products.findIndex(p => p.name == product.name)
-            products.splice(index, 1)
-          })
+          revalidatePath('/products')
         }} />, 'green')
         if (res.error) {
           openModal(<MessageModal title='Error' message={res.error} />, 'red')

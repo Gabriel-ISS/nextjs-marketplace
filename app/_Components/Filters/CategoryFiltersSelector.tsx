@@ -2,35 +2,44 @@ import ErrorBlock from '@/_Components/ErrorBlock'
 import styles from '@/_Components/Filters/Filters.module.scss'
 import Loader from '@/_Components/Loader'
 import useFetch from '@/_hooks/useFetch'
+import useQuery from '@/_hooks/useQuery'
 import { getCategoryFiltersNC } from '@/_lib/data'
-import { ChangeEvent, ChangeEventHandler } from 'react'
+import { checkboxManager } from '@/_lib/utils'
 
 
-interface Props {
-  category: {
-    name: string,
-    isNew: boolean
-  }
-  brandHandler: ChangeEventHandler<HTMLInputElement>
-  commonPropertiesHandler: (propertyName: string, propertyIndexForFilters: number, propertyValueIndexForFilters: number, event: ChangeEvent<HTMLInputElement>) => void
-  checkedBrands: string[]
-  checkedProperties: FilterForFilters['properties']
-}
-
-export default function CategoryFiltersSelector({ category, brandHandler, commonPropertiesHandler, checkedBrands, checkedProperties }: Props) {
+export default function CategoryFiltersSelector() {
+  const [query, setQuery] = useQuery()
   const { isLoading, data, error } = useFetch<FilterForFilters>(
     async ({ manager, setData }) => {
-      if (category.isNew) {
+      if (query.category) {
+        return await manager(() => getCategoryFiltersNC(query.category as string))
+      } else {
         setData(null)
         return
-      } else {
-        return await manager(() => getCategoryFiltersNC(category.name))
       }
     },
-    [category.name]
+    [query.category]
   )
-
   if (error) return <ErrorBlock>{error}</ErrorBlock>
+
+  const brandHandler = (selected: string, isChecked: boolean) => {
+    checkboxManager(query, 'brands', selected, isChecked)
+    setQuery(query)
+  }
+
+  const commonPropertiesHandler = (propertyName: string, selected: string, isChecked: boolean) => {
+    if (query.properties) {
+      checkboxManager(query.properties, propertyName, selected, isChecked)
+      if (!Object.keys(query.properties).length) {
+        delete query.properties
+      }
+    } else {
+      query.properties = {
+        [propertyName]: [selected]
+      }
+    }
+    setQuery(query)
+  }
 
   return (
     <Loader isLoading={isLoading} meanwhile={<span>Cargando filtros de categoría...</span>}>
@@ -48,8 +57,8 @@ export default function CategoryFiltersSelector({ category, brandHandler, common
                     name='brand'
                     value={brand}
                     id={brand}
-                    onChange={brandHandler}
-                    checked={checkedBrands.includes(brand)}
+                    onChange={e => brandHandler(e.target.value, e.target.checked)}
+                    defaultChecked={query.brands?.includes(brand)}
                   />{brand}
                 </label>
               ))}
@@ -58,13 +67,13 @@ export default function CategoryFiltersSelector({ category, brandHandler, common
         ) : null}
 
         <fieldset className={styles['common_properties--no_padding']}>
-          {data.properties.map(({ name: propertyName, values }, propertyIndex) => (
+          {data.properties.map(({ name: propertyName, values }) => (
             <fieldset className={styles.filter_group} key={propertyName}>
               <legend className={styles.filter_group__title}>
                 {propertyName}
               </legend>
               <div className={styles.filter_group__options}>
-                {values.map((name, valueIndex) => (
+                {values.map(name => (
                   <label className={styles.filter_group__option} key={name}>
                     {name}
                     <input
@@ -72,8 +81,8 @@ export default function CategoryFiltersSelector({ category, brandHandler, common
                       name={propertyName}
                       value={name}
                       id={name}
-                      onChange={e => commonPropertiesHandler(propertyName, propertyIndex, valueIndex, e)}
-                      checked={Boolean(checkedProperties.find(property => property.name == propertyName)?.values.includes(name))}
+                      onChange={e => commonPropertiesHandler(propertyName, e.target.value, e.target.checked)}
+                      defaultChecked={Boolean(query.properties?.[propertyName]?.includes(name))}
                     />
                   </label>
                 ))}

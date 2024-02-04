@@ -1,4 +1,5 @@
 import { ADMIN_ROLES, C_ERROR_TAG, S_ERROR_TAG } from '@/constants';
+import QueryString from 'qs';
 
 
 export class ClientError extends Error {
@@ -8,6 +9,34 @@ export class ClientError extends Error {
     } else {
       super(C_ERROR_TAG + message)
     }
+  }
+}
+
+export function getQueryObj(queryString: string): Query {
+  if (!queryString.length) return {}
+  const q: Query = QueryString.parse(queryString)
+  if (q.page) {
+    q.page = Number(q.page)
+  }
+  return q
+}
+
+type OptionalRecord<K extends string | number | symbol, T> = { [P in K]?: T; }
+type OnlyArrayKeys<O> = Extract<keyof O, { [K in keyof O]: O[K] extends any[] | undefined ? K : never }[keyof O]>
+
+export function checkboxManager<
+  Obj extends OptionalRecord<string, any>,
+  K extends OnlyArrayKeys<Obj>,
+  T extends NonNullable<Obj[K]>[number]
+>(query: Obj, key: K, selected: T, isChecked: boolean) {
+  const q = query as OptionalRecord<K, T[]>;
+  if (isChecked) {
+    if (!q[key]) q[key] = [] as unknown as Obj[K]
+    q[key]?.push(selected)
+  } else {
+    if (!q[key]) throw new ClientError('Se intenta eliminar una etiqueta de la consulta, pero no hay etiquetas definidas')
+    q[key] = (q[key] as T[]).filter(t => t != selected) as unknown as Obj[K]
+    if (!q[key]?.length) delete q[key]
   }
 }
 

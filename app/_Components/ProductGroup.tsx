@@ -1,10 +1,7 @@
-'use client'
-
 import styles from '@/_Components/ProductGroup.module.scss'
-import useAppStore from '@/_store/useStore'
+import { ClientError } from '@/_lib/utils'
 import Link from 'next/link'
 import QueryString from 'qs'
-import { useState } from 'react'
 
 
 interface Props {
@@ -14,27 +11,16 @@ interface Props {
 }
 
 export default function ProductGroup({ name, image, type }: Props) {
-  const [query] = useState<Query>(() => {
-    if (type == 'tag') {
-      return { tags: [name] }
-    }
-    else if (type == 'category') {
-      return { category: name }
-    }
-    else {
-      throw new Error(`El tipo de grupo no puede ser ${type}`)
-    }
-  })
-  const [url] = useState(() => `/products?${QueryString.stringify(query)}`)
-  const setQuery = useAppStore(s => s.query.setter)
+  const q: Query =
+    type == 'tag' ? { tags: [name] } :
+      type == 'category' ? { category: name } :
+        (() => { throw new ClientError(`El tipo de grupo no puede ser ${type}`) })()
 
-  function linkHandler() {
-    setQuery(query)
-  }
+  const url = `/products?${QueryString.stringify(q)}`
 
   return (
     <li className={styles.prod_group}>
-      <Link className={styles.prod_group__container} href={url} onClick={linkHandler}>
+      <Link className={styles.prod_group__container} href={url}>
         <img className={styles.prod_group__img} src={image} alt={name} />
         <h3 className={styles.prod_group__name}>{name}</h3>
       </Link>
