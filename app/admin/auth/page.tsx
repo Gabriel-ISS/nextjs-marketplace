@@ -121,8 +121,9 @@ interface ListItemProps {
 function ListItem({ name, credential }: ListItemProps) {
   return (
     <li>
+      <b>{name}: </b>
       <span className={styles.fake_cred__item}>
-        <b>{name}:</b> {credential} <CopyButton value={credential} />
+        {credential} <CopyButton value={credential} />
       </span>
     </li>
   )

@@ -35,7 +35,9 @@
   &__item {
     display: inline-flex;
     align-items: center;
-    gap: 1rem;
+    flex-wrap: wrap;
+    gap: 1ch;
+    padding-bottom: .5rem;
   }
 
   &__copy_btn {
@@ -45,7 +47,6 @@
     padding: .3rem;
     background-color: var(--bg3);
     color: var(--text-color);
-    margin-bottom : .5rem;
   }
 
   
