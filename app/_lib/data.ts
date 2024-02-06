@@ -13,6 +13,7 @@ async function get<T>(path: string, options?: GetOptions): Promise<T> {
   if (options?.params) {
     query = '?' + new URLSearchParams(options.params).toString()
   }
+  throw new Error(`${process.env.NEXT_PUBLIC_HOST}/api${path}${query}`)
   const error = await fetch(`${process.env.NEXT_PUBLIC_HOST}/api${path}${query}`, {
     headers: {
       'Content-Type': 'application/json',
