@@ -9,6 +9,7 @@ import ProductsLink from '@/_Components/ProductsLink';
 import { getSession, signOut } from 'next-auth/react';
 import { ADMIN_ROLES } from '@/constants';
 import { usePathname, useRouter } from 'next/navigation';
+import { revalidatePath } from 'next/cache';
 
 
 export default function Header() {
