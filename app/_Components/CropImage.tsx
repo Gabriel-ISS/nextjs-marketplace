@@ -185,6 +185,7 @@ export default function CropImage({ aspect, imgSrc, imageName, fileType, onSaveC
             onComplete={(c) => setCompletedCrop(c)}
             aspect={aspect}
           >
+            {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               className={className || styles.crop_img__img}
               ref={imgRef}
