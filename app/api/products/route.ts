@@ -1,12 +1,10 @@
+import { GetProductsReturn } from '@/_lib/data';
 import { connectDB } from '@/_lib/db';
 import { Product } from '@/_lib/models';
 import { getErrorMessage } from '@/_lib/server-utils';
 import { FilterQuery } from 'mongoose';
 import QueryString from 'qs';
 
-
-type ProductsAndPages = { products: Product[], totalPages: number }
-export type GetProductsReturn = ActionRes<ProductsAndPages>
 
 export async function GET(req: Request) {
   await connectDB()
@@ -15,7 +13,7 @@ export async function GET(req: Request) {
   return Response.json(res)
 }
 
-export async function getProducts(queryString: string | undefined): Promise<GetProductsReturn> {
+async function getProducts(queryString: string | undefined): Promise<GetProductsReturn> {
   try {
     const LIMIT_PER_PAGE = 3 * 4;
     let page = 1

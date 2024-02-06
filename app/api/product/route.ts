@@ -1,12 +1,11 @@
 import { DEFAULT_PRODUCT } from '@/_lib/constants'
+import { GetProductParams, GetProductReturn } from '@/_lib/data'
 import { connectDB } from '@/_lib/db'
 import { Product } from '@/_lib/models'
 import { getErrorMessage } from '@/_lib/server-utils'
 import { getParams } from '@/_lib/utils'
 
 
-export type GetProductParams = { id?: string }
-export type GetProductReturn = ActionRes<Product>
 export async function GET(req: Request) {
   await connectDB()
   const { id } = getParams<GetProductParams>(req.url)
@@ -14,7 +13,7 @@ export async function GET(req: Request) {
   return Response.json(res)
 }
 
-export async function getProduct(id?: string): Promise<GetProductReturn> {
+async function getProduct(id?: string): Promise<GetProductReturn> {
   if (!id) return { success: DEFAULT_PRODUCT }
 
   try {

@@ -1,3 +1,5 @@
+export const dynamic = 'force-dynamic'
+
 import ErrorBlock from '@/_Components/ErrorBlock'
 import ProductGroup from '@/_Components/ProductGroup'
 import Search from '@/_Components/Search'

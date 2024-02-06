@@ -1,3 +1,5 @@
+export const dynamic = 'force-dynamic'
+
 import Filters from '@/_Components/Filters/Filters';
 import ProductList from '@/_Components/ProductList';
 import Search from '@/_Components/Search';

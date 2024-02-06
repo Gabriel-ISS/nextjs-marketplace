@@ -1,11 +1,10 @@
+import { GetFiltersReturn, GetFiltersParams } from '@/_lib/data';
 import { connectDB } from '@/_lib/db';
 import { Filter } from '@/_lib/models'
 import { ServerSideError, getErrorMessage } from '@/_lib/server-utils'
 import { getParams } from '@/_lib/utils';
 
 
-export type GetFiltersParams = { category: string }
-export type GetFiltersReturn = ActionRes<FilterForFilters>
 export async function GET(req: Request) {
   await connectDB()
   let res: GetFiltersReturn;
