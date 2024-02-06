@@ -7,7 +7,7 @@ import { StateUpdater } from '@/_hooks/useWritableState'
 import useAppStore from '@/_store/useStore'
 import { Field, useFormikContext } from 'formik'
 import { produce } from 'immer'
-import { ChangeEvent, useEffect } from 'react'
+import { ChangeEvent } from 'react'
 
 
 interface Props {

@@ -11,6 +11,7 @@
   &__img {
     justify-self: center;
     width: min(100%, 500px);
+    height: auto;
     aspect-ratio: 1;
 
     background-color: var(--bg2);

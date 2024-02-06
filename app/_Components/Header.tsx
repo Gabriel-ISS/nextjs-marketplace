@@ -69,6 +69,7 @@ export default function Header() {
       <nav className={styles.nav}>
 
         <div className={styles.nav__content}>
+          {/* eslint-disable-next-line @next/next/no-img-element */}
           <Link className={styles.nav__primary_link} href="/"><h1 className={satisfy.className}><img src='/logo.svg' alt='logo' width={33} height={33} /> NextMarket</h1></Link>
 
           <button

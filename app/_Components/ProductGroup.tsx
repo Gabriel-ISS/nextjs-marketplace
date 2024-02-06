@@ -1,5 +1,6 @@
 import styles from '@/_Components/ProductGroup.module.scss'
 import { ClientError } from '@/_lib/utils'
+import Image from 'next/image'
 import Link from 'next/link'
 import QueryString from 'qs'
 
@@ -21,7 +22,7 @@ export default function ProductGroup({ name, image, type }: Props) {
   return (
     <li className={styles.prod_group}>
       <Link className={styles.prod_group__container} href={url}>
-        <img className={styles.prod_group__img} src={image} alt={name} />
+        <Image width={340} height={340} className={styles.prod_group__img} src={image} alt={name} />
         <h3 className={styles.prod_group__name}>{name}</h3>
       </Link>
     </li>

@@ -9,6 +9,14 @@ const nextConfig = {
     serverActions: {
       bodySizeLimit: '5mb'
     }
+  },
+  images: {
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: process.env.S3_IMAGE_DOMAIN
+      }
+    ]
   }
 }
 
