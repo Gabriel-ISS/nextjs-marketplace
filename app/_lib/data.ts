@@ -21,7 +21,7 @@ export async function getCategoryFilters(category: string) {
 }
 
 export async function getProducts(queryString: string) {
-  return (await axios.get<GetProductsReturn>('/products', { params: queryString })).data
+  return (await axios.get<GetProductsReturn>(`/products?${queryString}`)).data
 }
 
 export async function getProduct(id?: string) {

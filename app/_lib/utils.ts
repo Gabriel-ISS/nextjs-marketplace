@@ -21,7 +21,6 @@ export function getQueryObj(queryString: string): Query {
   return q
 }
 
-// TODO: Eliminar todos los retry
 type OptionalRecord<K extends string | number | symbol, T> = { [P in K]?: T; }
 type OnlyArrayKeys<O> = Extract<keyof O, { [K in keyof O]: O[K] extends any[] | undefined ? K : never }[keyof O]>
 
@@ -39,31 +38,6 @@ export function checkboxManager<
     q[key] = (q[key] as T[]).filter(t => t != selected) as unknown as Obj[K]
     if (!q[key]?.length) delete q[key]
   }
-}
-
-export async function actionFetch<T>(fetcher: () => Promise<ActionRes<T>>, interval: number, attempts: number): Promise<ActionRes<T>> {
-  return new Promise(resolve => {
-    const id = setInterval(() => {
-      fetcher().then(data => {
-        clearInterval(id)
-        resolve(data)
-      })
-    }, interval)
-    setTimeout(() => {
-      clearInterval(id)
-      resolve({ error: 'Timeout' })
-    }, interval * attempts)
-  })
-
-}
-
-export function fetchRetry(fetcher: () => Promise<any>, interval: number, attempts: number) {
-  const id = setInterval(() => {
-    fetcher().then(() => clearInterval(id))
-  }, interval)
-  setTimeout(() => {
-    clearInterval(id)
-  }, interval * attempts)
 }
 
 export function getParams<T extends Record<string, any>>(url: string): T {
