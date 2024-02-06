@@ -12,6 +12,7 @@
     "@aws-sdk/client-s3": "^3.490.0",
     "@react-hook/throttle": "^2.2.0",
     "@types/qs": "^6.9.10",
+    "axios": "^1.6.7",
     "browser-image-compression": "^2.0.2",
     "formik": "^2.4.5",
     "immer": "^10.0.3",

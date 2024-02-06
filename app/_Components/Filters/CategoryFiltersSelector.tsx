@@ -3,7 +3,7 @@ import styles from '@/_Components/Filters/Filters.module.scss'
 import Loader from '@/_Components/Loader'
 import useFetch from '@/_hooks/useFetch'
 import useQuery from '@/_hooks/useQuery'
-import { getCategoryFiltersNC } from '@/_lib/data'
+import { getCategoryFilters } from '@/_lib/data'
 import { checkboxManager } from '@/_lib/utils'
 
 
@@ -12,7 +12,7 @@ export default function CategoryFiltersSelector() {
   const { isLoading, data, error } = useFetch<FilterForFilters>(
     async ({ manager, setData }) => {
       if (query.category) {
-        return await manager(() => getCategoryFiltersNC(query.category as string))
+        return await manager(() => getCategoryFilters(query.category as string))
       } else {
         setData(null)
         return

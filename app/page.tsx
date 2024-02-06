@@ -1,7 +1,7 @@
 import ErrorBlock from '@/_Components/ErrorBlock'
 import ProductGroup from '@/_Components/ProductGroup'
 import Search from '@/_Components/Search'
-import { getCategoriesWithImage, getProductGroups } from '@/_lib/data'
+import { getCategories, getProductGroups } from '@/_lib/data'
 import { satisfy } from '@/_lib/fonts'
 import { actionFetch } from '@/_lib/utils'
 import styles from '@/page.module.scss'
@@ -10,7 +10,7 @@ import { ComponentProps } from 'react'
 
 export default async function App() {
   const productGroups = await actionFetch(getProductGroups, 500, 3)
-  const productCategories = await actionFetch(getCategoriesWithImage, 500, 3)
+  const productCategories = await actionFetch(() => getCategories({ includeImages: true }), 500, 3)
 
   return (
     <main>
@@ -52,7 +52,7 @@ function ProductSection({ title, data, type }: Props) {
       <h2 className={`${satisfy.className} ${styles.products__title}`}>{title}</h2>
       <ul className={styles.products__container}>
         {data.map(group => (
-            <ProductGroup key={group.name} name={group.name} image={group.image} type={type} />
+          <ProductGroup key={group.name} name={group.name} image={group.image} type={type} />
         ))}
       </ul>
     </section>

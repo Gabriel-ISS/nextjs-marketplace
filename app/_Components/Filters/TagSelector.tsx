@@ -3,13 +3,13 @@ import styles from '@/_Components/Filters/Filters.module.scss'
 import Loader from '@/_Components/Loader'
 import useFetch from '@/_hooks/useFetch'
 import useQuery from '@/_hooks/useQuery'
-import { getProductGroupsNC } from '@/_lib/data'
-import { ClientError, checkboxManager } from '@/_lib/utils'
+import { getProductGroups } from '@/_lib/data'
+import { checkboxManager } from '@/_lib/utils'
 
 
 export default function TagSelector() {
   const [query, setQuery] = useQuery()
-  const { error, isLoading, data } = useFetch<string[]>(({ manager }) => manager(() => getProductGroupsNC()))
+  const { error, isLoading, data } = useFetch<string[]>(({ manager }) => manager(() => getProductGroups({NC: true})))
 
   if (error) return <ErrorBlock>{error}</ErrorBlock>
 

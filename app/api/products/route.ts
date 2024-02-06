@@ -1,9 +1,21 @@
+import { connectDB } from '@/_lib/db';
 import { Product } from '@/_lib/models';
 import { getErrorMessage } from '@/_lib/server-utils';
 import { FilterQuery } from 'mongoose';
 import QueryString from 'qs';
 
-export async function getProducts(queryString: string | undefined): Promise<ActionRes<{ products: Product[], totalPages: number }>> {
+
+type ProductsAndPages = { products: Product[], totalPages: number }
+export type GetProductsReturn = ActionRes<ProductsAndPages>
+
+export async function GET(req: Request) {
+  await connectDB()
+  const query = req.url.split('?')[1]
+  const res: GetProductsReturn = await getProducts(query)
+  return Response.json(res)
+}
+
+export async function getProducts(queryString: string | undefined): Promise<GetProductsReturn> {
   try {
     const LIMIT_PER_PAGE = 3 * 4;
     let page = 1
@@ -43,10 +55,4 @@ export async function getProducts(queryString: string | undefined): Promise<Acti
   } catch (error) {
     return getErrorMessage(error, 'Fallo al obtener los productos')
   }
-}
-
-export async function GET(req: Request) {
-  const query = req.url.split('?')[1]
-  const res = await getProducts(query)
-  return Response.json(res)
 }

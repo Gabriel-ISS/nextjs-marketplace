@@ -1,5 +1,5 @@
 import { Produce, StateUpdater } from '@/_hooks/useWritableState'
-import { getCategories, getCategoryFiltersNC, getProductGroupsNC } from '@/_lib/data'
+import { getCategories, getCategoryFilters, getProductGroups } from '@/_lib/data'
 import { fetchRetry } from '@/_lib/utils'
 import { ImmerSet, Slice } from '@/_store/useStore'
 import { Draft } from 'immer'
@@ -28,7 +28,7 @@ const filterSlice: Slice<FilterSlice> = (set) => ({
         category: '',
         brands: [],
         properties: []
-      } as FilterForFilters, getCategoryFiltersNC),
+      } as FilterForFilters, getCategoryFilters),
       clear() {
         set(prev => {
           prev.filters.categoryFilters.state.data = {
@@ -39,7 +39,7 @@ const filterSlice: Slice<FilterSlice> = (set) => ({
         })
       }
     },
-    tags: filterInitializer(set, 'tags', [] as string[], getProductGroupsNC),
+    tags: filterInitializer(set, 'tags', [] as string[], () => getProductGroups({NC: true})),
   },
   query: {
     data: {},
