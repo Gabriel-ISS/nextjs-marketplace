@@ -1,6 +1,5 @@
 import { Produce, StateUpdater } from '@/_hooks/useWritableState'
 import { getCategories, getCategoryFilters, getProductGroups } from '@/_lib/data'
-import { fetchRetry } from '@/_lib/utils'
 import { ImmerSet, Slice } from '@/_store/useStore'
 import { Draft } from 'immer'
 import QueryString from 'qs'
@@ -39,7 +38,7 @@ const filterSlice: Slice<FilterSlice> = (set) => ({
         })
       }
     },
-    tags: filterInitializer(set, 'tags', [] as string[], () => getProductGroups({NC: true})),
+    tags: filterInitializer(set, 'tags', [] as string[], () => getProductGroups({ NC: true })),
   },
   query: {
     data: {},
@@ -101,24 +100,19 @@ const filterInitializer = <
     })
   },
   async load(...args) {
-
-    fetchRetry(_load, 500, 3)
-
-    async function _load() {
-      set(prev => { prev.filters[filterKey].state.isLoading = true })
-      const res = await fetcher(...args)
-      set(prev => {
-        const FState = prev.filters[filterKey].state
-        if (!res.success) {
-          FState.error = res.error
-          FState.isLoading = false
-          return;
-        }
-        FState.data = res.success
+    set(prev => { prev.filters[filterKey].state.isLoading = true })
+    const res = await fetcher(...args)
+    set(prev => {
+      const FState = prev.filters[filterKey].state
+      if (!res.success) {
+        FState.error = res.error
         FState.isLoading = false
-        delete FState.error
-      })
-    }
+        return;
+      }
+      FState.data = res.success
+      FState.isLoading = false
+      delete FState.error
+    })
   },
   setLoading(loading) {
     set(prev => {

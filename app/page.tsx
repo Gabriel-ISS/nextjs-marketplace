@@ -3,14 +3,13 @@ import ProductGroup from '@/_Components/ProductGroup'
 import Search from '@/_Components/Search'
 import { getCategories, getProductGroups } from '@/_lib/data'
 import { satisfy } from '@/_lib/fonts'
-import { actionFetch } from '@/_lib/utils'
 import styles from '@/page.module.scss'
 import { ComponentProps } from 'react'
 
 
 export default async function App() {
-  const productGroups = await actionFetch(getProductGroups, 500, 3)
-  const productCategories = await actionFetch(() => getCategories({ includeImages: true }), 500, 3)
+  const productGroups = await getProductGroups()
+  const productCategories = await getCategories({ includeImages: true })
 
   return (
     <main>

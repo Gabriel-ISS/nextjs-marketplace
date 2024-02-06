@@ -1,4 +1,3 @@
-import { fetchRetry } from '@/_lib/utils';
 import { useThrottleCallback } from '@react-hook/throttle';
 import { DependencyList, Dispatch, SetStateAction, useEffect, useState } from 'react';
 
@@ -23,8 +22,8 @@ export default function useFetch<T>(
   const [isLoading, setLoading] = useState<boolean>(false)
   const [error, setError] = useState<string | null>(null)
 
-  const throttleFn = useThrottleCallback((dt: Data<T>) => {
-    fetchRetry(() => fn(dt), 500, 3)
+  const throttledFn = useThrottleCallback((dt: Data<T>) => {
+    fn(dt)
   })
 
   const actionResHandler: ActionResHandler<T> = (res: ActionRes<T>) => {
@@ -48,7 +47,7 @@ export default function useFetch<T>(
   }
 
   useEffect(() => {
-    throttleFn({ manager, setData, setLoading, setError, actionResHandler })
+    throttledFn({ manager, setData, setLoading, setError, actionResHandler })
   }, dependencyList || [])
 
   return {
