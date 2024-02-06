@@ -37,7 +37,7 @@
   &__collapsible {
     display: flex;
 
-    @media (width < $screen-md) {
+    @media (width < ($screen-md + 2)) {
       // el display se controla desde javascript
       grid-auto-flow: row;
       width: 100%;
@@ -69,7 +69,7 @@
     margin: 0;
 
     @media (width > $screen-md) {
-      min-width: 30rem;
+      min-width: 22rem;
       align-items: center;
       flex-direction: row;
       gap: 1rem;
