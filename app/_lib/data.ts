@@ -11,7 +11,7 @@ import QueryString from 'qs'
 
 connectDB()
 
-
+//d
 export async function getProductGroups(): Promise<ActionRes<Group[]>> {
   try {
     const groups = await Group.find({})
@@ -21,6 +21,7 @@ export async function getProductGroups(): Promise<ActionRes<Group[]>> {
   }
 }
 
+//d
 export async function getProductGroupsNC(): Promise<ActionRes<string[]>> {
   try {
     const groups = await Group.find({})
@@ -30,6 +31,7 @@ export async function getProductGroupsNC(): Promise<ActionRes<string[]>> {
   }
 }
 
+//d
 export async function getCategories(): Promise<ActionRes<string[]>> {
   try {
     const categoriesContainers = await Filter.find({}, { category: 1 })
@@ -39,6 +41,7 @@ export async function getCategories(): Promise<ActionRes<string[]>> {
   }
 }
 
+//d
 export async function getCategoryFiltersNC(category: string): Promise<ActionRes<FilterForFilters>> {
   try {
     const filters = await Filter.findOne({ category })
@@ -57,6 +60,7 @@ export async function getCategoryFiltersNC(category: string): Promise<ActionRes<
   }
 }
 
+//d
 export async function getCategoriesWithImage(): Promise<ActionRes<{ name: string, image: string }[]>> {
   try {
     const categoriesContainers = await Filter.find({}, { category: 1, category_img: 1 })
@@ -71,6 +75,7 @@ export async function getCategoriesWithImage(): Promise<ActionRes<{ name: string
   }
 }
 
+//d
 export async function getProducts(queryString: string): Promise<ActionRes<{ products: Product[], totalPages: number }>> {
   try {
     const LIMIT_PER_PAGE = 3 * 4;
@@ -113,6 +118,7 @@ export async function getProducts(queryString: string): Promise<ActionRes<{ prod
   }
 }
 
+//d
 export async function getProduct(id?: string): Promise<ActionRes<Product>> {
   if (!id) return { success: DEFAULT_PRODUCT }
 
@@ -123,31 +129,5 @@ export async function getProduct(id?: string): Promise<ActionRes<Product>> {
     }
   } catch (error) {
     return getErrorMessage(error, 'Falla al obtener el producto')
-  }
-}
-
-export async function getUser(credentials: Pick<User, 'name' | 'password'>): Promise<ActionRes<User>> {
-  // credentials también incluye información como el callbackURL
-  try {
-    const user = await User.findOne({
-      name: credentials.name,
-      password: credentials.password
-    }, safeUserProjection);
-    if (!user) throw new ServerSideError('Usuario o contraseña incorrectos.');
-    return { success: user }
-  } catch (error) {
-    return getErrorMessage(error, 'Error al obtener el usuario')
-  }
-}
-
-export async function getSafeUser(): Promise<ActionRes<SafeUser>> {
-  try {
-    const session = await getServerSession()
-    if (!session) throw new ServerSideError('Usuario no autenticado')
-    const user = await User.findOne({ name: session.user.name }, safeUserProjection)
-    if (!user) throw new ServerSideError('Usuario no encontrado')
-    return { success: user }
-  } catch (error) {
-    return getErrorMessage(error, 'Error al obtener el usuario')
   }
 }

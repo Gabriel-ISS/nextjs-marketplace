@@ -21,6 +21,7 @@ export function getQueryObj(queryString: string): Query {
   return q
 }
 
+// TODO: Eliminar todos los retry
 type OptionalRecord<K extends string | number | symbol, T> = { [P in K]?: T; }
 type OnlyArrayKeys<O> = Extract<keyof O, { [K in keyof O]: O[K] extends any[] | undefined ? K : never }[keyof O]>
 
@@ -63,6 +64,13 @@ export function fetchRetry(fetcher: () => Promise<any>, interval: number, attemp
   setTimeout(() => {
     clearInterval(id)
   }, interval * attempts)
+}
+
+export function getParams<T extends Record<string, any>>(url: string): T {
+  const search = url.split('?')[1] as string | undefined
+  if (!search) return {} as T
+  const searchParams = new URLSearchParams(search)
+  return Object.fromEntries(searchParams.entries()) as T
 }
 
 export function getLocalCurrency(value: number) {

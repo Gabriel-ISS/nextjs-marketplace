@@ -2,7 +2,7 @@ import 'server-only';
 
 import { deleteImages, saveTagImage } from '@/_lib/aws-s3';
 import { FilterManager, RelevantFilterData } from '@/_lib/filter-manager';
-import { Filter, Group, User } from '@/_lib/models';
+import { Filter, Group, User, safeUserProjection } from '@/_lib/models';
 import { Types, mongo } from "mongoose";
 import { getServerSession } from 'next-auth';
 import { S_ERROR_TAG, TEST_ADMIN } from '@/constants';
@@ -173,5 +173,17 @@ export async function updateTags(newGroups: UnsavedGroup[], tags: string[], prev
     ])
   } catch (error) {
     throw new ServerSideError('Falla al actualizar las etiquetas')
+  }
+}
+
+export async function getSafeUser(): Promise<ActionRes<SafeUser>> {
+  try {
+    const session = await getServerSession()
+    if (!session) throw new ServerSideError('Usuario no autenticado')
+    const user = await User.findOne({ name: session.user.name }, safeUserProjection)
+    if (!user) throw new ServerSideError('Usuario no encontrado')
+    return { success: user }
+  } catch (error) {
+    return getErrorMessage(error, 'Error al obtener el usuario')
   }
 }
