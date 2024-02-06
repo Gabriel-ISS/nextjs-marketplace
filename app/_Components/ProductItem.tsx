@@ -42,7 +42,7 @@ export default function ProductItem({ product, adminMode }: Props) {
   return (
     <article className={styles.product}>
       <div className={styles.product__container}>
-        <Image width={200} height={200} className={styles.product__image} src={product.image} alt={product.name} />
+        <Image width={100} height={100} className={styles.product__image} src={product.image} alt={product.name} />
         <div className={styles.product__right}>
           <Link href={'/product?id=' + product._id} target='_blank'><h3 className={styles.product__name}>{product.name} <FaExternalLinkAlt /></h3></Link>
           <Price price={product.price} />
