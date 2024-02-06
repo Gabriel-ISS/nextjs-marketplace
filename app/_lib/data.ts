@@ -18,7 +18,13 @@ function get<T>(path: string, options?: GetOptions): Promise<T> {
       'Content-Type': 'application/json',
     }
   })
-  .then(res => res.json())
+  .then(res => {
+    if (res.status !== 200) {
+      return res.text()
+      //throw new Error(`There was an error with status code ${res.status}.\n${await res.text()}`)
+    }
+    return res.json()
+  })
 }
 
 export type GetGroupsParams = { NC?: boolean }
