@@ -1,12 +1,18 @@
 @import './vars';
 
 .search_section {
+  position: relative;
+
   display: grid;
   min-height: clamp(22rem, 12rem + 30vw, 44rem);
 
-  background-image: url('/header2.jpg');
-  background-size: cover;
-  background-position: center;
+  &__img {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    object-fit: cover;
+    filter: brightness(.7);
+  }
 
   &__container {
     @include autoMargin(1500px);

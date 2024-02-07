@@ -6,6 +6,7 @@ import Search from '@/_Components/Search'
 import { getCategories, getProductGroups } from '@/_lib/data'
 import { satisfy } from '@/_lib/fonts'
 import styles from '@/page.module.scss'
+import Image from 'next/image'
 import { ComponentProps } from 'react'
 
 
@@ -18,6 +19,7 @@ export default async function App() {
   return (
     <main>
       <section className={styles.search_section}>
+        <Image className={styles.search_section__img} src='/header.jpg' alt='' fill quality={90} priority />
         <div className={styles.search_section__container}>
           <div className={styles.search_section__text_container}>
             <span className={`${satisfy.className} ${styles.search_section__title}`}>NextMarket</span>
@@ -55,7 +57,7 @@ function ProductSection({ title, data, type }: Props) {
       <h2 className={`${satisfy.className} ${styles.products__title}`}>{title}</h2>
       <ul className={styles.products__container}>
         {data.map(group => (
-          <ProductGroup key={group.name} name={group.name} image={group.image} type={type} />
+          <ProductGroup key={group.name} name={group.name} image={group.imgPath} type={type} />
         ))}
       </ul>
     </section>
