@@ -38,11 +38,13 @@ export default function ProductItem({ product, adminMode }: Props) {
     }} />, 'yellow')
   }
 
+  const img = process.env.NEXT_PUBLIC_IMAGE_KIT_BASE_URL + product.imgPath + '?tr=w-150'
+
   return (
     <article className={styles.product}>
       <div className={styles.product__container}>
         {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img className={styles.product__image} src={product.image} alt={product.name} loading='lazy' />
+        <img className={styles.product__image} src={img} alt={product.name} loading='lazy' />
         <div className={styles.product__right}>
           <Link href={'/product?id=' + product._id} target='_blank'><h3 className={styles.product__name}>{product.name} <FaExternalLinkAlt /></h3></Link>
           <Price price={product.price} />

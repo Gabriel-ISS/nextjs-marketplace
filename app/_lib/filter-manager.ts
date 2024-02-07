@@ -27,7 +27,7 @@ export class FilterManager {
     } else if (product) {
       this.data = new Filter({
         category: product.data.category,
-        category_img: product.rawCategoryImage,
+        categoryImgPath: product.rawCategoryImage,
         brands: [{
           name: product.data.brand,
           used: 1
@@ -189,14 +189,14 @@ export class FilterManager {
   async updateDB() {
     if (this.data.isNew) {
       const imgLink = await saveCategoryImage(this.data._id, this.rawCategoryImg)
-      this.data.category_img = imgLink
+      this.data.categoryImgPath = imgLink
       return await this.data.save()
     } else {
       if (this.data.brands.length || this.data.properties.length) {
         return await this.data.save()
       } else {
         return await Promise.all([
-          deleteImages(this.data.category_img),
+          deleteImages(this.data.categoryImgPath),
           this.data.deleteOne(),
         ])
       }

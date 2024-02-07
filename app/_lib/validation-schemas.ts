@@ -7,7 +7,7 @@ const minValueMessage = (field: string) => `"${field}" debe ser de al menos \${m
 const minItemsMessage = (field: string) => `"${field}" requiere al menos \${min} elementos.`
 
 export const productSchema: ObjectSchema<Omit<Product, '_id'>> = object({
-  image: string().required(requiredMessage('Imagen')),
+  imgPath: string().required(requiredMessage('Imagen')),
   name: string().required(requiredMessage('Nombre')).min(8, minLengthMessage('Nombre')).max(50, maxLengthMessage('Nombre')),
   price: object({
     old: number().optional(),

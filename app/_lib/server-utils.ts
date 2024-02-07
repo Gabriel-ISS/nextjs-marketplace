@@ -122,7 +122,7 @@ export async function updateTags(newGroups: UnsavedGroup[], tags: string[], prev
     const toReduce = reduceGroups.filter(g => g.used > 1).map(g => g.name)
     const _toDelete = reduceGroups.filter(g => g.used <= 1)
     const toDelete = _toDelete.map(g => g.name)
-    const toDeleteImages = _toDelete.map(g => g.image)
+    const toDeleteImages = _toDelete.map(g => g.imgPath)
 
     return { toReduce, toDelete, toIncrease, toDeleteImages }
   }
@@ -133,7 +133,7 @@ export async function updateTags(newGroups: UnsavedGroup[], tags: string[], prev
     const id = new Types.ObjectId()
     // @ts-ignore
     g._id = id
-    g.image = await saveTagImage(id.toString(), g.image)
+    g.imgPath = await saveTagImage(id.toString(), g.imgPath)
   }))
 
 

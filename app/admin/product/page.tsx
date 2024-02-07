@@ -74,7 +74,7 @@ export default function ProductEditor({ searchParams }: PageProps) {
   function imageHandler(data: ImageFileData, setProduct: StateUpdater<Product>) {
     openModal(<CropImageModal imageData={data} onSaveCrop={croppedImage => {
       setProduct(product => {
-        product.image = croppedImage
+        product.imgPath = croppedImage
       })
     }} />)
   }
@@ -249,7 +249,7 @@ export default function ProductEditor({ searchParams }: PageProps) {
         tags.push(tag)
         newFilters.tags.push({
           name: tag,
-          image: img
+          imgPath: img
         })
       })
 

@@ -47,7 +47,7 @@ export default async function App() {
 
 interface Props {
   title: string
-  data: Pick<Group, 'name' | 'image'>[]
+  data: Pick<Group, 'name' | 'imgPath'>[]
   type: ComponentProps<typeof ProductGroup>['type']
 }
 
@@ -57,7 +57,7 @@ function ProductSection({ title, data, type }: Props) {
       <h2 className={`${satisfy.className} ${styles.products__title}`}>{title}</h2>
       <ul className={styles.products__container}>
         {data.map(group => (
-          <ProductGroup key={group.name} name={group.name} image={group.imgPath} type={type} />
+          <ProductGroup key={group.name} name={group.name} imgPath={group.imgPath} type={type} />
         ))}
       </ul>
     </section>

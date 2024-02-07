@@ -18,7 +18,7 @@ type UnsavedFilter = {
 }
 type UnsavedFilter2 = {
   category: string
-  category_img: string
+  categoryImgPath: string
   brands: UnsavedBrand2[]
   properties: UnsavedProperty2[]
 }

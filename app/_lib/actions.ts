@@ -12,11 +12,11 @@ import { revalidatePath } from 'next/cache'
 export async function saveProduct(product: Product, newTags: UnsavedGroup[], rawCategoryImg: string): Promise<ActionRes> {
   try {
     await checkIfRealAdmin()
-    
+
     const getPrevProduct = async () => {
       if (productExist) {
-        type MinProduct = Pick<Product, RelevantFilterDataKeys | 'tags' | 'image'>
-        const projection: Projection<MinProduct, 1> = { image: 1, category: 1, brand: 1, properties: 1, tags: 1 }
+        type MinProduct = Pick<Product, RelevantFilterDataKeys | 'tags' | 'imgPath'>
+        const projection: Projection<MinProduct, 1> = { imgPath: 1, category: 1, brand: 1, properties: 1, tags: 1 }
         const p = await Product.findById<MinProduct>(product._id, projection)
         if (!p) throw new ServerSideError(`El producto con id ${product._id} no fue encontrado`)
         return p
@@ -29,21 +29,25 @@ export async function saveProduct(product: Product, newTags: UnsavedGroup[], raw
     const prevProduct = await getPrevProduct()
 
     const createOrUpdateProduct = async () => {
-      const loadImage = product.image.startsWith('data:')
-      if (loadImage) {
-        const imgLink = await saveProductImage(product._id, product.image)
-        product.image = imgLink
-      }
       if (productExist) {
-        if (loadImage) await deleteImages(prevProduct.image)
+        const loadImage = product.imgPath.startsWith('data:')
+        if (loadImage) {
+          const imgLink = await saveProductImage(product._id, product.imgPath)
+          product.imgPath = imgLink
+          await deleteImages(prevProduct.imgPath)
+        }
         try {
           return await Product.findByIdAndUpdate(product._id, withoutID(product))
         } catch (error) {
           throw new ServerSideError('No se pudo actualizar el producto')
         }
       } else {
+        const doc = new Product({ product, imgPath: '' })
+        const rawImage = product.imgPath
+        doc.imgPath = await saveProductImage(doc.id, rawImage)
+        await deleteImages(prevProduct.imgPath)
         try {
-          return await Product.create(withoutID(product))
+          return await doc.save()
         } catch (error) {
           throw new ServerSideError('No se pudo crear el producto')
         }
@@ -74,7 +78,7 @@ export async function deleteProduct(_id: string): Promise<ActionRes> {
     if (!prevProduct) throw new ServerSideError('No se pudo encontrar el producto a eliminar')
 
     await Promise.all([
-      deleteImages(prevProduct.image),
+      deleteImages(prevProduct.imgPath),
       prevProduct.deleteOne(),
       updateFilters(DEFAULT_PRODUCT, prevProduct, ''),
       updateTags([], [], prevProduct.tags)

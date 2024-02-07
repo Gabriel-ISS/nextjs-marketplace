@@ -18,7 +18,7 @@ type Property = {
 
 type Filter = {
   category: string
-  category_img: string
+  categoryImgPath: string
   brands: Brand[]
   properties: Property[]
 }
@@ -26,13 +26,13 @@ type Filter = {
 type Group = {
   _id: string
   name: string
-  image: string
+  imgPath: string
   used: number
 }
 
 type Product = {
   _id: string
-  image: string
+  imgPath: string
   name: string
   price: {
     old?: number,

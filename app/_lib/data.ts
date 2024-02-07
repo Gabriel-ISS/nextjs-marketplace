@@ -1,9 +1,3 @@
-/* import axios from 'axios'
-
-const market = axios.create({
-  baseURL: `${process.env.NEXT_PUBLIC_HOST}/api`
-}) */
-
 type GetOptions = {
   params?: any
 }
@@ -32,13 +26,13 @@ export async function getProductGroups<P extends GetGroupsParams>(params?: P) {
   return (await get<GetGroupsReturn<P>>('/groups', { params }))
 }
 
+export type CategoryWithImage = { name: string, imgPath: string }
 export type GetCategoriesParams = { includeImages?: boolean }
 export type GetCategoriesReturn<P extends GetCategoriesParams = GetCategoriesParams> = ActionRes<P['includeImages'] extends true ? CategoryWithImage[] : string[]>
 export async function getCategories<P extends GetCategoriesParams>(params?: P) {
   return (await get<GetCategoriesReturn<P>>('/categories', { params }))
 }
 
-export type CategoryWithImage = { name: string, image: string }
 export type GetFiltersParams = { category: string }
 export type GetFiltersReturn = ActionRes<FilterForFilters>
 export async function getCategoryFilters(category: string) {

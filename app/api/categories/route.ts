@@ -23,11 +23,11 @@ async function getCategories(): Promise<ActionRes<string[]>> {
 
 async function getCategoriesWithImage(): Promise<ActionRes<CategoryWithImage[]>> {
   try {
-    const categoriesContainers = await Filter.find({}, { category: 1, category_img: 1 })
+    const categoriesContainers = await Filter.find({}, { category: 1, categoryImgPath: 1 })
     return {
       success: categoriesContainers.map(obj => ({
         name: obj.category,
-        image: obj.category_img
+        imgPath: obj.categoryImgPath
       }))
     }
   } catch (error) {

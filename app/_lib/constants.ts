@@ -1,6 +1,6 @@
 export const DEFAULT_PRODUCT: Product = {
   _id: '',
-  image: '',
+  imgPath: '',
   name: '',
   price: {
     current: 0,

@@ -8,7 +8,7 @@ const UsedSchema = {
 }
 
 const productSchema = new Schema<Product & Document>({
-  image: RequiredString,
+  imgPath: RequiredString,
   name: RequiredString,
   price: {
     old: Number,
@@ -26,7 +26,7 @@ const productSchema = new Schema<Product & Document>({
 
 const filterSchema = new Schema<Filter & Document>({
   category: RequiredString,
-  category_img: RequiredString,
+  categoryImgPath: RequiredString,
   brands: [{
     name: RequiredString,
     used: UsedSchema
@@ -42,7 +42,7 @@ const filterSchema = new Schema<Filter & Document>({
 
 const groupSchema = new Schema<Group & Document>({
   name: RequiredString,
-  image: RequiredString,
+  imgPath: RequiredString,
   used: UsedSchema
 })
 
