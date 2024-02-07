@@ -22,7 +22,8 @@ export default function ProductGroup({ name, image, type }: Props) {
   return (
     <li className={styles.prod_group}>
       <Link className={styles.prod_group__container} href={url}>
-        <Image width={340} height={340} className={styles.prod_group__img} src={image} alt={name} />
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img className={styles.prod_group__img} src={image} alt={name} />
         <h3 className={styles.prod_group__name}>{name}</h3>
       </Link>
     </li>

@@ -6,7 +6,6 @@ import styles from '@/_Components/ProductItem.module.scss'
 import { deleteProduct } from '@/_lib/actions'
 import useAppStore from '@/_store/useStore'
 import { revalidatePath } from 'next/cache'
-import Image from 'next/image'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { FaEdit, FaTrash } from 'react-icons/fa'
@@ -42,7 +41,8 @@ export default function ProductItem({ product, adminMode }: Props) {
   return (
     <article className={styles.product}>
       <div className={styles.product__container}>
-        <Image width={100} height={100} className={styles.product__image} src={product.image} alt={product.name} />
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img className={styles.product__image} src={product.image} alt={product.name} />
         <div className={styles.product__right}>
           <Link href={'/product?id=' + product._id} target='_blank'><h3 className={styles.product__name}>{product.name} <FaExternalLinkAlt /></h3></Link>
           <Price price={product.price} />

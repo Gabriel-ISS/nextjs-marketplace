@@ -1,6 +1,5 @@
 import Price from '@/_Components/Price'
 import styles from '@/_Components/Product.module.scss'
-import Image from 'next/image'
 
 
 interface Props {
@@ -10,7 +9,8 @@ interface Props {
 export default function Product({ product }: Props) {
   return (
     <div className={styles.product}>
-      <Image width={600} height={600} className={styles.product__img} src={product.image} alt={product.name} />
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img className={styles.product__img} src={product.image} alt={product.name} />
       <div className={styles.product__data}>
         <div>
           <h2 className={styles.product__name}>{product.name}</h2>
