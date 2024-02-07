@@ -10,8 +10,10 @@ import { ComponentProps } from 'react'
 
 
 export default async function App() {
-  const productGroups = await getProductGroups()
-  const productCategories = await getCategories({ includeImages: true })
+  const [productGroups, productCategories] = await Promise.all([
+    getProductGroups(),
+    getCategories({ includeImages: true })
+  ])
 
   return (
     <main>
