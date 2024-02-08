@@ -37,7 +37,7 @@
   &__collapsible {
     display: flex;
 
-    @media (width < $screen-md) {
+    @media (width < ($screen-md + 2)) {
       // el display se controla desde javascript
       grid-auto-flow: row;
       width: 100%;
