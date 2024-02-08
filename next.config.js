@@ -9,8 +9,7 @@ const nextConfig = {
     serverActions: {
       bodySizeLimit: '5mb'
     }
-  },
-  outputFileTracing: false
+  }
 }
 
 module.exports = nextConfig
