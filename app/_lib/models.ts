@@ -2,6 +2,7 @@ import { Document, Model, Schema, model, models } from 'mongoose';
 
 const RequiredNumber = { type: Number, required: true }
 const RequiredString = { type: String, required: true }
+const SafeString = { type: String, required: true, select: false }
 const UsedSchema = {
   type: Number,
   default: 1
@@ -48,8 +49,9 @@ const groupSchema = new Schema<Group & Document>({
 
 const userSchema = new Schema<User & Document>({
   name: RequiredString,
-  password: RequiredString,
-  role: String
+  password: SafeString,
+  role: String,
+  cart: Array
 })
 
 export const Product = (models.Product as Model<Product & Document>) || model('Product', productSchema);

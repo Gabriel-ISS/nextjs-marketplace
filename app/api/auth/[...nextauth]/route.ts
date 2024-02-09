@@ -1,5 +1,5 @@
 import { connectDB } from '@/_lib/db'
-import { User, safeUserProjection } from '@/_lib/models'
+import { User } from '@/_lib/models'
 import { ServerSideError, getErrorMessage } from '@/_lib/server-utils'
 import NextAuth, { NextAuthOptions } from 'next-auth'
 import Credentials from 'next-auth/providers/credentials'
@@ -20,7 +20,7 @@ const options: NextAuthOptions = {
       },
       async authorize(credentials, _req) {
         if (!credentials) throw new ServerSideError('No se han enviado las credenciales')
-        const res = await getUser(credentials.name)
+        const res = await getUser(credentials)
         if (res.error) throw new Error(res.error)
         return res.success as any
       }
@@ -46,9 +46,9 @@ export { handler as GET, handler as POST }
 
 
 
-async function getUser(name: string): Promise<ActionRes<SafeUser>> {
+async function getUser(credentials: Pick<User, 'name' | 'password'>): Promise<ActionRes<SafeUser>> {
   try {
-    const user = await User.findOne({ name }, safeUserProjection);
+    const user = await User.findOne(credentials);
     if (!user) throw new ServerSideError('Usuario o contraseña incorrectos.');
     return { success: user }
   } catch (error) {

@@ -2,10 +2,10 @@ import 'server-only';
 
 import { deleteImages, saveTagImage } from '@/_lib/aws-s3';
 import { FilterManager, RelevantFilterData } from '@/_lib/filter-manager';
-import { Filter, Group, User, safeUserProjection } from '@/_lib/models';
+import { Filter, Group, User } from '@/_lib/models';
+import { S_ERROR_TAG, TEST_ADMIN } from '@/constants';
 import { Types, mongo } from "mongoose";
 import { getServerSession } from 'next-auth';
-import { S_ERROR_TAG, TEST_ADMIN } from '@/constants';
 
 type ExtraData = { send?: boolean }
 export class ServerSideError extends Error {
@@ -180,7 +180,7 @@ export async function getSafeUser(): Promise<ActionRes<SafeUser>> {
   try {
     const session = await getServerSession()
     if (!session) throw new ServerSideError('Usuario no autenticado')
-    const user = await User.findOne({ name: session.user.name }, safeUserProjection)
+    const user = await User.findOne({ name: session.user.name })
     if (!user) throw new ServerSideError('Usuario no encontrado')
     return { success: user }
   } catch (error) {
