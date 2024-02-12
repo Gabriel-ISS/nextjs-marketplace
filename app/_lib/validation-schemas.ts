@@ -1,10 +1,12 @@
-import { ObjectSchema, object, string, number, array } from 'yup'
+import { ObjectSchema, object, string, number, array, ref } from 'yup'
+
 
 const requiredMessage = (field: string) => `"${field}" es un campo requerido.`
 const minLengthMessage = (field: string) => `"${field}" debe tener como mínimo \${min} caracteres.`
 const maxLengthMessage = (field: string) => `"${field}" debe tener como máximo \${max} caracteres.`
 const minValueMessage = (field: string) => `"${field}" debe ser de al menos \${min}.`
 const minItemsMessage = (field: string) => `"${field}" requiere al menos \${min} elementos.`
+
 
 export const productSchema: ObjectSchema<Omit<Product, '_id'>> = object({
   imgPath: string().required(requiredMessage('Imagen')),
@@ -22,3 +24,15 @@ export const productSchema: ObjectSchema<Omit<Product, '_id'>> = object({
   })).required().min(2, minItemsMessage('Propiedades comunes')),
   tags: array().of(string().required()).required(),
 })
+
+export const userSchema: ObjectSchema<Omit<User, '_id'>> = object({
+  name: string().required(requiredMessage('nombre')).min(5, minLengthMessage('nombre')).max(25, maxLengthMessage('nombre')),
+  password: string().required(requiredMessage('contraseña')).min(14, minLengthMessage('contraseña')).max(25, maxLengthMessage('contraseña')),
+  role: string().optional(),
+  cart: array().of(string().required()).optional()
+})
+
+
+export const NewCredentialsSchema = userSchema.concat(object({
+  confirmPassword: string().required(requiredMessage('confirmar contraseña')).oneOf([ref('password')], 'Este valor debe ser igual a la contraseña')
+}))

@@ -3,7 +3,7 @@
 import { deleteImages, saveProductImage } from '@/_lib/aws-s3'
 import { DEFAULT_PRODUCT } from '@/_lib/constants'
 import { RelevantFilterDataKeys } from '@/_lib/filter-manager'
-import { Product } from '@/_lib/models'
+import { Product, User } from '@/_lib/models'
 import { ServerSideError, checkIfRealAdmin, getErrorMessage, updateFilters, updateTags } from '@/_lib/server-utils'
 import { withoutID } from '@/_lib/utils'
 import { revalidatePath } from 'next/cache'
@@ -89,5 +89,16 @@ export async function deleteProduct(_id: string): Promise<ActionRes> {
     return { success: 'Producto eliminado correctamente' }
   } catch (error) {
     return getErrorMessage(error, 'No se pudo eliminar el producto')
+  }
+}
+
+export async function createUser(user: Pick<User, 'name' | 'password'>): Promise<ActionRes> {
+  try {
+    const userExist = await User.find({ name: user.name })
+    if (userExist) throw new ServerSideError(`El usuario "${user.name}" ya existe`)
+    await User.create(user)
+    return { success: 'Registrado exitosamente' }
+  } catch (error) {
+    return getErrorMessage(error, 'Ah ocurrido un error inesperado')
   }
 }

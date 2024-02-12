@@ -1,4 +1,4 @@
-@import '../../vars';
+@import '../vars';
 
 .main {
   display: flex;
@@ -10,9 +10,6 @@
 
 .container {
   @include autoMargin(300px);
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
 }
 
 .input {
@@ -24,7 +21,8 @@
   display: flex;
   align-items: center;
   gap: 1rem;
-  justify-content: center
+  justify-content: center;
+  margin-block: 1rem;
 }
 
 .fake_cred {

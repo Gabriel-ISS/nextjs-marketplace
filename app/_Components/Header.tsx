@@ -92,9 +92,9 @@ export default function Header() {
               <li><Link href='/about'>Sobre nosotros</Link></li>
             </ul>
             {ADMIN_ROLES.includes(role) ? (
-              <button className={styles.nav__admin_mode_btn} onClick={_signOut}>Cerrar session</button>
+              <button className={styles.nav__admin_mode_btn} onClick={_signOut}>Cerrar sesión</button>
             ) : (
-              <Link className={styles.nav__admin_mode_btn} href='/admin/auth' role='button'>Probar modo administrador</Link>
+              <Link className={styles.nav__admin_mode_btn} href='/auth' role='button'>Iniciar sesión</Link>
             )}
           </div>
         </div>
