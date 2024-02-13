@@ -4,7 +4,7 @@ import { deleteImages, saveProductImage } from '@/_lib/aws-s3'
 import { DEFAULT_PRODUCT } from '@/_lib/constants'
 import { RelevantFilterDataKeys } from '@/_lib/filter-manager'
 import { Product, User } from '@/_lib/models'
-import { ServerSideError, checkIfRealAdmin, getErrorMessage, updateFilters, updateTags } from '@/_lib/server-utils'
+import { ServerSideError, checkIfRealAdmin, getErrorMessage, getSafeUser, updateFilters, updateTags } from '@/_lib/server-utils'
 import { withoutID } from '@/_lib/utils'
 import { revalidatePath } from 'next/cache'
 
@@ -99,6 +99,43 @@ export async function createUser(user: Pick<User, 'name' | 'password'>): Promise
     await User.create(user)
     return { success: 'Registrado exitosamente' }
   } catch (error) {
-    return getErrorMessage(error, 'Ah ocurrido un error inesperado')
+    return getErrorMessage(error, 'No se pudo registrar el usuario')
   }
 }
+
+/* async function updateCart(
+  updater: (cart: SafeUser['cart']) => void,
+  { success, defaultError }: Record<'success' | 'defaultError', string>
+): Promise<ActionRes> {
+  try {
+    const res = await getSafeUser()
+    if (!res.success) throw new ServerSideError(res.error)
+    const user = res.success
+    await updater(user.cart)
+    await user.save()
+    return { success }
+  } catch (error) {
+    revalidatePath('/product')
+    return getErrorMessage(error, defaultError)
+  }
+} */
+
+/* export async function addToCart(productID: string): Promise<ActionRes> {
+  return await updateCart(cart => {
+    cart.push(productID)
+  }, {
+    success: 'Producto agregado al carrito',
+    defaultError: 'No se pudo agregar el producto al carrito'
+  })
+}
+
+export async function removeFromCart(productID: string): Promise<ActionRes> {
+  return await updateCart(cart => {
+    const index = cart.indexOf(productID)
+    if (index == -1) throw new ServerSideError('El producto no se encuentra en la lista de compras')
+    cart.splice(index, 1)
+  }, {
+    success: 'Producto eliminado del carrito',
+    defaultError: 'No se pudo eliminar el producto del carrito'
+  })
+} */

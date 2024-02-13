@@ -6,6 +6,7 @@ import { Filter, Group, User } from '@/_lib/models';
 import { S_ERROR_TAG, TEST_ADMIN } from '@/constants';
 import { Types, mongo } from "mongoose";
 import { getServerSession } from 'next-auth';
+import { Document } from 'mongoose';
 
 type ExtraData = { send?: boolean }
 export class ServerSideError extends Error {
@@ -176,7 +177,7 @@ export async function updateTags(newGroups: UnsavedGroup[], tags: string[], prev
   }
 }
 
-export async function getSafeUser(): Promise<ActionRes<SafeUser>> {
+export async function getSafeUser(): Promise<ActionRes<SafeUser & Document>> {
   try {
     const session = await getServerSession()
     if (!session) throw new ServerSideError('Usuario no autenticado')

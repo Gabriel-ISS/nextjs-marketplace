@@ -1,6 +1,6 @@
 @import '../vars';
 
-.product {
+/* .product {
   @include autoMargin();
   align-self: center;
   padding-block: 1rem;
@@ -33,11 +33,6 @@
     font-size: 1rem !important;
   }
 
-  &__contact_btn {
-    @include largeBtn();
-    text-align: center;
-  }
-
   &__note {
     margin-block: 0;
   }
@@ -62,4 +57,4 @@
       color: $muted;
     }
   }
-}
+} */

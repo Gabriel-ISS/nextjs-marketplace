@@ -53,5 +53,5 @@ type User = {
   name: string,
   password: string
   role?: string
-  cart?: string[]
+  cart: string[]
 }
