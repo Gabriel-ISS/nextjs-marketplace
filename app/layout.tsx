@@ -21,9 +21,9 @@ export default function RootLayout({
     <html lang="es">
       <body className={openSans.className}>
         <Modal />
+            <Navigation />
         {/* <header style={{ zIndex: 1 }}>
           <Suspense fallback={<></>}>
-            <Navigation />
           </Suspense>
         </header> */}
         {children}
