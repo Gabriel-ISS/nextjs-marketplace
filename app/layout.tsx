@@ -21,11 +21,11 @@ export default function RootLayout({
     <html lang="es">
       <body className={openSans.className}>
         <Modal />
-        <header style={{ zIndex: 1 }}>
+        {/* <header style={{ zIndex: 1 }}>
           <Suspense fallback={<></>}>
             <Navigation />
           </Suspense>
-        </header>
+        </header> */}
         {children}
         <Footer />
       </body>
