@@ -7,6 +7,7 @@ import { S_ERROR_TAG, TEST_ADMIN } from '@/constants';
 import { Types, mongo } from "mongoose";
 import { getServerSession } from 'next-auth';
 import { Document } from 'mongoose';
+import { redirect } from 'next/navigation';
 
 type ExtraData = { send?: boolean }
 export class ServerSideError extends Error {
@@ -27,7 +28,12 @@ export function getErrorMessage(error: unknown, defaultMessage: string) {
   }
   // error desconocido
   else if (error instanceof Error) {
-    console.log(error.message)
+    if (error.message == 'NEXT_REDIRECT') {
+      const path = (error as any as Record<string, string>).digest.split(';')[2]
+      redirect(path)
+    } else {
+      console.log(error.message)
+    }
   }
   // error desconocido
   else if (error && typeof error == 'object' && 'message' in error) {

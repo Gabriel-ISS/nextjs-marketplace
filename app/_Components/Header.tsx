@@ -23,13 +23,12 @@ export default function Header() {
   // Para accesibilidad
   const [ariaExpanded, setArialExpanded] = useState(false);
 
-  const [role, setRole] = useState('')
+  const [isLoggedIn, setIsLoggedIn] = useState(false)
 
   useEffect(() => {
     (async () => {
       const res = await getSession()
-      const role = res?.user.role
-      setRole(role || '')
+      setIsLoggedIn(Boolean(res?.user))
     })()
   }, [path])
 
@@ -61,7 +60,7 @@ export default function Header() {
 
   async function _signOut() {
     await signOut({ redirect: false })
-    router.push('/admin/auth')
+    router.push('/auth')
   }
 
   return (
@@ -91,7 +90,7 @@ export default function Header() {
               <li><ProductsLink /></li>
               <li><Link href='/about'>Sobre nosotros</Link></li>
             </ul>
-            {ADMIN_ROLES.includes(role) ? (
+            {isLoggedIn ? (
               <button className={styles.nav__admin_mode_btn} onClick={_signOut}>Cerrar sesión</button>
             ) : (
               <Link className={styles.nav__admin_mode_btn} href='/auth' role='button'>Iniciar sesión</Link>

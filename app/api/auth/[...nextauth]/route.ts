@@ -27,8 +27,8 @@ const options: NextAuthOptions = {
     })
   ],
   pages: {
-    signIn: '/admin/auth',
-    error: '/admin/auth'
+    signIn: '/auth',
+    error: '/auth'
   },
   callbacks: {
     async session({ session, user, token }) {
@@ -46,9 +46,12 @@ export { handler as GET, handler as POST }
 
 
 
-async function getUser(credentials: Pick<User, 'name' | 'password'>): Promise<ActionRes<SafeUser>> {
+async function getUser<C extends Pick<User, 'name' | 'password'>>(credentials: C): Promise<ActionRes<SafeUser>> {
   try {
-    const user = await User.findOne(credentials);
+    const user = await User.findOne({
+      name: credentials.name,
+      password: credentials.password
+    });
     if (!user) throw new ServerSideError('Usuario o contraseña incorrectos.');
     return { success: user }
   } catch (error) {

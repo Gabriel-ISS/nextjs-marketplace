@@ -7,6 +7,7 @@ import { Product, User } from '@/_lib/models'
 import { ServerSideError, checkIfRealAdmin, getErrorMessage, getSafeUser, updateFilters, updateTags } from '@/_lib/server-utils'
 import { withoutID } from '@/_lib/utils'
 import { revalidatePath } from 'next/cache'
+import { redirect } from 'next/navigation'
 
 
 export async function saveProduct(product: Product, newTags: UnsavedGroup[], rawCategoryImg: string): Promise<ActionRes> {
@@ -103,24 +104,25 @@ export async function createUser(user: Pick<User, 'name' | 'password'>): Promise
   }
 }
 
-/* async function updateCart(
+async function updateCart(
   updater: (cart: SafeUser['cart']) => void,
   { success, defaultError }: Record<'success' | 'defaultError', string>
 ): Promise<ActionRes> {
   try {
     const res = await getSafeUser()
-    if (!res.success) throw new ServerSideError(res.error)
+    if (!res.success) redirect('/auth')
     const user = res.success
     await updater(user.cart)
     await user.save()
     return { success }
   } catch (error) {
-    revalidatePath('/product')
     return getErrorMessage(error, defaultError)
+  } finally {
+    revalidatePath('/product')
   }
-} */
+}
 
-/* export async function addToCart(productID: string): Promise<ActionRes> {
+export async function addToCart(productID: string): Promise<ActionRes | undefined> {
   return await updateCart(cart => {
     cart.push(productID)
   }, {
@@ -129,7 +131,7 @@ export async function createUser(user: Pick<User, 'name' | 'password'>): Promise
   })
 }
 
-export async function removeFromCart(productID: string): Promise<ActionRes> {
+export async function removeFromCart(productID: string): Promise<ActionRes | undefined> {
   return await updateCart(cart => {
     const index = cart.indexOf(productID)
     if (index == -1) throw new ServerSideError('El producto no se encuentra en la lista de compras')
@@ -138,4 +140,4 @@ export async function removeFromCart(productID: string): Promise<ActionRes> {
     success: 'Producto eliminado del carrito',
     defaultError: 'No se pudo eliminar el producto del carrito'
   })
-} */
+}
