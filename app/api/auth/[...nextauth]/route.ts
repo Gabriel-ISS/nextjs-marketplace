@@ -13,7 +13,7 @@ const options: NextAuthOptions = {
   },
   providers: [
     Credentials({
-      name: 'Credentials',
+      name: 'credentials',
       credentials: {
         name: { type: 'text', label: 'Usuario' },
         password: { type: 'password', label: 'Contraseña' },
@@ -25,20 +25,7 @@ const options: NextAuthOptions = {
         return res.success as any
       }
     })
-  ],
-  pages: {
-    signIn: '/auth',
-    error: '/auth'
-  },
-  callbacks: {
-    async session({ session, user, token }) {
-      await connectDB()
-      const newUser = await User.findOne({ name: session.user.name }, { password: 0 })
-      if (!newUser) throw new ServerSideError('Usuario no encontrado')
-      session.user = newUser
-      return session
-    },
-  }
+  ]
 }
 
 const handler = NextAuth(options)
