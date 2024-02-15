@@ -25,13 +25,12 @@ export const productSchema: ObjectSchema<Omit<Product, '_id'>> = object({
   tags: array().of(string().required()).required(),
 })
 
-export const userSchema: ObjectSchema<Omit<User, '_id'>> = object({
+export const userSchema: ObjectSchema<Omit<User, '_id' | 'cart'> & Partial<Pick<User,'cart'>>> = object({
   name: string().required(requiredMessage('nombre')).min(5, minLengthMessage('nombre')).max(25, maxLengthMessage('nombre')),
   password: string().required(requiredMessage('contraseña')).min(14, minLengthMessage('contraseña')).max(25, maxLengthMessage('contraseña')),
   role: string().optional(),
   cart: array().of(string().required()).optional()
 })
-
 
 export const NewCredentialsSchema = userSchema.concat(object({
   confirmPassword: string().required(requiredMessage('confirmar contraseña')).oneOf([ref('password')], 'Este valor debe ser igual a la contraseña')

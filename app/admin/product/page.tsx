@@ -301,7 +301,7 @@ export default function ProductEditor({ searchParams }: PageProps) {
           >
             {({ isSubmitting, errors, values }) => (
               <>
-                <Product product={values} />
+                <Product product={values} userCart={[]} />
                 <aside className={styles.editor}>
                   <Form>
                     <Field name='image' component={ImageInput} handler={imageHandler} />
