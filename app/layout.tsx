@@ -1,9 +1,10 @@
-import type { Metadata } from 'next'
-import '@/globals.scss'
-import { openSans } from '@/_lib/fonts'
-import Header from '@/_Components/Header'
 import Footer from '@/_Components/Footer'
+import Navigation from '@/_Components/Navigation'
+import { openSans } from '@/_lib/fonts'
+import '@/globals.scss'
+import type { Metadata } from 'next'
 import dynamic from 'next/dynamic'
+import { Suspense } from 'react'
 const Modal = dynamic(() => import('@/_Components/Modal/Modal'), { ssr: false })
 
 export const metadata: Metadata = {
@@ -20,7 +21,11 @@ export default function RootLayout({
     <html lang="es">
       <body className={openSans.className}>
         <Modal />
-        <Header />
+        <header style={{ zIndex: 1 }}>
+          <Suspense>
+            <Navigation />
+          </Suspense>
+        </header>
         {children}
         <Footer />
       </body>
