@@ -10,7 +10,7 @@ import { TEST_ADMIN } from '@/constants';
 import { Field, Form, Formik } from 'formik';
 import { signIn } from 'next-auth/react';
 import Link from 'next/link';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { ChangeEventHandler, FocusEventHandler, HTMLAttributes, HTMLInputTypeAttribute, useEffect, useState } from 'react';
 import { FaRegCopy } from 'react-icons/fa';
 import { TbLoader2 } from 'react-icons/tb';
@@ -20,23 +20,26 @@ import { ArrowContainer, Popover } from 'react-tiny-popover';
 type UserCredentials = Pick<User, 'name' | 'password'>
 export default function Auth() {
   const { push } = useRouter()
+  const searchParams = useSearchParams()
   const openModal = useAppStore(s => s.modal.open)
-  const newAccount = useSearchParams().get('new-account')
+  const callbackUrl = searchParams.get('callbackUrl') as string
+  const newAccount = searchParams.get('new-account')
 
   const handleSubmit = async (credentials: UserCredentials) => {
     let res;
     if (newAccount) {
       res = await createUser(credentials)
-    } else {
-      res = await signIn('credentials', {
-        ...credentials,
-        redirect: false
-      })
     }
+    
+    res = await signIn('credentials', {
+      ...credentials,
+      redirect: false
+    })
+
     if (res?.error) {
       openModal(<MessageModal title='Error' message={res.error} />, 'red')
     } else {
-      push('/products')
+      push(callbackUrl)
     }
   }
 
@@ -61,7 +64,7 @@ export default function Auth() {
         {newAccount ? (
           <Link href='/auth'>¿Ya tienes una cuenta? Inicia sesión</Link>
         ) : (
-          <Link href='/auth?new-account=true'>¿No tienes una cuenta? Regístrate</Link>
+          <Link href={`/auth?new-account=true&callbackUrl=${encodeURIComponent(callbackUrl)}`}>¿No tienes una cuenta? Regístrate</Link>
         )}
       </div>
     </main>

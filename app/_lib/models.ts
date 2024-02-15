@@ -52,6 +52,8 @@ const userSchema = new Schema<User & Document>({
   password: SafeString,
   role: String,
   cart: Array
+}, {
+  versionKey: false
 })
 
 export const Product = (models.Product as Model<Product & Document>) || model('Product', productSchema);

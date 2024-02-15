@@ -8,13 +8,14 @@ import { satisfy } from '@/_lib/fonts';
 import ProductsLink from '@/_Components/ProductsLink';
 import { getSession, signOut } from 'next-auth/react';
 import { ADMIN_ROLES } from '@/constants';
-import { usePathname, useRouter } from 'next/navigation';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { revalidatePath } from 'next/cache';
 
 
 export default function Header() {
-  const router = useRouter()
+  const { push } = useRouter()
   const path = usePathname()
+  const search = useSearchParams().toString()
   const linksContainer = useRef<HTMLDivElement | null>(null)
   // Controla el estado del elemento a esconder
   const [state, setState] = useState<'closed' | 'opened' | 'opening' | 'closing'>('closed');
@@ -31,6 +32,8 @@ export default function Header() {
       setIsLoggedIn(Boolean(res?.user))
     })()
   }, [path])
+
+  const getCallbackUrl = () => `/auth?callbackUrl=${encodeURIComponent(`${path}?${search}`)}`
 
   function toggleState() {
     if (state == 'closed') {
@@ -60,7 +63,7 @@ export default function Header() {
 
   async function _signOut() {
     await signOut({ redirect: false })
-    router.push('/auth')
+    push(getCallbackUrl())
   }
 
   return (
@@ -93,7 +96,7 @@ export default function Header() {
             {isLoggedIn ? (
               <button className={styles.nav__admin_mode_btn} onClick={_signOut}>Cerrar sesión</button>
             ) : (
-              <Link className={styles.nav__admin_mode_btn} href='/auth' role='button'>Iniciar sesión</Link>
+              <Link className={styles.nav__admin_mode_btn} href={getCallbackUrl()} role='button'>Iniciar sesión</Link>
             )}
           </div>
         </div>

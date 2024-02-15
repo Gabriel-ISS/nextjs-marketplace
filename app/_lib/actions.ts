@@ -2,16 +2,19 @@
 
 import { deleteImages, saveProductImage } from '@/_lib/aws-s3'
 import { DEFAULT_PRODUCT } from '@/_lib/constants'
+import { connectDB } from '@/_lib/db'
 import { RelevantFilterDataKeys } from '@/_lib/filter-manager'
 import { Product, User } from '@/_lib/models'
 import { ServerSideError, checkIfRealAdmin, getErrorMessage, getSafeUser, updateFilters, updateTags } from '@/_lib/server-utils'
 import { withoutID } from '@/_lib/utils'
+import { signIn } from 'next-auth/react'
 import { revalidatePath } from 'next/cache'
 import { redirect } from 'next/navigation'
 
 
 export async function saveProduct(product: Product, newTags: UnsavedGroup[], rawCategoryImg: string): Promise<ActionRes> {
   try {
+    await connectDB()
     await checkIfRealAdmin()
 
     const getPrevProduct = async () => {
@@ -73,6 +76,7 @@ export async function saveProduct(product: Product, newTags: UnsavedGroup[], raw
 
 export async function deleteProduct(_id: string): Promise<ActionRes> {
   try {
+    await connectDB()
     await checkIfRealAdmin()
 
     const prevProduct = await Product.findById(_id)
@@ -95,7 +99,8 @@ export async function deleteProduct(_id: string): Promise<ActionRes> {
 
 export async function createUser(user: Pick<User, 'name' | 'password'>): Promise<ActionRes> {
   try {
-    const userExist = await User.find({ name: user.name })
+    await connectDB()
+    const userExist = await User.findOne({ name: user.name })
     if (userExist) throw new ServerSideError(`El usuario "${user.name}" ya existe`)
     await User.create(user)
     return { success: 'Registrado exitosamente' }
@@ -106,11 +111,13 @@ export async function createUser(user: Pick<User, 'name' | 'password'>): Promise
 
 async function updateCart(
   updater: (cart: SafeUser['cart']) => void,
-  { success, defaultError }: Record<'success' | 'defaultError', string>
+  { success, defaultError }: Record<'success' | 'defaultError', string>,
+  productID: string
 ): Promise<ActionRes> {
   try {
+    await connectDB()
     const res = await getSafeUser()
-    if (!res.success) redirect('/auth')
+    if (!res.success) redirect(`/auth?callbackUrl=${encodeURIComponent(`/product?id=${productID}`)}`)
     const user = res.success
     await updater(user.cart)
     await user.save()
@@ -128,7 +135,9 @@ export async function addToCart(productID: string): Promise<ActionRes | undefine
   }, {
     success: 'Producto agregado al carrito',
     defaultError: 'No se pudo agregar el producto al carrito'
-  })
+  },
+    productID
+  )
 }
 
 export async function removeFromCart(productID: string): Promise<ActionRes | undefined> {
@@ -139,5 +148,7 @@ export async function removeFromCart(productID: string): Promise<ActionRes | und
   }, {
     success: 'Producto eliminado del carrito',
     defaultError: 'No se pudo eliminar el producto del carrito'
-  })
+  },
+    productID
+  )
 }
