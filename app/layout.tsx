@@ -22,7 +22,7 @@ export default function RootLayout({
       <body className={openSans.className}>
         <Modal />
         <header style={{ zIndex: 1 }}>
-          <Suspense>
+          <Suspense fallback={<></>}>
             <Navigation />
           </Suspense>
         </header>
