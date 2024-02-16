@@ -9,6 +9,7 @@ import { getServerSession } from 'next-auth';
 import { Document } from 'mongoose';
 import { redirect } from 'next/navigation';
 import { CategoryWithImage } from '@/_lib/data';
+import { connectDB } from '@/_lib/db';
 
 type ExtraData = { send?: boolean }
 export class ServerSideError extends Error {
@@ -186,6 +187,7 @@ export async function updateTags(newGroups: UnsavedGroup[], tags: string[], prev
 
 export async function getProductGroups(): Promise<ActionRes<Group[]>> {
   try {
+    await connectDB()
     const groups = await Group.find({})
     return { success: groups }
   } catch (error) {
@@ -195,6 +197,7 @@ export async function getProductGroups(): Promise<ActionRes<Group[]>> {
 
 export async function getCategoriesWithImage(): Promise<ActionRes<CategoryWithImage[]>> {
   try {
+    await connectDB()
     const categoriesContainers = await Filter.find({}, { category: 1, categoryImgPath: 1 })
     return {
       success: categoriesContainers.map(obj => ({
