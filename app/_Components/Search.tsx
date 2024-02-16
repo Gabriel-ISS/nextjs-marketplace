@@ -2,7 +2,6 @@
 
 import styles from '@/_Components/Search.module.scss'
 import { getQueryObj } from '@/_lib/utils'
-import { revalidatePath } from 'next/cache'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import QueryString from 'qs'
 import { useState } from 'react'
