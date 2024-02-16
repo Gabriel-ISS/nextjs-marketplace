@@ -214,6 +214,7 @@ export async function getCategoriesWithImage(): Promise<ActionRes<CategoryWithIm
 
 export async function getProducts(queryString: string | undefined): Promise<GetProductsReturn> {
   try {
+    await connectDB()
     const LIMIT_PER_PAGE = 3 * 4;
     let page = 1
     let mongoQuery: FilterQuery<Product> = {}
@@ -258,6 +259,7 @@ export async function getProduct(id?: string): Promise<GetProductReturn> {
   if (!id) return { success: DEFAULT_PRODUCT }
 
   try {
+    await connectDB()
     const product = await Product.findById(id)
     return {
       success: JSON.parse(JSON.stringify(product))
@@ -269,6 +271,7 @@ export async function getProduct(id?: string): Promise<GetProductReturn> {
 
 export async function getSafeUser(): Promise<ActionRes<SafeUser & Document>> {
   try {
+    await connectDB()
     const session = await getServerSession()
     if (!session) throw new ServerSideError('Usuario no autenticado')
     const user = await User.findOne({ name: session.user.name })

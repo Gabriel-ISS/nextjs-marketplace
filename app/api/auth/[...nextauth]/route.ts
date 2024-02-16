@@ -29,15 +29,6 @@ const options: NextAuthOptions = {
   pages: {
     signIn: '/auth',
     error: '/auth'
-  },
-  callbacks: {
-    async session({ session, user, token }) {
-      await connectDB()
-      const newUser = await User.findOne({ name: session.user.name }, { password: 0 })
-      if (!newUser) throw new ServerSideError('Usuario no encontrado')
-      session.user = newUser
-      return session
-    },
   }
 }
 
@@ -45,9 +36,9 @@ const handler = NextAuth(options)
 export { handler as GET, handler as POST }
 
 
-
 async function getUser<C extends Pick<User, 'name' | 'password'>>(credentials: C): Promise<ActionRes<SafeUser>> {
   try {
+    connectDB()
     const user = await User.findOne({
       name: credentials.name,
       password: credentials.password
