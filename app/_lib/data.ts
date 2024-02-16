@@ -18,6 +18,9 @@ async function get<T>(path: string, options?: GetOptions): Promise<T> {
     }
     return res.json()
   })
+  .catch(e => {
+    return {error: e.message}
+  })
 }
 
 export type GetGroupsParams = { NC?: boolean }
@@ -52,7 +55,6 @@ export async function getProduct(id?: string) {
   const params: GetProductParams = { id }
   return await get<GetProductReturn>('/product', { params })
 }
-
 
 export async function getSafeUser() {
   return await get<ActionRes<SafeUser>>('/user')
