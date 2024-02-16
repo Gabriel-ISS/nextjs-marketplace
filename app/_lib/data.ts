@@ -7,7 +7,8 @@ async function get<T>(path: string, options?: GetOptions): Promise<T> {
   if (options?.params) {
     query = '?' + new URLSearchParams(options.params).toString()
   }
-  return fetch(`${process.env.NEXT_PUBLIC_HOST}/api${path}${query}`, {
+  const endpoint = `${process.env.NEXT_PUBLIC_HOST}/api${path}${query}`
+  return fetch(endpoint, {
     headers: {
       'Content-Type': 'application/json',
     }
@@ -19,7 +20,7 @@ async function get<T>(path: string, options?: GetOptions): Promise<T> {
     return res.json()
   })
   .catch(e => {
-    return {error: e.message}
+    return {error: `${e.message}. Endpoint: ${endpoint}`}
   })
 }
 
