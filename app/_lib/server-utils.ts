@@ -8,6 +8,7 @@ import { Types, mongo } from "mongoose";
 import { getServerSession } from 'next-auth';
 import { Document } from 'mongoose';
 import { redirect } from 'next/navigation';
+import { CategoryWithImage } from '@/_lib/data';
 
 type ExtraData = { send?: boolean }
 export class ServerSideError extends Error {
@@ -180,6 +181,29 @@ export async function updateTags(newGroups: UnsavedGroup[], tags: string[], prev
     ])
   } catch (error) {
     throw new ServerSideError('Falla al actualizar las etiquetas')
+  }
+}
+
+export async function getProductGroups(): Promise<ActionRes<Group[]>> {
+  try {
+    const groups = await Group.find({})
+    return { success: groups }
+  } catch (error) {
+    return getErrorMessage(error, 'Falla al obtener los grupos de productos')
+  }
+}
+
+export async function getCategoriesWithImage(): Promise<ActionRes<CategoryWithImage[]>> {
+  try {
+    const categoriesContainers = await Filter.find({}, { category: 1, categoryImgPath: 1 })
+    return {
+      success: categoriesContainers.map(obj => ({
+        name: obj.category,
+        imgPath: obj.categoryImgPath
+      }))
+    }
+  } catch (error) {
+    return getErrorMessage(error, 'Falla al obtener las categorías')
   }
 }
 

@@ -3,8 +3,8 @@ export const dynamic = 'force-dynamic'
 import ErrorBlock from '@/_Components/ErrorBlock'
 import ProductGroup from '@/_Components/ProductGroup'
 import Search from '@/_Components/Search'
-import { getCategories, getProductGroups } from '@/_lib/data'
 import { satisfy } from '@/_lib/fonts'
+import { getCategoriesWithImage, getProductGroups } from '@/_lib/server-utils'
 import styles from '@/page.module.scss'
 import Image from 'next/image'
 import { ComponentProps } from 'react'
@@ -13,7 +13,7 @@ import { ComponentProps } from 'react'
 export default async function App() {
   const [productGroups, productCategories] = await Promise.all([
     getProductGroups(),
-    getCategories({ includeImages: true })
+    getCategoriesWithImage()
   ])
 
   return (
