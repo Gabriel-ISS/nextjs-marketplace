@@ -10,7 +10,7 @@ import { TEST_ADMIN } from '@/constants';
 import { Field, Form, Formik } from 'formik';
 import { signIn } from 'next-auth/react';
 import Link from 'next/link';
-import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { ChangeEventHandler, FocusEventHandler, HTMLAttributes, HTMLInputTypeAttribute, useEffect, useState } from 'react';
 import { FaRegCopy } from 'react-icons/fa';
 import { TbLoader2 } from 'react-icons/tb';

@@ -1,13 +1,12 @@
 'use client'
 
-import styles from '@/_Components/Navigation.module.scss';
 import LoginButton from '@/_Components/LoginButton';
+import styles from '@/_Components/Navigation.module.scss';
 import ProductsLink from '@/_Components/ProductsLink';
 import { satisfy } from '@/_lib/fonts';
 import Link from 'next/link';
 import { useRef, useState } from 'react';
 import { MdMenu } from 'react-icons/md';
-import ContentLoader from 'react-content-loader';
 
 
 export default function Navigation() {
