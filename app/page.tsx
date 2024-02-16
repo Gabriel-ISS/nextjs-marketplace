@@ -1,4 +1,4 @@
-export const dynamic = 'force-dynamic'
+//export const dynamic = 'force-dynamic'
 
 import ErrorBlock from '@/_Components/ErrorBlock'
 import ProductGroup from '@/_Components/ProductGroup'

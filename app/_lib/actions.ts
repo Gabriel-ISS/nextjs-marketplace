@@ -109,7 +109,7 @@ export async function createUser(user: Pick<User, 'name' | 'password'>): Promise
   }
 }
 
-async function updateCart(
+/* async function updateCart(
   updater: (cart: SafeUser['cart']) => void,
   { success, defaultError }: Record<'success' | 'defaultError', string>,
   productID: string
@@ -127,21 +127,22 @@ async function updateCart(
   } finally {
     revalidatePath('/product')
   }
-}
+} */
 
 export async function addToCart(productID: string): Promise<ActionRes | undefined> {
-  return await updateCart(cart => {
+  /* return await updateCart(cart => {
     cart.push(productID)
   }, {
     success: 'Producto agregado al carrito',
     defaultError: 'No se pudo agregar el producto al carrito'
   },
     productID
-  )
+  ) */
+  return undefined
 }
 
 export async function removeFromCart(productID: string): Promise<ActionRes | undefined> {
-  return await updateCart(cart => {
+  /* return await updateCart(cart => {
     const index = cart.indexOf(productID)
     if (index == -1) throw new ServerSideError('El producto no se encuentra en la lista de compras')
     cart.splice(index, 1)
@@ -150,5 +151,6 @@ export async function removeFromCart(productID: string): Promise<ActionRes | und
     defaultError: 'No se pudo eliminar el producto del carrito'
   },
     productID
-  )
+  ) */
+  return undefined
 }
