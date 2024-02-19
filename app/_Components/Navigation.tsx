@@ -68,6 +68,7 @@ export default function Navigation() {
           <ul className={styles.nav__links_list}>
             <li><Link href='/'>Inicio</Link></li>
             <li><ProductsLink /></li>
+            <li><Link href='/cart'>Carrito de compras</Link></li>
             <li><Link href='/about'>Sobre nosotros</Link></li>
           </ul>
           <LoginButton />

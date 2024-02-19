@@ -1,6 +1,10 @@
 @import '../vars';
 
+
 .nav {
+  $break-point: 920px;
+  $links: 4;
+  
   $link-height: 1.5rem;
   $links-padding-bottom: .3rem;
   $admin-btn-height: 3rem;
@@ -33,7 +37,7 @@
   &__collapsible {
     display: flex;
 
-    @media (width < ($screen-md + 2)) {
+    @media (width < ($break-point + 2)) {
       // el display se controla desde javascript
       grid-auto-flow: row;
       width: 100%;
@@ -47,7 +51,7 @@
       &[data-state="opening"],
       &[data-state="opened"] {
         opacity: 1;
-        height: ($link-height * 3) + $links-padding-bottom + $admin-btn-height + ($admin-btn-mb * 2);
+        height: ($link-height * $links) + $links-padding-bottom + $admin-btn-height + ($admin-btn-mb * 2);
       }
 
       &[data-state="closed"] {
@@ -64,8 +68,8 @@
     padding-inline: 0;
     margin: 0;
 
-    @media (width > $screen-md) {
-      min-width: 25rem;
+    @media (width > $break-point) {
+      padding-right: 3rem;
       align-items: center;
       flex-direction: row;
       gap: 1rem;
@@ -77,6 +81,7 @@
       align-items: center;
 
       a {
+        width: max-content;
         font-size: 1.3rem;
         font-weight: 700;
         font-variant-caps: all-small-caps;
@@ -97,7 +102,7 @@
     margin-block: $admin-btn-mb;
     text-align: center;
 
-    @media (width > $screen-md) {
+    @media (width > $break-point) {
       height: auto;
       padding-block: .3rem;
       margin-block: .3rem;
@@ -114,7 +119,7 @@
     background: none;
     color: $primary;
 
-    @media (width > $screen-md) {
+    @media (width > $break-point) {
       display: none;
     }
 
