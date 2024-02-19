@@ -4,7 +4,7 @@ import Filters from '@/_Components/Filters/Filters';
 import ProductList from '@/_Components/ProductList';
 import Search from '@/_Components/Search';
 import { CenteredSpinner } from '@/_Components/Spinner';
-import { getSafeUser } from '@/_lib/server-utils';
+import { getSafeUser } from '@/_lib/server-only/data';
 import { isAdmin } from '@/_lib/utils';
 import styles from '@/products/page.module.scss';
 import Link from 'next/link';

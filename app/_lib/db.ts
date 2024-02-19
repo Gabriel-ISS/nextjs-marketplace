@@ -1,6 +1,6 @@
 import 'server-only';
 
-import { ServerSideError } from '@/_lib/server-utils';
+import { ServerSideError } from '@/_lib/server-only/utils';
 import mongoose from 'mongoose';
 
 const { MONGO_URL, MONGO_DB_NAME } = process.env;

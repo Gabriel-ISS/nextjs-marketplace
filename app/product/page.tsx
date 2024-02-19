@@ -1,6 +1,6 @@
 import Product from '@/_Components/Product'
 import styles from '@/product/page.module.scss'
-import { getProduct, getSafeUser } from '@/_lib/server-utils'
+import { getProduct, getSafeUser } from '@/_lib/server-only/data'
 
 
 export default async function ProductPage({ searchParams }: PageProps) {

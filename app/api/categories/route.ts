@@ -1,7 +1,8 @@
 import { CategoryWithImage, GetCategoriesParams, GetCategoriesReturn } from '@/_lib/data'
 import { connectDB } from '@/_lib/db'
 import { Filter } from '@/_lib/models'
-import { getCategoriesWithImage, getErrorMessage } from '@/_lib/server-utils'
+import { getErrorMessage } from '@/_lib/server-only/utils'
+import { getCategoriesWithImage } from '@/_lib/server-only/data'
 import { getParams } from '@/_lib/utils'
 
 

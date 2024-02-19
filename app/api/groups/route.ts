@@ -1,7 +1,8 @@
 import { GetGroupsParams, GetGroupsReturn } from '@/_lib/data'
 import { connectDB } from '@/_lib/db'
 import { Group } from '@/_lib/models'
-import { getErrorMessage, getProductGroups } from '@/_lib/server-utils'
+import { getErrorMessage } from '@/_lib/server-only/utils'
+import { getProductGroups } from '@/_lib/server-only/data'
 import { getParams } from '@/_lib/utils'
 
 

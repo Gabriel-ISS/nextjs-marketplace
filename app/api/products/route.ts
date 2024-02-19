@@ -1,6 +1,6 @@
 import { GetProductsReturn } from '@/_lib/data';
 import { connectDB } from '@/_lib/db';
-import { getProducts } from '@/_lib/server-utils';
+import { getProducts } from '@/_lib/server-only/data';
 
 
 export async function GET(req: Request) {

@@ -1,7 +1,7 @@
 import { GetFiltersReturn, GetFiltersParams } from '@/_lib/data';
 import { connectDB } from '@/_lib/db';
 import { Filter } from '@/_lib/models'
-import { ServerSideError, getErrorMessage } from '@/_lib/server-utils'
+import { ServerSideError, getErrorMessage } from '@/_lib/server-only/utils'
 import { getParams } from '@/_lib/utils';
 
 

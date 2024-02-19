@@ -1,5 +1,5 @@
 import { connectDB } from '@/_lib/db'
-import { getSafeUser } from '@/_lib/server-utils'
+import { getSafeUser } from '@/_lib/server-only/data'
 
 
 export async function GET(_req: Request) {

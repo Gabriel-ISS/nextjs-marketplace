@@ -1,6 +1,6 @@
 import { deleteImages, saveCategoryImage } from '@/_lib/aws-s3';
 import { Filter } from '@/_lib/models';
-import { ServerSideError } from '@/_lib/server-utils';
+import { ServerSideError } from '@/_lib/server-only/utils';
 import { Document } from 'mongoose';
 
 type CustomFilterConstructorProps = {

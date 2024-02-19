@@ -1,6 +1,6 @@
 import { GetProductParams, GetProductReturn } from '@/_lib/data'
 import { connectDB } from '@/_lib/db'
-import { getProduct } from '@/_lib/server-utils'
+import { getProduct } from '@/_lib/server-only/data'
 import { getParams } from '@/_lib/utils'
 
 

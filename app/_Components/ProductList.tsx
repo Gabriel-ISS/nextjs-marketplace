@@ -2,7 +2,7 @@ import ErrorBlock from '@/_Components/ErrorBlock'
 import Pagination from '@/_Components/Pagination'
 import ProductItem from '@/_Components/ProductItem'
 import styles from '@/_Components/ProductList.module.scss'
-import { getProducts } from '@/_lib/server-utils'
+import { getProducts } from '@/_lib/server-only/data'
 
 
 interface Props {
