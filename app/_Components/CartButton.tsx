@@ -1,6 +1,7 @@
 'use client'
 
 import styles from '@/_Components/CartButton.module.scss'
+import AddedToCartModal from '@/_Components/Modal/AddedToCartModal'
 import MessageModal from '@/_Components/Modal/MessageModal'
 import { addToCart, removeFromCart } from '@/_lib/actions'
 import useAppStore from '@/_store/useStore'
@@ -24,6 +25,9 @@ export default function CartButton({ product, userCart }: Props) {
     } else {
       setIsInCart(true)
       res = await addToCart(product._id)
+      if (res?.success) {
+        openModal(<AddedToCartModal />)
+      }
     }
     if (res?.error) {
       openModal(<MessageModal title='Error' message={res.error} />, 'red')
