@@ -23,7 +23,7 @@ export default function CartButton({ product, userCart }: Props) {
       res = await removeFromCart(product._id)
     } else {
       setIsInCart(true)
-      res = await addToCart(product._id, product.name, product.price.current)
+      res = await addToCart(product._id)
     }
     if (res?.error) {
       openModal(<MessageModal title='Error' message={res.error} />, 'red')
