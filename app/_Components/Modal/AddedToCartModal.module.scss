@@ -1,0 +1,48 @@
+@import '../../vars';
+
+.btn_container {
+  display: grid;
+  grid-template-rows: 1fr 1fr;
+  gap: 1rem;
+
+  margin: .5rem;
+}
+
+.continue_buying {
+  color: $primary;
+  background-color: transparent;
+  border: 2px solid $primary;
+  //border-radius: 0;
+  
+  font-size: 1rem;
+  font-weight: bold;
+  
+  transition: color 200ms, background 200ms;
+  &:hover {
+    color: white;
+    background-color: $primary;
+    filter: brightness(1);
+  }
+}
+
+.view_cart {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1ch;
+  padding-inline: .7rem;
+
+  color: white;
+  background-color: $primary;
+  border-radius: $br;
+
+  font-size: 1rem;
+  font-weight: bold;
+
+  transition: transform 200ms;
+  &:hover {
+    transform: scale(1.06);
+    text-decoration: none;
+    filter: brightness(1);
+  }
+}
