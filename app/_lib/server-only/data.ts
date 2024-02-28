@@ -1,14 +1,15 @@
 import 'server-only'
 
 import { DEFAULT_PRODUCT } from '@/_lib/constants'
-import { CategoryWithImage, GetProductReturn, GetProductsReturn } from '@/_lib/data'
+import { CategoryWithImage, GetCartProductsParams, GetCartProductsReturn, GetProductReturn, GetProductsReturn } from '@/_lib/data'
 import { connectDB } from '@/_lib/db'
-import { Filter, Group, Product, User } from '@/_lib/models'
-import { ServerSideError, getErrorMessage } from '@/_lib/server-only/utils'
+import { Cart, Filter, Group, Product, User } from '@/_lib/models'
+import { nextAuthOptions, ServerSideError, getErrorMessage } from '@/_lib/server-only/utils'
 import { Document, FilterQuery } from 'mongoose'
 import { getServerSession } from 'next-auth'
 import QueryString from 'qs'
 import { cache } from 'react'
+import { NOT_AUTHENTICATED_ERROR, USER_NOT_FOUND_ERROR } from '@/constants'
 
 
 export const getProductGroups = cache(async (): Promise<ActionRes<Group[]>> => {
@@ -96,12 +97,50 @@ export const getProduct = cache(async (id?: string): Promise<GetProductReturn> =
 export const getSafeUser = cache(async (): Promise<ActionRes<SafeUser & Document>> => {
   try {
     await connectDB()
-    const session = await getServerSession()
-    if (!session) throw new ServerSideError('Usuario no autenticado')
-    const user = await User.findOne({ name: session.user.name })
-    if (!user) throw new ServerSideError('Usuario no encontrado')
+    const session = await getServerSession(nextAuthOptions)
+    if (!session) throw new ServerSideError(NOT_AUTHENTICATED_ERROR)
+    const user = await User.findById(session.user.id)
+    if (!user) throw new ServerSideError(USER_NOT_FOUND_ERROR)
     return { success: user }
   } catch (error) {
     return getErrorMessage(error, 'Error al obtener el usuario')
   }
+})
+
+export const pickFromUser = cache(async <K extends PublicUserKey>(key: K): Promise<ActionRes<SafeUser[K]>> => {
+  try {
+    await connectDB()
+    const session = await getServerSession(nextAuthOptions)
+    if (!session) throw new ServerSideError(NOT_AUTHENTICATED_ERROR)
+    const user = await User.findById(session.user.id, { [key]: 1 })
+    if (!user) throw new ServerSideError(USER_NOT_FOUND_ERROR)
+    return { success: user[key] }
+  } catch (error) {
+    return getErrorMessage(error, 'Error al obtener el usuario')
+  }
+})
+
+export const getCartProducts = cache(async <P extends GetCartProductsParams>(params: P): Promise<GetCartProductsReturn<P>> => {
+  let res: GetCartProductsReturn<P>;
+  const NOT_PRODUCT_YET_MESSAGE = 'Aun no has agregado productos a tu carrito'
+  try {
+    await connectDB()
+    const session = await getServerSession(nextAuthOptions)
+    if (!session) throw new ServerSideError('Para ver su carrito primero debe iniciar session o crear una cuenta')
+    if (params.onlyIDs) {
+      const cart = await Cart.findOne({ userID: session.user.id }, { products: 1 })
+      if (!cart) throw new ServerSideError(NOT_PRODUCT_YET_MESSAGE)
+      const IDs = cart.products.map(p => p.ID.toString())
+      res = { success: IDs } as GetCartProductsReturn<P>
+    } else {
+      const productProjection: Projection<CartProduct, 1> = { imgPath: 1, name: 1, price: 1 }
+      const cart = await Cart.findOne({ userID: session.user.id }, { products: 1 }).populate('products.ID', productProjection) as Cart<'populated'>
+      if (!cart) throw new ServerSideError(NOT_PRODUCT_YET_MESSAGE)
+      const products = cart.products.map(p => ({ ...(p.ID as unknown as { _doc: CartProduct })._doc, quantity: p.quantity }))
+      res = { success: products } as GetCartProductsReturn<P>
+    }
+  } catch (error) {
+    res = getErrorMessage(error, 'Error al obtener el usuario')
+  }
+  return res
 })

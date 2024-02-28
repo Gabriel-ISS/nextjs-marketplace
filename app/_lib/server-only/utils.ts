@@ -3,10 +3,13 @@ import 'server-only'
 import { deleteImages, saveTagImage } from '@/_lib/aws-s3'
 import { FilterManager, RelevantFilterData } from '@/_lib/filter-manager'
 import { Filter, Group, User } from '@/_lib/models'
-import { S_ERROR_TAG, TEST_ADMIN } from '@/constants'
+import { NOT_AUTHENTICATED_ERROR, S_ERROR_TAG, TEST_ADMIN, UNAUTHORIZED_USER_ERROR, USER_NOT_FOUND_ERROR } from '@/constants'
 import { Types, mongo } from "mongoose"
 import { getServerSession } from 'next-auth'
 import { redirect } from 'next/navigation'
+import { NextAuthOptions } from 'next-auth'
+import Credentials from 'next-auth/providers/credentials'
+import { connectDB } from '@/_lib/db'
 
 type ExtraData = { send?: boolean }
 export class ServerSideError extends Error {
@@ -16,6 +19,64 @@ export class ServerSideError extends Error {
     } else {
       super(S_ERROR_TAG + message)
     }
+  }
+}
+
+export const nextAuthOptions: NextAuthOptions = {
+  debug: process.env.NODE_ENV === 'development',
+  secret: process.env.NEXTAUTH_SECRET,
+  session: {
+    maxAge: 60 * 60 * 16
+  },
+  providers: [
+    Credentials({
+      name: 'Credentials',
+      credentials: {
+        name: { type: 'text', label: 'Usuario' },
+        password: { type: 'password', label: 'Contraseña' },
+      },
+      async authorize(credentials, _req) {
+        if (!credentials) throw new ServerSideError('No se han enviado las credenciales')
+        const res = await getUser(credentials)
+        if (!res.success) throw new Error(res.error)
+        const { _id, name } = res.success
+        return { id: _id, name }
+      }
+    })
+  ],
+  pages: {
+    signIn: '/auth',
+    error: '/auth'
+  },
+  callbacks: {
+    async jwt({ token, user }) {
+      if (user) {
+        token.id = user.id;
+        if (user.role) token.role = user.role;
+      }
+      return token;
+    },
+    async session({ session, token }) {
+      if (session.user) {
+        session.user.id = token.id as string;
+        session.user.role = token.role as string;
+      }
+      return session;
+    }
+  }
+}
+
+async function getUser<C extends Pick<User, 'name' | 'password'>>(credentials: C): Promise<ActionRes<SafeUser>> {
+  try {
+    connectDB()
+    const user = await User.findOne({
+      name: credentials.name,
+      password: credentials.password
+    });
+    if (!user) throw new ServerSideError('Usuario o contraseña incorrectos.');
+    return { success: user }
+  } catch (error) {
+    return getErrorMessage(error, 'Error al obtener el usuario')
   }
 }
 
@@ -48,12 +109,12 @@ export function getErrorMessage(error: unknown, defaultMessage: string) {
 }
 
 export async function checkIfRealAdmin() {
-  const session = await getServerSession()
-  if (!session) throw new ServerSideError('Usuario no autenticado')
-  const user = await User.findOne({ name: session.user?.name }, { role: 1 })
-  if (!user) throw new ServerSideError('Usuario no encontrado')
+  const session = await getServerSession(nextAuthOptions)
+  if (!session) throw new ServerSideError(NOT_AUTHENTICATED_ERROR)
+  const user = await User.findById(session.user.id, { role: 1 })
+  if (!user) throw new ServerSideError(USER_NOT_FOUND_ERROR)
   if (user.role == 'fake admin') throw new ServerSideError(`Las acciones en el servidor no están autorizadas para el usuario "${TEST_ADMIN.name}"`)
-  if (user.role !== 'admin') throw new ServerSideError('Usuario no autorizado')
+  if (user.role !== 'admin') throw new ServerSideError(UNAUTHORIZED_USER_ERROR)
 }
 
 export async function updateFilters(product: RelevantFilterData, prevProduct: RelevantFilterData, rawCategoryImg: string) {

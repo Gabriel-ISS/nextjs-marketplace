@@ -20,7 +20,7 @@ export default function Product({ product, userCart }: Props) {
           <h2 className={styles.product__name}>{product.name}</h2>
           <Price className={styles.product__price} price={product.price} />
         </div>
-        <CartButton productID={product._id} userCart={userCart} />
+        <CartButton product={product} userCart={userCart} />
         {product.note && <p className={styles.product__note}>{product.note}</p>}
         <ul className={styles.product__properties}>
           {product.properties.map(property => (

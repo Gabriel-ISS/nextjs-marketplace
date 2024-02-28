@@ -6,4 +6,6 @@ export const TEST_ADMIN = {
 }
 export const ADMIN_ROLES = ['admin', 'fake admin']
 
-// ...
+export const NOT_AUTHENTICATED_ERROR = 'Usuario no autenticado'
+export const USER_NOT_FOUND_ERROR = 'Usuario no encontrado'
+export const UNAUTHORIZED_USER_ERROR = 'Usuario no autorizado'

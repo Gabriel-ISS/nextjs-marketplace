@@ -53,5 +53,12 @@ type User = {
   name: string,
   password: string
   role?: string
-  cart: string[]
+}
+
+type Cart<IDValue extends 'populated' | 'normal' = 'normal'> = {
+  userID: string
+  products: {
+    ID: IDValue extends 'normal' ? string : (CartProduct & { _id: string })
+    quantity?: number
+  }[]
 }

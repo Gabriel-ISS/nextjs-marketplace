@@ -4,10 +4,11 @@ import { deleteImages, saveProductImage } from '@/_lib/aws-s3'
 import { DEFAULT_PRODUCT } from '@/_lib/constants'
 import { connectDB } from '@/_lib/db'
 import { RelevantFilterDataKeys } from '@/_lib/filter-manager'
-import { Product, User } from '@/_lib/models'
-import { getSafeUser } from '@/_lib/server-only/data'
-import { ServerSideError, checkIfRealAdmin, getErrorMessage, updateFilters, updateTags } from '@/_lib/server-only/utils'
+import { Cart, Product, User } from '@/_lib/models'
+import { ServerSideError, checkIfRealAdmin, getErrorMessage, nextAuthOptions, updateFilters, updateTags } from '@/_lib/server-only/utils'
 import { withoutID } from '@/_lib/utils'
+import { Document } from 'mongoose'
+import { getServerSession } from 'next-auth'
 import { revalidatePath } from 'next/cache'
 import { redirect } from 'next/navigation'
 
@@ -110,28 +111,37 @@ export async function createUser(user: Pick<User, 'name' | 'password'>): Promise
 }
 
 async function updateCart(
-  updater: (cart: SafeUser['cart']) => void,
+  updater: (cart: (Cart & Document) | null, userID: string) => void,
   { success, defaultError }: Record<'success' | 'defaultError', string>,
   productID: string
 ): Promise<ActionRes> {
   try {
     await connectDB()
-    const res = await getSafeUser()
-    if (!res.success) redirect(`/auth?callbackUrl=${encodeURIComponent(`/product?id=${productID}`)}`)
-    const user = res.success
-    await updater(user.cart)
-    await user.save()
+    const session = await getServerSession(nextAuthOptions)
+    if (!session) redirect(`/auth?callbackUrl=${encodeURIComponent(`/product?id=${productID}`)}`)
+    const userID = session.user.id
+    let cart = await Cart.findOne({ userID })
+    await updater(cart, userID)
     return { success }
   } catch (error) {
     return getErrorMessage(error, defaultError)
   } finally {
     revalidatePath('/product')
+    revalidatePath('/cart')
   }
 }
 
 export async function addToCart(productID: string): Promise<ActionRes | undefined> {
-  return await updateCart(cart => {
-    cart.push(productID)
+  return await updateCart(async (cart, userID) => {
+    const data: Cart['products'][number] = { ID: productID }
+    if (cart) {
+      cart.products.push(data)
+    } else {
+      cart = new Cart({
+        userID, products: [data]
+      })
+    }
+    await cart.save()
   }, {
     success: 'Producto agregado al carrito',
     defaultError: 'No se pudo agregar el producto al carrito'
@@ -141,14 +151,30 @@ export async function addToCart(productID: string): Promise<ActionRes | undefine
 }
 
 export async function removeFromCart(productID: string): Promise<ActionRes | undefined> {
-  return await updateCart(cart => {
-    const index = cart.indexOf(productID)
+  return await updateCart(async cart => {
+    if (!cart) throw new ServerSideError('Carrito no encontrado')
+    const index = cart.products.findIndex(p => p.ID == productID)
     if (index == -1) throw new ServerSideError('El producto no se encuentra en la lista de compras')
-    cart.splice(index, 1)
+    cart.products.splice(index, 1)
+    await cart.save()
   }, {
     success: 'Producto eliminado del carrito',
     defaultError: 'No se pudo eliminar el producto del carrito'
   },
     productID
   )
+}
+
+export async function removeCart(): Promise<ActionRes | void> {
+  try {
+    await connectDB()
+    const session = await getServerSession(nextAuthOptions)
+    if (!session) throw new ServerSideError('Su sesión ha expirado')
+    await Cart.deleteOne({userID: session.user.id})
+    return;
+  } catch (error) {
+    return getErrorMessage(error, 'No se ha podido vaciar el carrito')
+  } finally {
+    revalidatePath('/cart')
+  }
 }

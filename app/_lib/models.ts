@@ -1,4 +1,4 @@
-import { Document, Model, Schema, model, models } from 'mongoose';
+import { Document, Model, ObjectId, Schema, model, models } from 'mongoose';
 
 const RequiredNumber = { type: Number, required: true }
 const RequiredString = { type: String, required: true }
@@ -50,15 +50,22 @@ const groupSchema = new Schema<Group & Document>({
 const userSchema = new Schema<User & Document>({
   name: RequiredString,
   password: SafeString,
-  role: String,
-  cart: Array
+  role: String
 }, {
   versionKey: false
 })
 
-export const Product = (models.Product as Model<Product & Document>) || model('Product', productSchema);
+type CartFromDB = Omit<Cart, 'userID'> & { userID: ObjectId }
+const cartSchema = new Schema<CartFromDB & Document>({
+  userID: { type: Schema.Types.ObjectId, ref: 'User' },
+  products: [{
+    ID: { type: Schema.Types.ObjectId, ref: 'Product' },
+    quantity: Number
+  }]
+})
+
+export const Product = (models.Product as Model<Product & Document>) || model('Product', productSchema, 'products');
 export const Filter = (models.Filter as Model<Filter & Document>) || model('Filter', filterSchema);
 export const Group = (models.Group as Model<Group & Document>) || model('Group', groupSchema);
 export const User = (models.User as Model<User & Document>) || model('User', userSchema);
-
-export const safeUserProjection: Projection<Partial<User>, 0> = { password: 0 }
+export const Cart = (models.Cart as Model<Cart & Document>) || model('Cart', cartSchema);

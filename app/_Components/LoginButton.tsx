@@ -1,4 +1,5 @@
 import styles from '@/_Components/Navigation.module.scss'
+import { revalidatePath } from '@/_lib/data'
 import { getSession, signOut } from 'next-auth/react'
 import Link from 'next/link'
 import { usePathname, useSearchParams } from 'next/navigation'
@@ -22,6 +23,7 @@ export default function LoginButton() {
 
   const _signOut = async () => {
     await signOut({ redirect: false })
+    await revalidatePath('/auth')
     push(getCallbackUrl())
   }
 

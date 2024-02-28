@@ -54,7 +54,9 @@ $br: .37rem;
   @keyframes rotate {
     from {
       transform: rotate(0turn);
-    } to {
+    }
+
+    to {
       transform: rotate(1turn);
     }
   }

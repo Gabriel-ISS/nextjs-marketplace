@@ -1,0 +1,114 @@
+@import '../vars';
+
+.main {
+  @include autoMargin();
+  padding-block: 1rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.product {
+  display: flex;
+  gap: 1rem;
+
+  width: min(90vw, 500px);
+  margin-bottom: .7rem;
+  padding-bottom: .7rem;
+
+  position: relative;
+  
+  border-bottom: 1px solid var(--text-color);
+
+  &__img {
+    border-radius: $br;
+    width: 130px;
+  }
+
+  &__price_container {
+    @media (width > $screen-md) {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      gap: 3rem;
+      margin-block: 2rem;
+    }
+  }
+
+  &__name {
+    margin-top: 0;
+    margin-bottom: .5rem;
+    margin-right: 2.5rem;
+    font-size: 1.1rem;
+  }
+
+  &__counter {
+    display: flex;
+    flex-wrap: nowrap;
+    gap: .5rem;
+
+    font-size: 1.5rem;
+
+    button {
+      padding: 0;
+
+      color: var(--text-color);
+      background-color: transparent;
+
+      transition: transform 200ms;
+      &:hover {
+        transform: scale(1.2);
+      }
+    }
+  }
+
+  &__remove_btn {
+    position: absolute;
+    top: .2rem;
+    right: .2rem;
+
+    color: var(--text-color);
+
+    &:hover {
+      color: $red;
+    }
+  }
+}
+
+.total {
+  display: flex;
+  justify-content: space-around;
+
+  padding-bottom: 1rem;
+
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+.buy_btn {
+  color: $green;
+  border: 3px solid $green;
+  background-color: transparent;
+  border-radius: 0;
+  width: 100%;
+  font-size: large;
+  font-weight: bold;
+
+
+  transition: color 400ms, background-color 400ms;
+  &:hover {
+    filter: opacity(1);
+    color: white;
+    background-color: $green;
+    animation: twinkle 1200ms 400ms ease-in-out infinite;
+  }
+
+  @keyframes twinkle {
+    0%, 100% {
+      background-color: $green;
+    }
+    50% {
+      background-color: transparentize($color: $green, $amount: .5);
+    }
+  }
+}

@@ -45,6 +45,9 @@ type DataState<T> = {
   error?: string
 }
 
-type Projection<T, N extends 1 | 0> = { [key in keyof T]: N }
+type Projection<T, N extends 1 | 0> = { [key in Exclude<keyof T, '_id'>]: N }
 
-type SafeUser = Omit<User, 'password'> 
+type PublicUserKey = Exclude<keyof User, 'password'>
+type SafeUser = Pick<User, PublicUserKey> 
+
+type CartProduct = Pick<Product, '_id' | 'imgPath' | 'name' | 'price'>

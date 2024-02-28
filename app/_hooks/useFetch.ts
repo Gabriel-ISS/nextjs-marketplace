@@ -14,9 +14,15 @@ type Data<T> = {
   actionResHandler: ActionResHandler<T>
 }
 
+/**
+ * 
+ * @param fn función que recibe como parámetro una serie de funciones para administrar el estado de la petición
+ * @param dependencyList cuando cambie la dependencia se volverá a ejecutar la petición
+ * @returns datos de la petición y funciones para cambiar el estado
+ */
 export default function useFetch<T>(
   fn: (dt: Data<T>) => Promise<any>,
-  dependencyList?: DependencyList
+  dependencyList: DependencyList = []
 ) {
   const [data, setData] = useState<T | null>(null)
   const [isLoading, setLoading] = useState<boolean>(false)
@@ -48,7 +54,7 @@ export default function useFetch<T>(
 
   useEffect(() => {
     throttledFn({ manager, setData, setLoading, setError, actionResHandler })
-  }, dependencyList || [])
+  }, dependencyList)
 
   return {
     data, setData,

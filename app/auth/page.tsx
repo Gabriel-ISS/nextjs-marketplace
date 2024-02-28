@@ -3,6 +3,7 @@
 import { CustomFormikError } from '@/_Components/Inputs';
 import MessageModal from '@/_Components/Modal/MessageModal';
 import { createUser } from '@/_lib/actions';
+import { revalidatePath } from '@/_lib/data';
 import { NewCredentialsSchema, userSchema } from '@/_lib/validation-schemas';
 import useAppStore from '@/_store/useStore';
 import styles from '@/auth/page.module.scss';
@@ -33,12 +34,13 @@ export default function Auth() {
     
     res = await signIn('credentials', {
       ...credentials,
-      redirect: false
+      redirect: callbackUrl == '/cart'
     })
 
     if (res?.error) {
       openModal(<MessageModal title='Error' message={res.error} />, 'red')
     } else {
+      await revalidatePath('/cart')
       push(callbackUrl)
     }
   }

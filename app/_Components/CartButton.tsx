@@ -8,22 +8,22 @@ import { useOptimistic } from 'react'
 
 
 interface Props {
-  productID: string
+  product: Pick<Product, '_id' | 'name' | 'price'>
   userCart: string[]
 }
 
-export default function CartButton({ productID, userCart }: Props) {
+export default function CartButton({ product, userCart }: Props) {
   const openModal = useAppStore(s => s.modal.open)
-  const [isInCart, setIsInCart] = useOptimistic(userCart.includes(productID), (state, newState: boolean) => newState)
+  const [isInCart, setIsInCart] = useOptimistic(userCart.includes(product._id), (state, newState: boolean) => newState)
 
   const handleClick = async () => {
     let res: ActionRes | undefined;
     if (isInCart) {
       setIsInCart(false)
-      res = await removeFromCart(productID)
+      res = await removeFromCart(product._id)
     } else {
       setIsInCart(true)
-      res = await addToCart(productID)
+      res = await addToCart(product._id, product.name, product.price.current)
     }
     if (res?.error) {
       openModal(<MessageModal title='Error' message={res.error} />, 'red')
