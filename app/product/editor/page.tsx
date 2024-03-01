@@ -415,7 +415,7 @@ const Input = ({ field, form, label, handler, ...props }: CustomInputProps) => {
 const TextArea = ({ field, form, label }: CustomInputProps) => {
   return <>
     <label htmlFor={field.name}>{label}</label>
-    <textarea id={field.name} {...field} />
+    <textarea id={field.name} {...field} style={{resize: 'vertical'}} />
     <CustomFormikError name={field.name} />
   </>
 }

@@ -39,8 +39,8 @@ export const nextAuthOptions: NextAuthOptions = {
         if (!credentials) throw new ServerSideError('No se han enviado las credenciales')
         const res = await getUser(credentials)
         if (!res.success) throw new Error(res.error)
-        const { _id, name } = res.success
-        return { id: _id, name }
+        const { _id, name, role } = res.success
+        return { id: _id, name, role }
       }
     })
   ],
