@@ -81,7 +81,7 @@ export const getProducts = cache(async (queryString: string | undefined): Promis
 })
 
 export const getProduct = cache(async (id?: string): Promise<GetProductReturn> => {
-  if (!id) return { success: DEFAULT_PRODUCT }
+  if (!id || id == 'undefined') return { success: DEFAULT_PRODUCT }
 
   try {
     await connectDB()

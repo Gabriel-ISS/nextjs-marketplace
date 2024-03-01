@@ -1,12 +1,12 @@
 'use client'
 
-import Loader from '@/_Components/Loader'
-import MessageModal from '@/_Components/Modal/MessageModal'
-import { CenteredSpinner } from '@/_Components/Spinner'
 import useFetch from '@/_hooks/useFetch'
 import { removeCart } from '@/_lib/actions'
 import { GetCartProductsReturn, getCartProducts } from '@/_lib/data'
 import { getLocalCurrency } from '@/_lib/utils'
+import Loader from '@/_reusable_components/Loader'
+import MessageModal from '@/_reusable_components/Modal/MessageModal'
+import { CenteredSpinner } from '@/_reusable_components/Spinner'
 import useAppStore from '@/_store/useStore'
 import Counter from '@/cart/_components/Counter'
 import RemoveFromCartButton from '@/cart/_components/RemoveFromCartButton'
@@ -14,7 +14,6 @@ import styles from '@/cart/page.module.scss'
 import { S_ERROR_TAG } from '@/constants'
 import Link from 'next/link'
 import { useMemo } from 'react'
-import { reach } from 'yup'
 
 
 export default function Cart() {

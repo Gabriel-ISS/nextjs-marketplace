@@ -1,8 +1,7 @@
-import { Produce, StateUpdater } from '@/_hooks/useWritableState'
+import { StateUpdater } from '@/_hooks/useWritableState'
 import { getCategories, getCategoryFilters, getProductGroups } from '@/_lib/data'
 import { ImmerSet, Slice } from '@/_store/useStore'
 import { Draft } from 'immer'
-import QueryString from 'qs'
 
 
 export type FilterSlice = {
@@ -10,12 +9,6 @@ export type FilterSlice = {
     categories: Filter<string[]>
     categoryFilters: Filter<FilterForFilters, [category: string]> & { clear: () => void }
     tags: Filter<string[]>
-  }
-  query: {
-    data: Query
-    wasEstablished: boolean
-    setter(setQuery: Produce<Query> | Query, resetPage?: boolean): void
-    setFromString(query: string): void
   }
 }
 
@@ -39,31 +32,6 @@ const filterSlice: Slice<FilterSlice> = (set) => ({
       }
     },
     tags: filterInitializer(set, 'tags', [] as string[], () => getProductGroups({ NC: true })),
-  },
-  query: {
-    data: {},
-    wasEstablished: false,
-    setter(updater, resetPage = true) {
-      set(prev => {
-        if (typeof updater == 'function') {
-          updater(prev.query.data)
-          prev.query.wasEstablished = true
-          if (resetPage) delete prev.query.data.page
-        } else {
-          prev.query.data = updater
-        }
-      })
-    },
-    setFromString(query) {
-      set(prev => {
-        prev.query.data = QueryString.parse(query)
-        const q = prev.query.data
-        if (q.page) {
-          q.page = Number(q.page)
-        }
-        prev.query.wasEstablished = true
-      })
-    }
   }
 })
 

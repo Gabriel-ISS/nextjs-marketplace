@@ -1,0 +1,11 @@
+@import '../../vars';
+
+.btn {
+  @include largeBtn();
+  text-align: center;
+
+  transition: background-color 200ms;
+  &--red {
+    background-color: $red;
+  }
+}

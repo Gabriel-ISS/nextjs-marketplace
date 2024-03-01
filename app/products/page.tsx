@@ -1,9 +1,9 @@
 export const dynamic = 'force-dynamic'
 
-import Filters from '@/_Components/Filters/Filters';
-import ProductList from '@/_Components/ProductList';
-import Search from '@/_Components/Search';
-import { CenteredSpinner } from '@/_Components/Spinner';
+import Filters from '@/products/_components/Filters/Filters';
+import ProductList from '@/products/_components/ProductList';
+import Search from '@/_reusable_components/Search';
+import { CenteredSpinner } from '@/_reusable_components/Spinner';
 import { getSafeUser } from '@/_lib/server-only/data';
 import { isAdmin } from '@/_lib/utils';
 import styles from '@/products/page.module.scss';
@@ -24,7 +24,7 @@ export default async function Products({ searchParams }: PageProps) {
       <div className={styles.principal_view} data-mode-admin={adminMode}>
         <Search className={styles.search} />
         {adminMode && (
-          <Link className={styles.add_product_btn} href='/admin/product' role='button'>Registrar producto <AiFillFileAdd /></Link>
+          <Link className={styles.add_product_btn} href='/product/editor' role='button'>Registrar producto <AiFillFileAdd /></Link>
         )}
         <Suspense key={query} fallback={<CenteredSpinner />}>
           <ProductList adminMode={adminMode} query={query} />

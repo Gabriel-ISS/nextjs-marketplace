@@ -111,10 +111,8 @@ export function getErrorMessage(error: unknown, defaultMessage: string) {
 export async function checkIfRealAdmin() {
   const session = await getServerSession(nextAuthOptions)
   if (!session) throw new ServerSideError(NOT_AUTHENTICATED_ERROR)
-  const user = await User.findById(session.user.id, { role: 1 })
-  if (!user) throw new ServerSideError(USER_NOT_FOUND_ERROR)
-  if (user.role == 'fake admin') throw new ServerSideError(`Las acciones en el servidor no están autorizadas para el usuario "${TEST_ADMIN.name}"`)
-  if (user.role !== 'admin') throw new ServerSideError(UNAUTHORIZED_USER_ERROR)
+  if (session.user.role == 'fake admin') throw new ServerSideError(`Las acciones en el servidor no están autorizadas para el usuario "${TEST_ADMIN.name}"`)
+  if (session.user.role !== 'admin') throw new ServerSideError(UNAUTHORIZED_USER_ERROR)
 }
 
 export async function updateFilters(product: RelevantFilterData, prevProduct: RelevantFilterData, rawCategoryImg: string) {
