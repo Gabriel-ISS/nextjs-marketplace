@@ -18,7 +18,7 @@ export async function middleware(req: NextRequest) {
     if (sessionToken) {
       headers["Cookie"] = `next-auth.session-token=${sessionToken};path=/;expires=Session`
     }
-    const session: Session | {} = await fetch(process.env.NEXTAUTH_URL + '/api/auth/session',
+    const session: Session | {} = await fetch(process.env.NEXT_PUBLIC_HOST + '/api/auth/session',
       { headers, cache: 'no-store' }
     ).then(res => res.json())
 
