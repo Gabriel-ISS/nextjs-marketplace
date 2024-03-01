@@ -27,10 +27,11 @@ export async function middleware(req: NextRequest) {
       }
       return res.json()
     })
+    return NextResponse.json(session)
 
-    if (!session) return new NextResponse(NOT_AUTHENTICATED_ERROR, { status: 401 })
+    /* if (!session) return new NextResponse(NOT_AUTHENTICATED_ERROR, { status: 401 })
     if (!ADMIN_ROLES.includes(session.user.role as string)) return new NextResponse(UNAUTHORIZED_USER_ERROR, { status: 403 })
-  
+   */
   }
 
   return NextResponse.next()
