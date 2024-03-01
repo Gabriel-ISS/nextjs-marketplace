@@ -18,6 +18,7 @@ export async function middleware(req: NextRequest) {
       secret: process.env.NEXTAUTH_SECRET as string,
     })
 
+    if (!userDecodedToken) throw new Error(sessionToken + '>>>>>>' + (process.env.NEXTAUTH_SECRET || '') + '>>>>' + JSON.stringify(userDecodedToken))
     if (!userDecodedToken) return new NextResponse(NOT_AUTHENTICATED_ERROR, { status: 401 })
     if (!ADMIN_ROLES.includes(userDecodedToken.role as string)) return new NextResponse(UNAUTHORIZED_USER_ERROR, { status: 403 })
   }
