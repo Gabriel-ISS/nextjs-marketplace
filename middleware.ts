@@ -11,14 +11,13 @@ export async function middleware(req: NextRequest) {
   const requestPath = req.nextUrl.pathname
 
   if (CHECK_IF_ADMIN_ROUTES.includes(requestPath)) {
-    let tokenKey = process.env.NODE_ENV === 'production' ? '__secure-next-auth.session-token' : 'next-auth.session-token';
+    let tokenKey = process.env.NODE_ENV === 'production' ? '__Secure-next-auth.session-token' : 'next-auth.session-token';
     let sessionToken = req.cookies.get(tokenKey)?.value
     const userDecodedToken = await decode({
       token: sessionToken,
       secret: process.env.NEXTAUTH_SECRET as string,
     })
-
-    if (!userDecodedToken) throw new Error(sessionToken + '>>>>>>' + (process.env.NEXTAUTH_SECRET || '') + '>>>>' + JSON.stringify(userDecodedToken))
+    
     if (!userDecodedToken) return new NextResponse(NOT_AUTHENTICATED_ERROR, { status: 401 })
     if (!ADMIN_ROLES.includes(userDecodedToken.role as string)) return new NextResponse(UNAUTHORIZED_USER_ERROR, { status: 403 })
   }
