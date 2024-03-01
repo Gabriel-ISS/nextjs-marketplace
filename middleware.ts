@@ -18,7 +18,7 @@ export async function middleware(req: NextRequest) {
     if (sessionToken) {
       headers["Cookie"] = `next-auth.session-token=${sessionToken};path=/;expires=Session`
     }
-    const endpoint = process.env.NEXT_PUBLIC_HOST + '/api/auth/session'
+    const endpoint = process.env.VERCEL_URL + '/api/auth/session'
     const session: Session | null = await fetch(endpoint,
       { method: 'GET', headers, cache: 'no-store' }
     ).then(res => {
