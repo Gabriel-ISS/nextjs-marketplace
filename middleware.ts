@@ -20,7 +20,7 @@ export async function middleware(req: NextRequest) {
     }
     const endpoint = process.env.NEXT_PUBLIC_HOST + '/api/auth/session'
     const session: Session | null = await fetch(endpoint,
-      { headers, cache: 'no-store' }
+      { method: 'GET', headers, cache: 'no-store' }
     ).then(res => {
       if (!res.ok) {
         throw new Error(`HTTP error! status: ${res.status}\nAt route ${endpoint}`);
