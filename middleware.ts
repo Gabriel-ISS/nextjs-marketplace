@@ -11,10 +11,7 @@ export async function middleware(req: NextRequest) {
   const requestPath = req.nextUrl.pathname
 
   if (CHECK_IF_ADMIN_ROUTES.includes(requestPath)) {
-    const endpoint = process.env.NEXT_PUBLIC_HOST + '/api/categories'
-    const data = await fetch(endpoint).then(res => res.json())
-    return NextResponse.json(data)
-    /* let sessionToken = req.cookies.get('next-auth.session-token')?.value
+    let sessionToken = req.cookies.get('next-auth.session-token')?.value
     const headers: HeadersInit = {
       "Content-Type": "application/json"
     }
@@ -33,7 +30,7 @@ export async function middleware(req: NextRequest) {
 
     if (!session) return new NextResponse(NOT_AUTHENTICATED_ERROR, { status: 401 })
     if (!ADMIN_ROLES.includes(session.user.role as string)) return new NextResponse(UNAUTHORIZED_USER_ERROR, { status: 403 })
-   */
+  
   }
 
   return NextResponse.next()
