@@ -61,12 +61,6 @@ export async function getSafeUser() {
   return await get<ActionRes<SafeUser>>('/user')
 }
 
-export type RevalidatePathParams = { path: string }
-export async function revalidatePath(path: string) {
-  const params: RevalidatePathParams = { path }
-  return await get<{}>('/revalidate', { params })
-}
-
 export type GetCartProductsParams = { onlyIDs?: boolean }
 export type CartProductsReturn = (CartProduct & { quantity?: number })[]
 export type GetCartProductsReturn<P extends GetCartProductsParams = GetCartProductsParams> = ActionRes<P['onlyIDs'] extends true ? string[] : CartProductsReturn>

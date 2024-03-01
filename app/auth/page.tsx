@@ -1,9 +1,8 @@
 'use client'
 
-import { CustomFormikError } from '@/_Components/Inputs';
-import MessageModal from '@/_Components/Modal/MessageModal';
+import { CustomFormikError } from '@/_reusable_components/Inputs';
+import MessageModal from '@/_reusable_components/Modal/MessageModal';
 import { createUser } from '@/_lib/actions';
-import { revalidatePath } from '@/_lib/data';
 import { NewCredentialsSchema, userSchema } from '@/_lib/validation-schemas';
 import useAppStore from '@/_store/useStore';
 import styles from '@/auth/page.module.scss';
@@ -20,7 +19,7 @@ import { ArrowContainer, Popover } from 'react-tiny-popover';
 
 type UserCredentials = Pick<User, 'name' | 'password'>
 export default function Auth() {
-  const { push } = useRouter()
+  const { push, refresh } = useRouter()
   const searchParams = useSearchParams()
   const openModal = useAppStore(s => s.modal.open)
   const callbackUrl = searchParams.get('callbackUrl') as string
@@ -40,8 +39,8 @@ export default function Auth() {
     if (res?.error) {
       openModal(<MessageModal title='Error' message={res.error} />, 'red')
     } else {
-      await revalidatePath('/cart')
       push(callbackUrl)
+      refresh()
     }
   }
 

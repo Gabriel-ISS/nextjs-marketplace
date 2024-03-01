@@ -1,11 +1,11 @@
-import Footer from '@/_Components/Footer'
-import Navigation from '@/_Components/Navigation'
+import Footer from '@/_components/Footer'
+import Navigation from '@/_components/Navigation'
 import { openSans } from '@/_lib/fonts'
 import '@/globals.scss'
 import type { Metadata } from 'next'
 import dynamic from 'next/dynamic'
 import { Suspense } from 'react'
-const Modal = dynamic(() => import('@/_Components/Modal/Modal'), { ssr: false })
+const Modal = dynamic(() => import('@/_reusable_components/Modal/Modal'), { ssr: false })
 
 export const metadata: Metadata = {
   title: 'NextMarket',

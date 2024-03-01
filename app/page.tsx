@@ -1,8 +1,8 @@
 export const dynamic = 'force-dynamic'
 
-import ErrorBlock from '@/_Components/ErrorBlock'
-import ProductGroup from '@/_Components/ProductGroup'
-import Search from '@/_Components/Search'
+import ErrorBlock from '@/_reusable_components/ErrorBlock'
+import ProductGroup from '@/_components/ProductGroup'
+import Search from '@/_reusable_components/Search'
 import { satisfy } from '@/_lib/fonts'
 import { getCategoriesWithImage, getProductGroups } from '@/_lib/server-only/data'
 import styles from '@/page.module.scss'

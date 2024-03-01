@@ -1,6 +1,6 @@
 import React, { ComponentProps } from 'react'
 import { Slice, State } from '@/_store/useStore'
-import MessageModal from '@/_Components/Modal/MessageModal'
+import MessageModal from '@/_reusable_components/Modal/MessageModal'
 
 
 export type ModalColor = 'blue' | 'green' | 'red' | 'yellow'
