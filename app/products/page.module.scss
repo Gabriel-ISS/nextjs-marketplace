@@ -1,13 +1,5 @@
 @import '../vars';
 
-.main {
-  display: grid;
-
-  @media (width > $screen-md) {
-    grid-template-columns: clamp(16rem, 24vw, 22rem) 1fr;
-  }
-}
-
 .principal_view {
   @include autoMargin(1300px);
   display: grid;

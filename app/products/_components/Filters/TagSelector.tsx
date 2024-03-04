@@ -1,3 +1,5 @@
+'use client'
+
 import ErrorBlock from '@/_reusable_components/ErrorBlock'
 import styles from '@/products/_components/Filters/Filters.module.scss'
 import Loader from '@/_reusable_components/Loader'
